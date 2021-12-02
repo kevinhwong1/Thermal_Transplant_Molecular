@@ -11,13 +11,13 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Goals
 
-Goal 1: Determine how the different trimming parameters affect the methylation stats [notebook link for parameters](https://kevinhwong1.github.io/KevinHWong_Notebook/Methylseq-trimming-test-to-remove-m-bias/)
+Goal 1: Determine how the different trimming parameters change the methylation stats [notebook link for parameters](https://kevinhwong1.github.io/KevinHWong_Notebook/Methylseq-trimming-test-to-remove-m-bias/)
 
 Goal 2: Determine if any methylation stats correlate with: DNA extraction date, Lib prep date, life stage or treatments
 
 Goal 3: Generate methylation statistics 
 
-# Goal 1: Determine how the different trimming parameters affect the methylation stats
+# Goal 1: Determine how the different trimming parameters change the methylation stats
 
 ```{r, echo=TRUE, warning=FALSE, message=FALSE}
 # Read in required libraries
@@ -249,6 +249,16 @@ ggsave(filename="../output/WGBS/PMS_Box.jpeg", plot=PMS_Box, dpi=300, width=12, 
 ```{r, echo=FALSE, out.width="100%"}
 knitr::include_graphics("../output/WGBS/PMS_Box.jpeg")
 ```
+
+### Notebook Post Links
+
+* [20210415](https://kevinhwong1.github.io/KevinHWong_Notebook/20210415-WGBS-PicoMethyl-seq-library-prep-for-Thermal-Transplant-Trial-2/)
+* [20210422](https://kevinhwong1.github.io/KevinHWong_Notebook/20210422-WGBS-PicoMethyl-seq-library-prep-for-Thermal-Transplant-Trial-3/)
+* [20210426](https://kevinhwong1.github.io/KevinHWong_Notebook/20210426-WGBS-PicoMethyl-seq-library-prep-for-Thermal-Transplant-Trial-4/)
+* [20210428](https://kevinhwong1.github.io/KevinHWong_Notebook/20210428-WGBS-PicoMethyl-seq-library-prep-for-Thermal-Transplant-Trial-5/)
+* [20210504](https://kevinhwong1.github.io/KevinHWong_Notebook/20210504-WGBS-PicoMethyl-seq-library-prep-for-Thermal-Transplant-Trial-6/)
+* [20210506](https://kevinhwong1.github.io/KevinHWong_Notebook/20210506-WGBS-PicoMethyl-seq-library-prep-for-Thermal-Transplant-Trial-7/)
+* [20210511](https://kevinhwong1.github.io/KevinHWong_Notebook/20210512-WGBS-PicoMethyl-seq-library-prep-for-Thermal-Transplant-Trial-8/)
 
 ## Goal 3: Generate Methylation statistics 
 
