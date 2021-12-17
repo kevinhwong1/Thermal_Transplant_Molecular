@@ -1,0 +1,8 @@
+Species references
+Parkinson, J. E., M. A. Coffroth and T. C. LaJeunesse (2015). "New species of Clade B Symbiodinium (Dinophyceae) from the greater Caribbean belong to different functional guilds: S. aenigmaticum sp. nov., S. antillogorgium sp. nov., S. endomadracis sp. nov., and S. pseudominutum sp. nov." Journal of phycology 51(5): 850-858.
+Lajeunesse, T. C., J. E. Parkinson and J. D. Reimer (2012). A genetics-based description of Symbiodinium minutum sp. nov. and S. psygmophilum sp. nov. (dinophyceae), two dinoflagellates symbiotic with cnidaria. Journal of Phycology 48(6): 1380-1391.
+Lajeunesse, T. C., J. E. Parkinson and J. D. Reimer (2012). A genetics-based description of Symbiodinium minutum sp. nov. and S. psygmophilum sp. nov. (dinophyceae), two dinoflagellates symbiotic with cnidaria. Journal of Phycology 48(6): 1380-1391.
+Parkinson, J. E., M. A. Coffroth and T. C. LaJeunesse (2015). "New species of Clade B Symbiodinium (Dinophyceae) from the greater Caribbean belong to different functional guilds: S. aenigmaticum sp. nov., S. antillogorgium sp. nov., S. endomadracis sp. nov., and S. pseudominutum sp. nov." Journal of phycology 51(5): 850-858.
+Trench, R. K. and L.-v. Thinh (1995). Gymnodinium linucheae sp. nov.: The dinoflagellate symbiont of the jellyfish Linuche unguiculata. European Journal of Phycology 30(2): 149-154.
+['Output as part of data_analysis ID: 3; Number of data_set objects as part of analysis = 1; submitting_user: kevinhwong1; time_stamp: 20211216T114913']
+Data_set ID: 8; Data_set name: Thermal_transplant_1; submitting_user: kevinhwong1; time_stamp: 20211214T134847
