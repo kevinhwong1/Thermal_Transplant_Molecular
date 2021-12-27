@@ -2,15 +2,20 @@
 
 Project: Thermal Transplant Molecular
 
-########### ANDROMEDA
+References:
+* [SymPortal Framework](https://github.com/didillysquat/SymPortal_framework)
 
-# Copying symportal into my own directory for permission access
+This analysis was performed on the URI HPC Andromeda cluster.
+
+# Copying SymPortal into my own directory for permission access
+
 ```
 cd /data/putnamlab/kevin_wong1/
 rsync -rl /opt/software/SymPortal/0.3.21-foss-2019b/ ./SymPortal/
 ```
 
 # Modifying settings and config file
+
 ```
 module load SymPortal
 mv settings_blank.py ./settings.py
@@ -40,8 +45,7 @@ conda env create -f $EBROOTSYMPORTAL/symportal_env.yml #try doing this as a scri
 exit
 ```
 
-
-#### Creating database and testing
+#### Creating the database and testing
 
 ```bash
 
@@ -62,28 +66,8 @@ python3 populate_db_ref_seqs.py
 
 module unload SymPortal
 
-export PYTHONPATH=/data/putnamlab/kevin_wong1/SymPortal/:/data/putnamlab/kevin_wong1/SymPortal/lib/python3.7/site-packages:$PYTHONPATH
-
-export PATH=/data/putnamlab/kevin_wong1/SymPortal/:/data/putnamlab/kevin_wong1/SymPortal/bin:$PATH
-
-##### Checking installation
-python3 -m tests.tests
-
-conda deactivate
+exit
 ```
-
-
-```bash
-mkdir symportal
-
-interactive
-
-
-
-
-```
-
-#### Creating database and testing
 
 `nano symportal_setup.sh`
 
@@ -175,7 +159,6 @@ main.py --load /data/putnamlab/kevin_wong1/20210609_Thermal_Transplant_ITS2/raw_
 
 #### Running analysis
 
-
 ```bash
 #!/bin/bash
 #SBATCH --job-name="SP_analysis"
@@ -213,4 +196,4 @@ export PATH=/data/putnamlab/kevin_wong1/SymPortal/:/data/putnamlab/kevin_wong1/S
 
 ```bash
 scp -r kevin_wong1@ssh3.hac.uri.edu:/data/putnamlab/kevin_wong1/SymPortal/outputs/analyses/3/20211216T114913/its2_type_profiles /Users/kevinwong/MyProjects/Thermal_Transplant_Molecular/output/ITS2/.
-``
+```
