@@ -45,7 +45,7 @@ conda env create -f $EBROOTSYMPORTAL/symportal_env.yml #try doing this as a scri
 exit
 ```
 
-#### Creating the database and testing
+# Creating the reference database
 
 ```bash
 
@@ -68,6 +68,10 @@ module unload SymPortal
 
 exit
 ```
+
+# Testing installation and reference database
+
+SymPortal was not built to run on a cluster, so permission access was tricky as you cannot write into the master installation module. Therefore, we need to change the python and SymPortal paths to the ones we created in our own directory. Additionally, some of the dependencies needed by SymPortal are only in the master installation module. To use these dependencies but write into our own SymPortal framework, we must `load` then `unload` the master SymPortal module in our script.
 
 `nano symportal_setup.sh`
 
@@ -102,6 +106,7 @@ echo "Mission Complete!" $(date)
 
 ```
 
+Output:
 ```
 ANALYSIS COMPLETE: DataAnalysis:
        name: testing
@@ -118,11 +123,15 @@ Deleting /glfs/brick01/gv0/putnamlab/kevin_wong1/SymPortal/outputs/loaded_data_s
 Mission Complete! Fri Dec 10 16:35:52 EST 2021
 ```
 
-#### Loading Data
+# Loading experimental data
+
+Uploading the metadata csv file:
 
 ```bash
 scp Wong_Kevin_ThermalTrans_ITS2_Meta.csv kevin_wong1@ssh3.hac.uri.edu:/data/putnamlab/kevin_wong1/20210609_Thermal_Transplant_ITS2/Wong_Kevin_ThermalTrans_ITS2_Meta.csv
 ```
+
+Loading the data:
 
 `nano symportal_load.sh`
 
@@ -157,7 +166,7 @@ main.py --load /data/putnamlab/kevin_wong1/20210609_Thermal_Transplant_ITS2/raw_
 
 ```
 
-#### Running analysis
+# Running analysis
 
 ```bash
 #!/bin/bash
@@ -193,6 +202,8 @@ export PATH=/data/putnamlab/kevin_wong1/SymPortal/:/data/putnamlab/kevin_wong1/S
 ./main.py --display_analyses
 
 ```
+
+# Exporting
 
 ```bash
 scp -r kevin_wong1@ssh3.hac.uri.edu:/data/putnamlab/kevin_wong1/SymPortal/outputs/analyses/3/20211216T114913/its2_type_profiles /Users/kevinwong/MyProjects/Thermal_Transplant_Molecular/output/ITS2/.
