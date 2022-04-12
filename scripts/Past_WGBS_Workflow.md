@@ -1046,6 +1046,32 @@ wc -l L*
   4414681 L_RHP.3xCpG.bed
 ```
 
+#### Sorting the merged files so scaffolds are all in the same order and multiIntersectBed will run correctly. Run for loop using bedtools to sort all .tab files
+
+`nano bedtools.sort.cpg.sh`
+
+```bash
+#!/bin/bash
+#SBATCH -t 500:00:00
+#SBATCH --nodes=1 --ntasks-per-node=10
+#SBATCH --mem=500GB
+#SBATCH --account=putnamlab
+#SBATCH --export=NONE
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH --mail-user=kevin_wong1@uri.edu
+#SBATCH -D /data/putnamlab/kevin_wong1/Thermal_Transplant_WGBS/Past_WGBS/genome_feature
+#SBATCH --cpus-per-task=3
+
+module load BEDTools/2.27.1-foss-2018b
+
+for f in *.3xCpG.bed
+do
+  STEM=$(basename "${f}" .3xCpG.bed)
+  bedtools sort -i "${f}" \
+  > "${STEM}".3xCpG_sorted.bed
+done
+```
+
 #### Find CpGs common to all groups in comparison (e.g. Life Stage (A vs L), Adult origin, treatment, transplant, Larval origin, treatment)
 
 `nano cpg_group_comp.sh`
@@ -1064,7 +1090,7 @@ wc -l L*
 
 # All samples (Life stage) Comparisons
 
-cat *.3xCpG.bed |\
+cat *.3xCpG_sorted.bed |\
 sort | \
 uniq -c | \
 awk '{if($1==3)print $2"\t"$3"\t"$4}' \
@@ -1072,7 +1098,7 @@ awk '{if($1==3)print $2"\t"$3"\t"$4}' \
 
 # Adult comparison
 
-cat A*.3xCpG.bed |\
+cat A*.3xCpG_sorted.bed |\
 sort | \
 uniq -c | \
 awk '{if($1==3)print $2"\t"$3"\t"$4}' \
@@ -1080,12 +1106,106 @@ awk '{if($1==3)print $2"\t"$3"\t"$4}' \
 
 # Larval comparison
 
-cat L*.3xCpG.bed |\
+cat L*.3xCpG_sorted.bed |\
 sort | \
 uniq -c | \
 awk '{if($1==3)print $2"\t"$3"\t"$4}' \
 > larval.3xCpG.allgrps.bed
+
+# Sort the bedfiles
+module load BEDTools/2.27.1-foss-2018b
+
+for f in *.3xCpG.allgrps.bed
+do
+  STEM=$(basename "${f}" .3xCpG.allgrps.bed)
+  bedtools sort -i "${f}" \
+  > "${STEM}".3xCpG.allgrps_sorted.bed
+done
+
 ```
 
-[kevin_wong1@ssh3 genome_feature]$ wc -l lifestage.3xCpG.allgrps.bed
+`wc -l lifestage.3xCpG.allgrps.bed`
 727650 lifestage.3xCpG.allgrps.bed
+
+`wc -l adult.3xCpG.allgrps.bed `
+802968 adult.3xCpG.allgrps.bed
+
+`wc -l larval.3xCpG.allgrps.bed`
+1398867 larval.3xCpG.allgrps.bed
+
+
+#### Determine binned features that common CpGs overlap with (bedtools intersect)
+
+`nano bin_feat_cpg.sh`
+
+```bash
+#!/bin/bash
+#SBATCH -t 500:00:00
+#SBATCH --nodes=1 --ntasks-per-node=10
+#SBATCH --mem=120GB
+#SBATCH --account=putnamlab
+#SBATCH --export=NONE
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH --mail-user=kevin_wong1@uri.edu
+#SBATCH -D /data/putnamlab/kevin_wong1/Thermal_Transplant_WGBS/Past_WGBS/genome_feature
+#SBATCH --cpus-per-task=3
+
+module load BEDTools/2.27.1-foss-2018b
+
+FILES=*.3xCpG.allgrps_sorted.bed
+
+for f in $FILES
+do
+intersectBed \
+-a ${f} \
+-b /data/putnamlab/kevin_wong1/Past_Genome/past_struc_annotations_v1/Pastreoides-v1.2Kbin.uniq.bed \
+-wb \
+> $(basename ${f%.3xCpG.allgrps_sorted.bed})_features.txt
+done
+```
+
+#### Filter features for those with at least 3 CpGs
+
+`nano filter_feat.sh`
+
+```bash
+#!/bin/bash
+#SBATCH -t 500:00:00
+#SBATCH --nodes=1 --ntasks-per-node=10
+#SBATCH --mem=120GB
+#SBATCH --account=putnamlab
+#SBATCH --export=NONE
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH --mail-user=kevin_wong1@uri.edu
+#SBATCH -D /data/putnamlab/kevin_wong1/Thermal_Transplant_WGBS/Past_WGBS/genome_feature
+#SBATCH --cpus-per-task=3
+
+FILES=*_features.txt
+
+for f in $FILES
+do
+cat ${f} |\
+awk -F"\t" '{print $4,$5,$6,$7}' |\
+sort |\
+uniq -c |\
+awk '{if($1>2)print $2"\t"$3"\t"$4"\t"$5}'\
+> $(basename ${f%_features.txt})_features.3CpG.txt
+done
+```
+
+```
+[kevin_wong1@n063 genome_feature]$ wc -l adult_features.3CpG.txt
+579330 adult_features.3CpG.txt
+[kevin_wong1@n063 genome_feature]$ wc -l adult_features.txt
+4182696 adult_features.txt
+
+[kevin_wong1@n063 genome_feature]$ wc -l larval_features.3CpG.txt
+808223 larval_features.3CpG.txt
+[kevin_wong1@n063 genome_feature]$ wc -l larval_features.txt   
+7322259 larval_features.txt
+
+[kevin_wong1@n063 genome_feature]$ wc -l lifestage_features.3CpG.txt
+516252 lifestage_features.3CpG.txt
+[kevin_wong1@n063 genome_feature]$ wc -l lifestage_features.txt   
+3779387 lifestage_features.txt
+```
