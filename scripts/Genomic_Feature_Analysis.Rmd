@@ -1,0 +1,87 @@
+---
+title: "WGBS_Genomic_Feature"
+author: "Kevin Wong"
+date: "25/04/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+https://github.com/hputnam/Geoduck_Meth/blob/master/RAnalysis/Scripts/DMR_stats_and_anno.Rmd 
+
+Starting at line 591
+
+```{r, warning=FALSE}
+
+#Loading libraries
+
+library(data.table)
+library(gplots)
+library(ggplot2)
+library(dplyr)
+library(broom)
+library(RColorBrewer)
+library(egg)
+library(purrr)
+```
+
+## Data formatting
+
+```{r, warning FALSE}
+# Import data
+adult.feat <- read.delim("../output/WGBS/genome_feature/adult.patchtransp_features.3CpG.txt", header = FALSE, stringsAsFactors = FALSE)
+larval.feat <- read.delim("../output/WGBS/genome_feature/larval_features.3CpG.txt", header = FALSE, stringsAsFactors = FALSE)
+
+#For this initial analysis, we will just use the adult.feat and larval.feat for the life stage comparison
+# Adding a comparisons column 
+adult.feat$comparison <- "Adult"
+larval.feat$comparison <- "Larval"
+
+# Binding datasets
+feat <- rbind(adult.feat, larval.feat)
+
+#Renaming columns 
+colnames(feat) <- c("scaffold", "start", "end", "feature", "comparison")
+
+#Filter out match and match part features
+
+feat.filt <- feat %>%
+  filter(feature != "match") %>%
+  filter(feature != "match_part") %>%
+  filter(feature != "expressed_sequence_match") %>%
+  filter(feature != "protein_match")
+
+feat.filt$feature <- as.factor(feat.filt$feature)
+feat.filt$comparison <- as.factor(feat.filt$comparison)
+
+feat$feature <- as.factor(feat$feature)
+```
+
+
+```{r, warning=FALSE}
+
+ggplot(feat.filt, aes(x = comparison, y = ..count.., fill = factor(feature), group = feature)) + 
+  geom_bar(position = "fill", color = "black") + 
+  scale_y_continuous(labels=scales::percent) + 
+  xlab("Lifestage") +
+  ylab("% of total regions") + 
+  theme_bw() + theme(axis.text.x = element_text(size = 7, angle = 60, hjust = 1), axis.title = element_text(size = 12, face = "bold")) + 
+  scale_fill_manual("Feature",values = RColorBrewer::brewer.pal(10,"BuGn"))
+
+```
+
+```{r, warning=FALSE}
+
+ggplot(feat, aes(x = comparison, y = ..count.., fill = factor(feature), group = feature)) + 
+  geom_bar(position = "fill", color = "black") + 
+  scale_y_continuous(labels=scales::percent) + 
+  xlab("Lifestage") +
+  ylab("% of total regions") + 
+  theme_bw() + theme(axis.text.x = element_text(size = 7, angle = 60, hjust = 1), axis.title = element_text(size = 12, face = "bold")) #+ 
+#  scale_fill_manual("Feature",values = RColorBrewer::brewer.pal(10,"BuGn"))
+
+```

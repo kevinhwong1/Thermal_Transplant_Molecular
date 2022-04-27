@@ -15,12 +15,34 @@ samtools faidx past_filtered_assembly.fasta
 
 This should create a fasta index file called `past_filtered_assembly.fasta.fai`
 
+
+#### Adding introns to the gff
+
+```
+module load AGAT/0.8.1-foss-2020b
+agat_sp_add_introns.pl --gff Pastreoides_noseq_v1.gff --out Pastreoides_noseq_v1_introns.gff
+```
+
+#### Cleaning up gff file
+
+`nano kill_list.txt `
+
+```
+match
+match_part
+protein_match
+```
+
+```
+module load AGAT/0.8.1-foss-2020b
+agat_sp_filter_feature_from_kill_list.pl --gff Pastreoides_noseq_v1_introns.gff --kill_list kill_list.txt --output Pastreoides_v1_clean.gff
+```
+
 #### Making a putative promoter track
 
 `nano put_promoter.sh`
 
 ```bash
-
 #!/bin/bash
 #SBATCH -t 500:00:00
 #SBATCH --nodes=1 --ntasks-per-node=10
@@ -37,7 +59,7 @@ This should create a fasta index file called `past_filtered_assembly.fasta.fai`
 module load BEDTools/2.27.1-foss-2018b
 
 flankBed \
--i /data/putnamlab/kevin_wong1/Past_Genome/past_struc_annotations_v1/Pastreoides_noseq_v1.gff \
+-i /data/putnamlab/kevin_wong1/Past_Genome/past_struc_annotations_v1/Pastreoides_noseq_v1_introns.gff \
 -g /data/putnamlab/kevin_wong1/Past_Genome/past_filtered_assembly.fasta.fai \
 -l 1000 \
 -r 0 \
@@ -65,7 +87,6 @@ exit
 
 #### Bin features
 
-
 ```bash
 interactive
 module load BEDTools/2.27.1-foss-2018b
@@ -89,12 +110,13 @@ exit
 
 note: some lines were removed, however under visual inspection, it seems like there are still duplicates. Revisit this later!
 
-```
-[kevin_wong1@n065 past_struc_annotations_v1]$ wc -l Pastreoides-v1.2Kbin.sort.bed
-3684541 Pastreoides-v1.2Kbin.sort.bed
-[kevin_wong1@n065 past_struc_annotations_v1]$ wc -l Pastreoides-v1.2Kbin.uniq.bed
-3498993 Pastreoides-v1.2Kbin.uniq.bed
-```
+
+`wc -l Pastreoides-v1.2Kbin.sort.bed`
+3946488 Pastreoides-v1.2Kbin.sort.bed
+
+`wc -l Pastreoides-v1.2Kbin.uniq.bed`
+3757955 Pastreoides-v1.2Kbin.uniq.bed
+
 
 ### 2. Determine Background Regions
 
@@ -241,6 +263,15 @@ uniq -c | \
 awk '{if($1==3)print $2"\t"$3"\t"$4}' \
 > adult.3xCpG.allgrps.bed
 
+# Adult comparison (Patch transplant only)
+
+cat A*P.3xCpG_sorted.bed |\
+sort | \
+uniq -c | \
+awk '{if($1==3)print $2"\t"$3"\t"$4}' \
+> adult.patchstransp.3xCpG.allgrps.bed
+
+
 # Larval comparison
 
 cat L*.3xCpG_sorted.bed |\
@@ -248,6 +279,8 @@ sort | \
 uniq -c | \
 awk '{if($1==3)print $2"\t"$3"\t"$4}' \
 > larval.3xCpG.allgrps.bed
+
+
 
 # Sort the bedfiles
 module load BEDTools/2.27.1-foss-2018b
@@ -266,6 +299,9 @@ done
 
 `wc -l adult.3xCpG.allgrps.bed `
 802968 adult.3xCpG.allgrps.bed
+
+`wc -l adult.patchtransp.3xCpG.allgrps.bed `
+1218657 adult.patchtransp.3xCpG.allgrps.bed
 
 `wc -l larval.3xCpG.allgrps.bed`
 1398867 larval.3xCpG.allgrps.bed
@@ -330,21 +366,30 @@ awk '{if($1>2)print $2"\t"$3"\t"$4"\t"$5}'\
 done
 ```
 
-```
-[kevin_wong1@n063 genome_feature]$ wc -l adult_features.3CpG.txt
-579330 adult_features.3CpG.txt
-[kevin_wong1@n063 genome_feature]$ wc -l adult_features.txt
-4182696 adult_features.txt
 
-[kevin_wong1@n063 genome_feature]$ wc -l larval_features.3CpG.txt
-808223 larval_features.3CpG.txt
-[kevin_wong1@n063 genome_feature]$ wc -l larval_features.txt   
-7322259 larval_features.txt
+`wc -l adult_features.3CpG.txt`
+628338 adult_features.3CpG.txt
 
-[kevin_wong1@n063 genome_feature]$ wc -l lifestage_features.3CpG.txt
-592455 lifestage_features.3CpG.txt
-[kevin_wong1@n063 genome_feature]$ wc -l lifestage_features.txt   
-4293893 lifestage_features.txt
-```
+`wc -l adult_features.txt`
+4500535 adult_features.txt
 
-scp 'kevin_wong1@ssh3.hac.uri.edu:/data/putnamlab/kevin_wong1/Thermal_Transplant_WGBS/Past_WGBS/genome_feature/*_features.3CpG.txt' ~/MyProjects/Thermal_Transplant_Molecular/output/WGBS/genome_feature
+`wc -l adult.patchtransp_features.3CpG.txt`
+807439 adult.patchtransp_features.3CpG.txt
+
+`wc -l adult.patchtransp_features.txt`
+6897315 adult.patchtransp_features.txt
+
+`wc -l larval_features.3CpG.txt`
+886097 larval_features.3CpG.txt
+
+`wc -l larval_features.txt`
+7922705 larval_features.txt
+
+`wc -l lifestage_features.3CpG.txt`
+640707 lifestage_features.3CpG.txt
+
+`wc -l lifestage_features.txt`
+4612165 lifestage_features.txt
+
+
+`scp 'kevin_wong1@ssh3.hac.uri.edu:/data/putnamlab/kevin_wong1/Thermal_Transplant_WGBS/Past_WGBS/genome_feature/*_features.3CpG.txt' ~/MyProjects/Thermal_Transplant_Molecular/output/WGBS/genome_feature`

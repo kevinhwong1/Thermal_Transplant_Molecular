@@ -1,0 +1,765 @@
+---
+title: "Past_WGBS_GM"
+author: "Kevin Wong"
+date: "15/04/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## DNA methylation analysis between life stages
+
+https://github.com/hputnam/Geoduck_Meth/blob/master/RAnalysis/Scripts/GM.Rmd
+
+```{r, message=FALSE, warning=FALSE}
+library(plotrix) 
+library(ggplot2)
+library(gridExtra)
+library(seacarb) 
+library(pheatmap)
+library(dplyr)
+library(tidyverse)
+library(tidyr)
+library(goseq)
+library(genefilter)
+library(gplots)
+library(cowplot)
+library(lsmeans)
+library(data.table)
+library(RColorBrewer)
+library(randomcoloR)
+#library(GSEABase)
+library(ggpubr)
+library(hrbrthemes)
+library(viridis)
+library(factoextra)
+library(ropls)
+library(mixOmics)
+library(vegan)
+library(plyr)
+```
+
+# Loading annotation file
+```{r}
+Annot <- read.csv("../data/Past_genome/Past_annotation_20220310.csv", header=TRUE, na.string="NA", stringsAsFactors = FALSE, skip=0)
+
+Annot[Annot == ""] <- NA
+
+Annot.1 <- Annot %>%
+  select(gene, Length, InterPro_GO_Names, BLAST_GO_Names, SwissProt_GO_Names, TrEMBL_GO_Names) %>%
+  mutate(InterPro_GO_Names = na_if(InterPro_GO_Names, "no GO terms")) %>%
+  mutate(InterPro_GO_Names = na_if(InterPro_GO_Names, "no IPS match")) %>%
+  unite("GO_Name", InterPro_GO_Names:TrEMBL_GO_Names, remove = FALSE, na.rm = TRUE) %>%
+  select(gene, Length, GO_Name)
+
+Annot.2 <- Annot %>%
+  select(gene, InterPro_GO_IDs, BLAST_GO_IDs, SwissProt_GO_IDs, TrEMBL_GO_IDs) %>%
+  mutate(InterPro_GO_IDs = na_if(InterPro_GO_IDs, "no GO terms")) %>%
+  mutate(InterPro_GO_IDs = na_if(InterPro_GO_IDs, "no IPS match")) %>%
+  unite("GO_IDs", InterPro_GO_IDs:TrEMBL_GO_IDs, remove = FALSE, na.rm = TRUE) %>%
+  select(gene, GO_IDs)
+
+Annot.select <- merge(Annot.1, Annot.2, by = "gene")
+Annot.select$GO_Name <- gsub("F:*","",Annot.select$GO_Name)
+Annot.select$GO_Name <- gsub("P:*","",Annot.select$GO_Name)
+Annot.select$GO_Name <- gsub("C:*","",Annot.select$GO_Name)
+Annot.select$GO_Name <- gsub("_","; ",Annot.select$GO_Name)
+
+Annot.select$GO_IDs <- gsub("F:*","",Annot.select$GO_IDs)
+Annot.select$GO_IDs <- gsub("P:*","",Annot.select$GO_IDs)
+Annot.select$GO_IDs <- gsub("C:*","",Annot.select$GO_IDs)
+Annot.select$GO_IDs <- gsub("_","; ",Annot.select$GO_IDs)
+
+```
+
+# Load methylation data
+```{r}
+#Lifestage data
+meth.data.LS_5x <- list.files(path = "../output/WGBS/meth_counts_5x", pattern = ".bed$", full.names=TRUE) %>%
+  set_names(.) %>% 
+  map_dfr(read.csv,.id="Sample.ID", header=FALSE, sep="\t", na.string="NA", stringsAsFactors = FALSE) %>% 
+  dplyr::select(-c(V3,V7:V14)) %>%
+  group_by(Sample.ID)
+colnames(meth.data.LS_5x) <- c("Sample.ID", "scaffold", "position","per.meth","meth","unmeth","gene")
+meth.data.LS_5x$gene <- gsub(";.*","",meth.data.LS_5x$gene) #remove extra characters
+meth.data.LS_5x$gene <- gsub("ID=","",meth.data.LS_5x$gene) #remove extra characters
+meth.data.LS_5x$Sample.ID <- gsub("../output/WGBS/meth_counts_5x/","",meth.data.LS_5x$Sample.ID) #remove extra characters
+meth.data.LS_5x$Sample.ID <- gsub("*._5x_sorted.tab_gene_CpG_5x_enrichment.bed","",meth.data.LS_5x$Sample.ID) #remove extra characters 
+meth.data.LS_5x$Sample.ID <- gsub("_...","",meth.data.LS_5x$Sample.ID) #remove extra characters
+
+sample.info <- read.csv("../data/metadata/Thermal_Transplant_Metadata_Analysis.csv", stringsAsFactors = TRUE)
+sample.info2 <- sample.info %>%
+  select(-Timepoint, -File_Name) %>%
+  filter(Coral.ID %like% "-A")
+
+MD.LS_5x <- merge(meth.data.LS_5x, sample.info2, by="Sample.ID")
+```
+
+```{r}
+# Binomial GLM to test for differentially methylated genes
+meth_table <- MD.LS_5x
+meth_table$sample_gene <- paste0(meth_table$Sample.ID, meth_table$gene)
+
+#filter for genes with >5 methylated positions
+min.filt <- count(meth_table, vars = c(sample_gene))
+newdata <- min.filt[ which(min.filt$n > 4), ]
+meth_table_filt <- meth_table[meth_table$sample_gene %in% newdata$vars,]
+```
+
+Analysis with Lifestage data without parental colony ID (Origin, Treatment, Lifestage)
+
+```{r, warning=FALSE}
+# create data frame to store results
+results2 <- data.frame()
+gs <- unique(meth_table_filt$gene)
+#first subset the unique dataframes and second run the GLMs
+for(i in 1:length(meth_table_filt$gene)){
+    
+    #subset the dataframe gene by gene
+    meth_table_filt1 <- subset(meth_table_filt, gene ==gs[i])
+    
+    # fit glm position model
+    fit2 <- glm(matrix(c(meth, unmeth), ncol=2) ~ Origin * Treatment * LifeStage, 
+               data=meth_table_filt1, family=binomial)
+    a2 <- anova(fit2, test="LRT")
+    
+    # capture summary stats to data frame
+    df2 <- data.frame(gene = meth_table_filt1[1,7],
+                     pval.Origin = a2$`Pr(>Chi)`[2],
+                     pval.Treatment = a2$`Pr(>Chi)`[3],
+                     pval.LifeStage = a2$`Pr(>Chi)`[4],
+                     pval.Origin_x_Treatment = a2$`Pr(>Chi)`[5],
+                     pval.Origin_x_LifeStage = a2$`Pr(>Chi)`[6],
+                     pval.Treatment_x_LifeStage = a2$`Pr(>Chi)`[7],
+                     pval.Origin_x_Treatment_x_LifeStage = a2$`Pr(>Chi)`[8],
+                     stringsAsFactors = F)
+    # bind rows of temporary data frame to the results data frame
+    results2 <- rbind(results2, df2)
+  }
+```
+Calculating adjusted p-values for glm with just Origin, Treatment, and Lifestage
+```{r}
+results2[is.na(results2)] <- 0
+results2$adj.pval.Origin <- p.adjust(results2$pval.Origin, method='BH')
+results2$adj.pval.Treatment<- p.adjust(results2$pval.Treatment, method='BH')
+results2$adj.pval.LifeStage<- p.adjust(results2$pval.LifeStage, method='BH')
+results2$adj.pval.Origin_x_Treatment <- p.adjust(results2$pval.Origin_x_Treatment, method='BH')
+results2$adj.pval.Origin_x_LifeStage <- p.adjust(results2$pval.Origin_x_LifeStage, method='BH')
+results2$adj.pval.Treatment_x_LifeStage <- p.adjust(results2$pval.Treatment_x_LifeStage, method='BH')
+results2$adj.pval.Origin_x_Treatment_x_LifeStage <- p.adjust(results2$pval.Origin_x_Treatment_x_LifeStage, method='BH')
+
+DMG_LS.sig <-results2
+DMG_LS.sig <- DMG_LS.sig[,c(1,9:15)]
+```
+
+
+Identifying DMG with significant to Origin 
+```{r}
+DMG_LS.sig.origin <- DMG_LS.sig[order(DMG_LS.sig$adj.pval.Origin),]
+DMG_LS.sig.origin <- DMG_LS.sig.origin[which(DMG_LS.sig.origin$adj.pval.Origin<0.05), ]
+# Annotation
+DMG_LS.sig.origin <- merge(DMG_LS.sig.origin, Annot.select, by="gene", all.x=TRUE)
+DMG_LS.sig.origin <- DMG_LS.sig.origin[order(DMG_LS.sig.origin$adj.pval.Origin),]
+DMG_LS.sig.origin <- DMG_LS.sig.origin[!duplicated(DMG_LS.sig.origin$gene),]
+write.table(DMG_LS.sig.origin, '../output/WGBS/DMG/Origin_sig_annot.tsv', sep='\t', row.names=FALSE)
+
+#Sanity check plotting of top DMGs with sig interaction
+origin <- MD.LS_5x %>%
+  filter(gene== DMG_LS.sig.origin$gene[1])
+means <- aggregate(per.meth ~ Origin, data=origin, FUN=mean)
+ses <- aggregate(per.meth ~ Origin, data=origin, FUN=std.error)
+means$ses <- ses$per.meth
+ggplot(data=means, aes(x=Origin, y=per.meth, group=Origin, colour=Origin, shape=Origin)) + #plot data
+    geom_line(size=0.7, position=position_dodge(.1)) + #plot lines
+    scale_colour_manual(values = c("blue", "red")) + #set line color
+    geom_point(size=4, position=position_dodge(.1), colour="black") + #set point characteristics
+    scale_shape_manual(values=c(1,18,16)) + #set shapes
+    geom_errorbar(aes(ymin=per.meth-ses, ymax=per.meth+ses), #plot error bars
+    width=0, position=position_dodge(.1), colour="black") + #set error bar characteristics
+    xlab("Origin") + #plot x axis label
+    ylab("Percent Methylation") + #plot y axis label
+    theme_bw()
+```
+
+Identifying DMG with significant to Treatment 
+```{r}
+DMG_LS.sig.treatment <- DMG_LS.sig[order(DMG_LS.sig$adj.pval.Treatment),]
+DMG_LS.sig.treatment <- DMG_LS.sig.treatment[which(DMG_LS.sig.treatment$adj.pval.Treatment<0.05), ]
+# Annotation
+DMG_LS.sig.treatment <- merge(DMG_LS.sig.treatment, Annot.select, by="gene", all.x=TRUE)
+DMG_LS.sig.treatment <- DMG_LS.sig.treatment[order(DMG_LS.sig.treatment$adj.pval.Treatment),]
+DMG_LS.sig.treatment <- DMG_LS.sig.treatment[!duplicated(DMG_LS.sig.treatment$gene),]
+write.table(DMG_LS.sig.treatment, '../output/WGBS/DMG/Treatment_sig_annot.tsv', sep='\t', row.names=FALSE)
+
+#Sanity check plotting of top DMGs with sig interaction
+treatment <- MD.LS_5x %>%
+  dplyr::filter(gene== DMG_LS.sig.treatment$gene[1])
+means <- aggregate(per.meth ~ Treatment, data=treatment, FUN=mean)
+ses <- aggregate(per.meth ~ Treatment, data=treatment, FUN=std.error)
+means$ses <- ses$per.meth
+ggplot(data=means, aes(x=Treatment, y=per.meth, group=Treatment, colour=Treatment, shape=Treatment)) + #plot data
+    geom_line(size=0.7, position=position_dodge(.1)) + #plot lines
+    scale_colour_manual(values = c("blue", "red")) + #set line color
+    geom_point(size=4, position=position_dodge(.1), colour="black") + #set point characteristics
+    scale_shape_manual(values=c(1,18,16)) + #set shapes
+    geom_errorbar(aes(ymin=per.meth-ses, ymax=per.meth+ses), #plot error bars
+    width=0, position=position_dodge(.1), colour="black") + #set error bar characteristics
+    xlab("Treatment") + #plot x axis label
+    ylab("Percent Methylation") + #plot y axis label
+    theme_bw()
+```
+
+
+Identifying DMG with significant to Life Stage 
+```{r}
+DMG_LS.sig.lifestage <- DMG_LS.sig[order(DMG_LS.sig$adj.pval.LifeStage),]
+DMG_LS.sig.lifestage <- DMG_LS.sig.lifestage[which(DMG_LS.sig.lifestage$adj.pval.LifeStage<0.05), ]
+# Annotation
+DMG_LS.sig.lifestage <- merge(DMG_LS.sig.lifestage, Annot.select, by="gene", all.x=TRUE)
+DMG_LS.sig.lifestage <- DMG_LS.sig.lifestage[order(DMG_LS.sig.lifestage$adj.pval.LifeStage),]
+DMG_LS.sig.lifestage <- DMG_LS.sig.lifestage[!duplicated(DMG_LS.sig.lifestage$gene),]
+write.table(DMG_LS.sig.lifestage, '../output/WGBS/DMG/LifeStage_sig_annot.tsv', sep='\t', row.names=FALSE)
+
+#Sanity check plotting of top DMGs with sig interaction
+lifestage <- MD.LS_5x %>%
+  filter(gene== DMG_LS.sig.lifestage$gene[1])
+means <- aggregate(per.meth ~ LifeStage, data=lifestage, FUN=mean)
+ses <- aggregate(per.meth ~ LifeStage, data=lifestage, FUN=std.error)
+means$ses <- ses$per.meth
+ggplot(data=means, aes(x=LifeStage, y=per.meth, group=LifeStage, colour=LifeStage, shape=LifeStage)) + #plot data
+    geom_line(size=0.7, position=position_dodge(.1)) + #plot lines
+    scale_colour_manual(values = c("blue", "red")) + #set line color
+    geom_point(size=4, position=position_dodge(.1), colour="black") + #set point characteristics
+    scale_shape_manual(values=c(1,18,16)) + #set shapes
+    geom_errorbar(aes(ymin=per.meth-ses, ymax=per.meth+ses), #plot error bars
+    width=0, position=position_dodge(.1), colour="black") + #set error bar characteristics
+    xlab("LifeStage") + #plot x axis label
+    ylab("Percent Methylation") + #plot y axis label
+    theme_bw()
+```
+
+
+Identifying DMG with significant to Origin x Treatment 
+```{r}
+DMG_LS.sig.OxT <- DMG_LS.sig[order(DMG_LS.sig$adj.pval.Origin_x_Treatment),]
+DMG_LS.sig.OxT <- DMG_LS.sig.OxT[which(DMG_LS.sig.OxT$adj.pval.Origin_x_Treatment<0.05), ]
+# Annotation
+DMG_LS.sig.OxT <- merge(DMG_LS.sig.OxT, Annot.select, by="gene", all.x=TRUE)
+DMG_LS.sig.OxT <- DMG_LS.sig.OxT[order(DMG_LS.sig.OxT$adj.pval.Origin_x_Treatment),]
+DMG_LS.sig.OxT <- DMG_LS.sig.OxT[!duplicated(DMG_LS.sig.OxT$gene),]
+write.table(DMG_LS.sig.OxT, '../output/WGBS/DMG/OxT_sig_annot.tsv', sep='\t', row.names=FALSE)
+
+#Sanity check plotting of top DMGs with sig interaction
+OxT <- MD.LS_5x %>%
+  filter(gene== DMG_LS.sig.OxT$gene[1])
+means <- aggregate(per.meth ~ Origin*Treatment, data=OxT, FUN=mean)
+ses <- aggregate(per.meth ~ Origin*Treatment, data=OxT, FUN=std.error)
+means$ses <- ses$per.meth
+ggplot(data=means, aes(x=Origin, y=per.meth, group=Treatment, colour=Treatment, shape=Treatment)) + #plot data
+    geom_line(size=0.7, position=position_dodge(.1)) + #plot lines
+    scale_colour_manual(values = c("blue", "red")) + #set line color
+    geom_point(size=4, position=position_dodge(.1), colour="black") + #set point characteristics
+    scale_shape_manual(values=c(1,18)) + #set shapes
+    geom_errorbar(aes(ymin=per.meth-ses, ymax=per.meth+ses), #plot error bars
+    width=0, position=position_dodge(.1), colour="black") + #set error bar characteristics
+    xlab("Origin") + #plot x axis label
+    ylab("Percent Methylation") + #plot y axis label
+    theme_bw()
+```
+
+Identifying DMG with significant to Origin x Life Stage 
+```{r}
+DMG_LS.sig.OxL <- DMG_LS.sig[order(DMG_LS.sig$adj.pval.Origin_x_LifeStage),]
+DMG_LS.sig.OxL <- DMG_LS.sig.OxL[which(DMG_LS.sig.OxL$adj.pval.Origin_x_LifeStage<0.05), ]
+# Annotation
+DMG_LS.sig.OxL <- merge(DMG_LS.sig.OxL, Annot.select, by="gene", all.x=TRUE)
+DMG_LS.sig.OxL <- DMG_LS.sig.OxL[order(DMG_LS.sig.OxL$adj.pval.Origin_x_LifeStage),]
+DMG_LS.sig.OxL <- DMG_LS.sig.OxL[!duplicated(DMG_LS.sig.OxL$gene),]
+write.table(DMG_LS.sig.OxL, '../output/WGBS/DMG/OxL_sig_annot.tsv', sep='\t', row.names=FALSE)
+
+#Sanity check plotting of top DMGs with sig interaction
+OxL <- MD.LS_5x %>%
+  filter(gene== DMG_LS.sig.OxL$gene[1])
+means <- aggregate(per.meth ~ Origin*LifeStage, data=OxL, FUN=mean)
+ses <- aggregate(per.meth ~ Origin*LifeStage, data=OxL, FUN=std.error)
+means$ses <- ses$per.meth
+ggplot(data=means, aes(x=Origin, y=per.meth, group=LifeStage, colour=LifeStage, shape=LifeStage)) + #plot data
+    geom_line(size=0.7, position=position_dodge(.1)) + #plot lines
+    scale_colour_manual(values = c("blue", "red")) + #set line color
+    geom_point(size=4, position=position_dodge(.1), colour="black") + #set point characteristics
+    scale_shape_manual(values=c(1,18)) + #set shapes
+    geom_errorbar(aes(ymin=per.meth-ses, ymax=per.meth+ses), #plot error bars
+    width=0, position=position_dodge(.1), colour="black") + #set error bar characteristics
+    xlab("Origin") + #plot x axis label
+    ylab("Percent Methylation") + #plot y axis label
+    theme_bw()
+```
+
+Identifying DMG with significant to Treatment x Life Stage 
+```{r}
+DMG_LS.sig.TxL <- DMG_LS.sig[order(DMG_LS.sig$adj.pval.Treatment_x_LifeStage),]
+DMG_LS.sig.TxL <- DMG_LS.sig.TxL[which(DMG_LS.sig.TxL$adj.pval.Treatment_x_LifeStage<0.05), ]
+# Annotation
+DMG_LS.sig.TxL <- merge(DMG_LS.sig.TxL, Annot.select, by="gene", all.x=TRUE)
+DMG_LS.sig.TxL <- DMG_LS.sig.TxL[order(DMG_LS.sig.TxL$adj.pval.Treatment_x_LifeStage),]
+DMG_LS.sig.TxL <- DMG_LS.sig.TxL[!duplicated(DMG_LS.sig.TxL$gene),]
+write.table(DMG_LS.sig.TxL, '../output/WGBS/DMG/TxL_sig_annot.tsv', sep='\t', row.names=FALSE)
+
+#Sanity check plotting of top DMGs with sig interaction
+TxL <- MD.LS_5x %>%
+  filter(gene== DMG_LS.sig.TxL$gene[1])
+means <- aggregate(per.meth ~ Treatment*LifeStage, data=TxL, FUN=mean)
+ses <- aggregate(per.meth ~ Treatment*LifeStage, data=TxL, FUN=std.error)
+means$ses <- ses$per.meth
+ggplot(data=means, aes(x=Treatment, y=per.meth, group=LifeStage, colour=LifeStage, shape=LifeStage)) + #plot data
+    geom_line(size=0.7, position=position_dodge(.1)) + #plot lines
+    scale_colour_manual(values = c("blue", "red")) + #set line color
+    geom_point(size=4, position=position_dodge(.1), colour="black") + #set point characteristics
+    scale_shape_manual(values=c(1,18)) + #set shapes
+    geom_errorbar(aes(ymin=per.meth-ses, ymax=per.meth+ses), #plot error bars
+    width=0, position=position_dodge(.1), colour="black") + #set error bar characteristics
+    xlab("Treatment") + #plot x axis label
+    ylab("Percent Methylation") + #plot y axis label
+    theme_bw()
+```
+
+Identifying DMG with significant to Origin x Treatment x Life Stage 
+```{r}
+DMG_LS.sig.OxTxL <- DMG_LS.sig[order(DMG_LS.sig$adj.pval.Origin_x_Treatment_x_LifeStage),]
+DMG_LS.sig.OxTxL <- DMG_LS.sig.OxTxL[which(DMG_LS.sig.OxTxL$adj.pval.Origin_x_Treatment_x_LifeStage<0.05), ]
+# Annotation
+DMG_LS.sig.OxTxL <- merge(DMG_LS.sig.OxTxL, Annot.select, by="gene", all.x=TRUE)
+DMG_LS.sig.OxTxL <- DMG_LS.sig.OxTxL[order(DMG_LS.sig.OxTxL$adj.pval.Origin_x_Treatment_x_LifeStage),]
+DMG_LS.sig.OxTxL <- DMG_LS.sig.OxTxL[!duplicated(DMG_LS.sig.OxTxL$gene),]
+write.table(DMG_LS.sig.OxTxL, '../output/WGBS/DMG/OxTxL_sig_annot.tsv', sep='\t', row.names=FALSE)
+
+#Sanity check plotting of top DMGs with sig interaction
+OxTxL <- MD.LS_5x %>%
+  filter(gene== DMG_LS.sig.OxTxL$gene[1])
+means <- aggregate(per.meth ~ Origin*Treatment*LifeStage, data=OxTxL, FUN=mean)
+ses <- aggregate(per.meth ~ Origin*Treatment*LifeStage, data=OxTxL, FUN=std.error)
+means$ses <- ses$per.meth
+means$Treatment_Life <- paste(means$Treatment, means$LifeStage, sep = "-")
+ggplot(data=means, aes(x=Origin, y=per.meth, group = Treatment_Life, colour=Treatment, shape=LifeStage)) + #plot data
+    geom_line(size=0.7, position=position_dodge(.1)) + #plot lines
+    scale_colour_manual(values = c("blue", "red")) + #set line color
+    geom_point(size=4, position=position_dodge(.1), colour="black") + #set point characteristics
+    scale_shape_manual(values=c(1,18)) + #set shapes
+    geom_errorbar(aes(ymin=per.meth-ses, ymax=per.meth+ses), #plot error bars
+    width=0, position=position_dodge(.1), colour="black") + #set error bar characteristics
+    xlab("Origin") + #plot x axis label
+    ylab("Percent Methylation") + #plot y axis label
+    theme_bw()
+```
+
+Gene Ontology Enrichment Analysis
+
+```{r}
+### Setting up files for go enrichment
+
+#generate list of all genes identified and background list for GO enrichment analysis
+MD.ALL.Genes <- as.data.frame(unique(meth_table_filt$gene))
+colnames(MD.ALL.Genes) <- "gene"
+MD.ALL.Genes_annot <- merge(MD.ALL.Genes, Annot.select, by = "gene")
+
+# Vector with all genes after filtering
+ALL.vector <-c(t(MD.ALL.Genes_annot$gene))
+ID.vector <- MD.ALL.Genes_annot$gene
+LENGTH.vector <-MD.ALL.Genes_annot$Length
+
+goslim <- read.csv("../data/WGBS/GO-GOslim.csv")
+goslim <- goslim %>% select(-term)
+
+## Defining goslim terms and seprating out goterms into single rows
+splitted <- strsplit(as.character(MD.ALL.Genes_annot$GO_IDs), "; ") #slit into multiple GO ids to get them all in a single row
+GO.terms <- data.frame(v1 = rep.int(MD.ALL.Genes_annot$gene, sapply(splitted, length)), v2 = unlist(splitted)) #list all genes with each of their GO terms in a single row 
+colnames(GO.terms) <- c("gene", "GO_IDs")
+
+
+##### Writing goenrich function #####
+goenrich <- function(filename, 
+                     identifier){
+  
+                DMG <- as.character(filename$gene) #set the enrichment test list
+                DMG.vector <-c(t(DMG)) #change to vectors
+                
+                gene.vector=as.integer(ALL.vector%in%DMG.vector) #Construct new vector with 1 for DEG and 0 for others
+                names(gene.vector)=ALL.vector #set names
+                DEG.pwf<-nullp(gene.vector, ID.vector, bias.data=LENGTH.vector) #weight vector by length of gene
+                
+                #Find enriched GO terms
+                GO.wall<-goseq(DEG.pwf, ID.vector, gene2cat=GO.terms, test.cats=c("GO:CC", "GO:BP", "GO:MF"), method="Wallenius", use_genes_without_cat=TRUE)
+                
+                GO <- GO.wall[order(GO.wall$over_represented_pvalue),]
+                colnames(GO)[1] <- "GO_ID"
+                
+                #GOslim 
+                GO.slim <- merge(GO, goslim, by = "GO_ID")
+                GO.slim <- GO.slim[!duplicated(GO.slim$GO_ID), ]
+                
+                #Filtering for p > 0.05
+                filename_sig.GO <- GO.slim %>%
+                  dplyr::filter(over_represented_pvalue <0.05) %>%
+                  arrange(., ontology, term, over_represented_pvalue)
+                #write.csv(sig.GO , file = "../output/WGBS/DMG/sig.GO.OxTxL.csv")
+                
+                #Formatting sig gene file with a goterm per row
+                split <- strsplit(as.character(filename$GO_IDs), "; ") 
+                split2 <- data.frame(v1 = rep.int(filename$gene, sapply(split, length)), v2 = unlist(split)) 
+                colnames(split2) <- c("gene", "GO_IDs")
+                
+                filename2 <- filename %>% dplyr::select(-GO_IDs, -GO_Name, -Length)
+                filename_GO <- merge(split2, filename2, by = "gene")
+                
+                colnames(filename_GO)[2] <- "GO_ID"
+                
+                # Merge sig meth genes with goslim
+                filename_GOslim <- merge(filename_GO, filename_sig.GO, by = "GO_ID", all = TRUE)
+                #write.csv(filename_GOslim , file = "../output/WGBS/DMG/sig.GO.OxTxL.GOSlim.csv")
+                
+                return(filename_GOslim)
+                }
+
+### Executing GOenrichment for each factor/interaction
+
+#Origin
+GOenrich_Origin <- goenrich(DMG_LS.sig.origin, Origin)
+write.csv(GOenrich_Origin , file = "../output/WGBS/DMG/GOenrich_Origin.csv")
+
+#Treatment
+GOenrich_Treatment <- goenrich(DMG_LS.sig.treatment, Treatment)
+write.csv(GOenrich_Treatment , file = "../output/WGBS/DMG/GOenrich_Treatment.csv")
+
+#LifeStage
+GOenrich_LifeStage <- goenrich(DMG_LS.sig.lifestage, LifeStage)
+write.csv(GOenrich_LifeStage , file = "../output/WGBS/DMG/GOenrich_LifeStage.csv")
+
+#OriginxTreatment
+GOenrich_OxT <- goenrich(DMG_LS.sig.OxT, OxT)
+write.csv(GOenrich_OxT , file = "../output/WGBS/DMG/GOenrich_OxT.csv")
+
+#OriginxLifeStage
+GOenrich_OxL <- goenrich(DMG_LS.sig.OxL, OxL)
+write.csv(GOenrich_OxL , file = "../output/WGBS/DMG/GOenrich_OxL.csv")
+
+#TreatmentxLifeStage
+GOenrich_TxL <- goenrich(DMG_LS.sig.TxL, TxL)
+write.csv(GOenrich_TxL , file = "../output/WGBS/DMG/GOenrich_TxL.csv")
+
+#OriginxTreatmentxLifestage
+GOenrich_OxTxL <- goenrich(DMG_LS.sig.OxTxL, OxTxL)
+write.csv(GOenrich_OxTxL , file = "../output/WGBS/DMG/GOenrich_OxTxL.csv")
+
+```
+
+
+```{r}
+#### ORIGIN ####
+
+# Plotting by BP function
+GOenrich_Origin_2 <- GOenrich_Origin %>%
+  filter(over_represented_pvalue != "NA") %>%
+  filter(numInCat >5) %>%
+  filter(ontology == "BP") %>%
+  arrange(., ontology, GOSlim_bin, over_represented_pvalue)
+
+GOenrich_Origin_2$GOSlim_bin <- as.factor(GOenrich_Origin_2$GOSlim_bin)
+
+#plot significantly enriched GO terms by Slim Category
+GOenrich_Origin_BP.plot <-  ggplot(GOenrich_Origin_2, aes(x = ontology, y = term)) + 
+  geom_tile(aes(fill =over_represented_pvalue)) + 
+  facet_grid(GOSlim_bin ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
+  theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+  panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
+  strip.text.y = element_text(angle=0, size = 10),
+  strip.text.x = element_text(size = 20),
+  axis.text = element_text(size = 8),
+  axis.title.x = element_blank(),
+  axis.title.y = element_blank())
+
+ggsave(filename="../output/WGBS/DMG/GOenrich_Origin.BP.plot.png", plot=GOenrich_Origin_BP.plot, dpi=300, width=12, height=12, units="in")
+```
+
+
+```{r}
+#### TREATMENT ####
+
+# Plotting by BP function
+GOenrich_Treatment_2 <- GOenrich_Treatment %>%
+  filter(over_represented_pvalue != "NA") %>%
+  filter(numInCat >5) %>%
+  filter(ontology == "BP") %>%
+  arrange(., ontology, GOSlim_bin, over_represented_pvalue)
+
+GOenrich_Treatment_2$GOSlim_bin <- as.factor(GOenrich_Treatment_2$GOSlim_bin)
+
+#plot significantly enriched GO terms by Slim Category
+GOenrich_Treatment_BP.plot <-  ggplot(GOenrich_Treatment_2, aes(x = ontology, y = term)) + 
+  geom_tile(aes(fill =over_represented_pvalue)) + 
+  facet_grid(GOSlim_bin ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
+  theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+  panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
+  strip.text.y = element_text(angle=0, size = 10),
+  strip.text.x = element_text(size = 20),
+  axis.text = element_text(size = 8),
+  axis.title.x = element_blank(),
+  axis.title.y = element_blank())
+
+ggsave(filename="../output/WGBS/DMG/GOenrich_Treatment.BP.plot.png", plot=GOenrich_Treatment_BP.plot, dpi=300, width=12, height=12, units="in")
+```
+
+```{r}
+#### LIFESTAGE ####
+
+# Plotting by BP function
+GOenrich_LifeStage_2 <- GOenrich_LifeStage %>%
+  filter(over_represented_pvalue != "NA") %>%
+  filter(numInCat >5) %>%
+  filter(ontology == "BP") %>%
+  arrange(., ontology, GOSlim_bin, over_represented_pvalue)
+
+GOenrich_LifeStage_2$GOSlim_bin <- as.factor(GOenrich_LifeStage_2$GOSlim_bin)
+
+#plot significantly enriched GO terms by Slim Category
+GOenrich_LifeStage_BP.plot <-  ggplot(GOenrich_LifeStage_2, aes(x = ontology, y = term)) + 
+  geom_tile(aes(fill =over_represented_pvalue)) + 
+  facet_grid(GOSlim_bin ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
+  theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+  panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
+  strip.text.y = element_text(angle=0, size = 10),
+  strip.text.x = element_text(size = 20),
+  axis.text = element_text(size = 8),
+  axis.title.x = element_blank(),
+  axis.title.y = element_blank())
+
+ggsave(filename="../output/WGBS/DMG/GOenrich_LifeStage.BP.plot.png", plot=GOenrich_LifeStage_BP.plot, dpi=300, width=12, height=12, units="in")
+```
+
+
+```{r}
+#### OxT ####
+
+# Plotting by BP function
+GOenrich_OxT_2 <- GOenrich_OxT %>%
+  filter(over_represented_pvalue != "NA") %>%
+  filter(numInCat >5) %>%
+  filter(ontology == "BP") %>%
+  arrange(., ontology, GOSlim_bin, over_represented_pvalue)
+
+GOenrich_OxT_2$GOSlim_bin <- as.factor(GOenrich_OxT_2$GOSlim_bin)
+
+#plot significantly enriched GO terms by Slim Category
+GOenrich_OxT_BP.plot <-  ggplot(GOenrich_OxT_2, aes(x = ontology, y = term)) + 
+  geom_tile(aes(fill =over_represented_pvalue)) + 
+  facet_grid(GOSlim_bin ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
+  theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+  panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
+  strip.text.y = element_text(angle=0, size = 10),
+  strip.text.x = element_text(size = 20),
+  axis.text = element_text(size = 8),
+  axis.title.x = element_blank(),
+  axis.title.y = element_blank())
+
+ggsave(filename="../output/WGBS/DMG/GOenrich_OxT.BP.plot.png", plot=GOenrich_OxT_BP.plot, dpi=300, width=12, height=12, units="in")
+```
+
+
+```{r}
+#### OxL ####
+
+# Plotting by BP function
+GOenrich_OxL_2 <- GOenrich_OxL %>%
+  filter(over_represented_pvalue != "NA") %>%
+  filter(numInCat >5) %>%
+  filter(ontology == "BP") %>%
+  arrange(., ontology, GOSlim_bin, over_represented_pvalue)
+
+GOenrich_OxL_2$GOSlim_bin <- as.factor(GOenrich_OxL_2$GOSlim_bin)
+
+#plot significantly enriched GO terms by Slim Category
+GOenrich_OxL_BP.plot <-  ggplot(GOenrich_OxL_2, aes(x = ontology, y = term)) + 
+  geom_tile(aes(fill =over_represented_pvalue)) + 
+  facet_grid(GOSlim_bin ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
+  theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+  panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
+  strip.text.y = element_text(angle=0, size = 10),
+  strip.text.x = element_text(size = 20),
+  axis.text = element_text(size = 8),
+  axis.title.x = element_blank(),
+  axis.title.y = element_blank())
+
+ggsave(filename="../output/WGBS/DMG/GOenrich_OxL.BP.plot.png", plot=GOenrich_OxL_BP.plot, dpi=300, width=12, height=12, units="in")
+```
+
+
+```{r}
+#### TxL ####
+
+# Plotting by BP function
+GOenrich_TxL_2 <- GOenrich_TxL %>%
+  filter(over_represented_pvalue != "NA") %>%
+  filter(numInCat >5) %>%
+  filter(ontology == "BP") %>%
+  arrange(., ontology, GOSlim_bin, over_represented_pvalue)
+
+GOenrich_TxL_2$GOSlim_bin <- as.factor(GOenrich_TxL_2$GOSlim_bin)
+
+#plot significantly enriched GO terms by Slim Category
+GOenrich_TxL_BP.plot <-  ggplot(GOenrich_TxL_2, aes(x = ontology, y = term)) + 
+  geom_tile(aes(fill =over_represented_pvalue)) + 
+  facet_grid(GOSlim_bin ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
+  theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+  panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
+  strip.text.y = element_text(angle=0, size = 10),
+  strip.text.x = element_text(size = 20),
+  axis.text = element_text(size = 8),
+  axis.title.x = element_blank(),
+  axis.title.y = element_blank())
+
+ggsave(filename="../output/WGBS/DMG/GOenrich_TxL.BP.plot.png", plot=GOenrich_TxL_BP.plot, dpi=300, width=12, height=12, units="in")
+```
+
+```{r}
+
+#### OxTxL ####
+
+# Plotting by BP function
+GOenrich_OxTxL_2 <- GOenrich_OxTxL %>%
+  filter(over_represented_pvalue != "NA") %>%
+  filter(numInCat >2) %>%
+  filter(ontology == "BP") %>%
+  arrange(., ontology, GOSlim_bin, over_represented_pvalue)
+
+GOenrich_OxTxL_2$GOSlim_bin <- as.factor(GOenrich_OxTxL_2$GOSlim_bin)
+
+#plot significantly enriched GO terms by Slim Category
+GOenrich_OxTxL_BP.plot <-  ggplot(GOenrich_OxTxL_2, aes(x = ontology, y = term)) + 
+  geom_tile(aes(fill =over_represented_pvalue)) + 
+  facet_grid(GOSlim_bin ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
+  theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+  panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
+  strip.text.y = element_text(angle=0, size = 10),
+  strip.text.x = element_text(size = 20),
+  axis.text = element_text(size = 8),
+  axis.title.x = element_blank(),
+  axis.title.y = element_blank())
+
+ggsave(filename="../output/WGBS/DMG/GOenrich_OxTxL.BP.plot.png", plot=GOenrich_OxTxL_BP.plot, dpi=300, width=12, height=12, units="in")
+```
+
+
+```{r}
+# Plotting heatmap of DMGs
+
+meth_table.means <- aggregate(per.meth ~ gene*Origin*Treatment*LifeStage, data=meth_table_filt, FUN=mean)
+meth_table.means2 <- meth_table.means[meth_table.means$gene %in% DMG_LS.sig$gene,]
+All_data <- meth_table.means2 %>% pivot_wider(names_from = c(Origin, Treatment, LifeStage), values_from = per.meth)
+All_mat <- as.matrix(All_data[,-1])
+
+pdf("../output/WGBS/Alldata.DMG_Rel_HEATMAP.pdf")
+heatmap.2(All_mat, 
+          cexCol = 1.5, 
+          distfun = function(x) as.dist(1 - cor(t(x), use = "pa")), 
+          hclustfun = function(x) hclust(x,method = 'average'),
+          key.xtickfun = function() {
+  breaks = pretty(parent.frame()$breaks)
+  #breaks = breaks[c(1,length(breaks))]
+  list(at = parent.frame()$scale01(breaks),labels = breaks)},
+  Colv=TRUE, col= rev(RColorBrewer::brewer.pal(name = "RdYlBu", n = 10)), 
+  density.info = "none", 
+  trace = "none", 
+  scale = "row", 
+  labRow = FALSE,
+  sepcolor="white",
+  sepwidth=c(0.1,0.01), 
+  lmat = rbind(c(0,3),c(2,1),c(4,0)),keysize=1, key.par = list(cex=0.65),lhei=c(1.5,4,1), lwid = c(1.5,4))
+dev.off()
+
+```
+
+
+```{r}
+# Plotting PCA
+
+### Formatting dataframe 
+meth_collife.means <- aggregate(per.meth ~ gene*Origin*Treatment*LifeStage*Col_Life, data=meth_table_filt, FUN=mean)
+meth_collife.means2 <- meth_collife.means[meth_collife.means$gene %in% DMG_LS.sig$gene,]
+All_data_collife <- meth_collife.means2 %>% pivot_wider(names_from = gene, values_from = per.meth)
+rownames(All_data_collife) <- paste0(All_data_collife$Col_Life)
+
+### Running prcomp
+scaled_pca_all <-prcomp(All_data_collife[c(5:ncol(All_data_collife))], scale=FALSE, center=TRUE)
+fviz_eig(scaled_pca_all)
+
+coral_info <- All_data_collife[c(1:4)]
+
+pca_data_all <- scaled_pca_all%>%
+  augment(coral_info)%>%
+  group_by(Origin, Treatment, LifeStage, Col_Life)%>%
+  mutate(PC1.mean = mean(.fittedPC1),
+         PC2.mean = mean(.fittedPC2))
+
+# pca.centroids_all<- pca_data_all%>%
+#   dplyr::select(Origin, Treatment, LifeStage, PC1.mean, PC2.mean)%>%
+#   dplyr::group_by(Origin, Treatment, LifeStage)%>%
+#   dplyr::summarise(PC1.mean = mean(PC1.mean), PC2.mean = mean(PC2.mean))
+
+#Examine PERMANOVA results.  
+# scale data
+vegan_all <- scale(All_data_collife[c(5:ncol(All_data_collife))])
+
+# PERMANOVA 
+permanova_all <- adonis(vegan_all ~ Origin*Treatment*LifeStage, data = All_data_collife, method='eu')
+z_pca_all <- permanova_all$aov.tab
+z_pca_all
+
+#Assemble plot with background points
+
+#1. make plot with dots
+
+#adding percentages on axis
+
+names(pca_data_all)[6] <- "PCA1"
+names(pca_data_all)[7] <- "PCA2"
+percentage_all <- round((scaled_pca_all$sdev^2) / sum((scaled_pca_all$sdev^2)) * 100, 2)
+percentage_all <- paste( colnames(pca_data_all[6:37]), "(",paste(as.character(percentage_all), "%", ")", sep="") )
+
+#setting up data to add polygons
+pca_data_all$OTL <- paste(pca_data_all$Origin, pca_data_all$Treatment, pca_data_all$LifeStage)
+pca_data_all$OT <- paste(pca_data_all$Origin, pca_data_all$Treatment)
+pca_data_all$Col_Life <- gsub("_Adult","",pca_data_all$Col_Life) #remove extra characters
+pca_data_all$Col_Life <- gsub("_Larvae","",pca_data_all$Col_Life) #remove extra characters
+
+find_hull_all <- function(pca_data_all) pca_data_all[chull(pca_data_all$PCA1, pca_data_all$PCA2), ]
+hulls_all <- ddply(pca_data_all, "OTL", find_hull_all)
+
+
+PCA_all <- ggplot(pca_data_all, aes(PCA1, PCA2, color=OT, group = Col_Life)) + 
+  geom_point(size = 4, aes(shape = LifeStage))+
+  geom_line() +
+  scale_colour_manual(values=c("#ffae80", "#ff5d00", "#80d1ff", "#00a2ff")) +
+  scale_shape_manual(values=c(15, 17)) +
+  theme_classic()+
+#  ylim(-20,15)+
+#  xlim(-15,15)+
+  ylab(percentage_all[2])+
+  xlab(percentage_all[1])+
+  labs(color = "Thermal History", shape = "Life Stage", fill = "none") +
+  # geom_text(x=9, y=-12, label=paste("p(Day)=", z_pca_all$`Pr(>F)`[1]), size=7, color=ifelse(z_pca_all$`Pr(>F)`[1] < 0.05, "black", "darkgray")) + 
+  # geom_text(x=9, y=-13.25, label=paste("p(Group)=", z_pca_all$`Pr(>F)`[2]), size=7, color=ifelse(z_pca_all$`Pr(>F)`[2] < 0.05, "black", "darkgray")) + 
+  # geom_text(x=9, y=-14.5, label=paste("p(Day x Group)=", z_pca_all$`Pr(>F)`[3]), size=7, color=ifelse(z_pca_all$`Pr(>F)`[3] < 0.05, "black", "darkgray")) +
+  theme(legend.text = element_text(size=18), 
+        legend.position="right",
+        plot.background = element_blank(),
+        legend.title = element_text(size=20), 
+        plot.margin = margin(1, 1, 1, 1, "cm"),
+        axis.text = element_text(size=18), 
+        title = element_text(size=25, face="bold"), 
+        axis.title = element_text(size=18))
+
+ggsave(filename="../output/WGBS/DMG/PerMeth_PCA.jpeg", plot=PCA_all, dpi=300, width=12, height=12, units="in")
+```
+
