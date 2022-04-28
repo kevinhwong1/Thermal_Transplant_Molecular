@@ -64,14 +64,15 @@ feat$feature <- as.factor(feat$feature)
 
 ```{r, warning=FALSE}
 
-ggplot(feat.filt, aes(x = comparison, y = ..count.., fill = factor(feature), group = feature)) + 
+gfa_plot <- ggplot(feat.filt, aes(x = comparison, y = ..count.., fill = factor(feature), group = feature)) + 
   geom_bar(position = "fill", color = "black") + 
   scale_y_continuous(labels=scales::percent) + 
   xlab("Lifestage") +
   ylab("% of total regions") + 
-  theme_bw() + theme(axis.text.x = element_text(size = 7, angle = 60, hjust = 1), axis.title = element_text(size = 12, face = "bold")) + 
+  theme_bw() + theme(axis.text.x = element_text(size = 20, angle = 60, hjust = 1), axis.title = element_text(size = 12, face = "bold")) + 
   scale_fill_manual("Feature",values = RColorBrewer::brewer.pal(10,"BuGn"))
 
+ggsave(filename="../output/WGBS/genome_feature/GFA_A_L.jpeg", plot=gfa_plot, dpi=300, width=12, height=12, units="in")
 ```
 
 ```{r, warning=FALSE}
