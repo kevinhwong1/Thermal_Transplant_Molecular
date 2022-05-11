@@ -105,8 +105,8 @@ meth_table$sample_gene <- paste0(meth_table$Sample.ID, meth_table$gene)
 
 #filter for genes with >5 methylated positions
 min.filt <- count(meth_table, vars = c(sample_gene))
-newdata <- min.filt[ which(min.filt$n > 4), ]
-meth_table_filt <- meth_table[meth_table$sample_gene %in% newdata$vars,]
+newdata <- min.filt[ which(min.filt$n > 9), ]
+meth_table_filt <- meth_table[meth_table$sample_gene %in% newdata$vars,] #consider checking this and run a pca on this - have a decent rational for this 
 ```
 
 Analysis with Lifestage data without parental colony ID (Origin, Treatment, Lifestage)
@@ -140,6 +140,7 @@ for(i in 1:length(meth_table_filt$gene)){
     results2 <- rbind(results2, df2)
   }
 ```
+
 Calculating adjusted p-values for glm with just Origin, Treatment, and Lifestage
 ```{r}
 results2[is.na(results2)] <- 0
@@ -456,13 +457,21 @@ write.csv(GOenrich_OxTxL , file = "../output/WGBS/DMG/GOenrich_OxTxL.csv")
 ```
 
 
+
+Prepping `MD.LS_5x` dataframe for directionality of change analysis
+```{r}
+MD.LS_5x_means <- aggregate(per.meth ~ Origin*Treatment*LifeStage*Col_Life*gene, data=MD.LS_5x, FUN=mean)
+```
+
+
+
 ```{r}
 #### ORIGIN ####
 
 # Plotting by BP function
 GOenrich_Origin_2 <- GOenrich_Origin %>%
   filter(over_represented_pvalue != "NA") %>%
-  filter(numInCat >5) %>%
+#  filter(numInCat >5) %>%
   filter(ontology == "BP") %>%
   arrange(., ontology, GOSlim_bin, over_represented_pvalue)
 
@@ -481,6 +490,34 @@ GOenrich_Origin_BP.plot <-  ggplot(GOenrich_Origin_2, aes(x = ontology, y = term
   axis.title.y = element_blank())
 
 ggsave(filename="../output/WGBS/DMG/GOenrich_Origin.BP.plot.png", plot=GOenrich_Origin_BP.plot, dpi=300, width=12, height=12, units="in")
+
+# Unique list of GOenrich origin genes
+GOenrich_Origin_gene <- unique(GOenrich_Origin_2$gene)
+GOenrich_Origin_meth <- dplyr::filter(MD.LS_5x_means, gene %in% GOenrich_Origin_gene)
+GOenrich_Origin_meth_means <- aggregate(per.meth ~ Origin*gene, data=GOenrich_Origin_meth, FUN=mean)
+
+# Filtering for direction of change 
+GOenrich_Origin_direction <- GOenrich_Origin_meth_means %>% 
+  spread(Origin, per.meth) %>% 
+  dplyr::mutate(direction = if_else(Patch > Rim, "Patch", "Rim")) %>%
+  dplyr::select(gene, direction)
+
+GOenrich_Origin_3 <- merge(GOenrich_Origin_2, GOenrich_Origin_direction, by = "gene")
+
+## Origin - Patch
+GOenrich_Origin_BP.plot <-  ggplot(GOenrich_Origin_3, aes(x = direction, y = term)) + 
+  geom_tile(aes(fill =over_represented_pvalue)) + 
+  facet_grid(GOSlim_bin ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
+  theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+  panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
+  strip.text.y = element_text(angle=0, size = 10),
+  strip.text.x = element_text(size = 20),
+  axis.text = element_text(size = 8),
+  axis.title.x = element_blank(),
+  axis.title.y = element_blank())
+
+ggsave(filename="../output/WGBS/DMG/GOenrich_Origin_Direction.BP.plot.png", plot=GOenrich_Origin_BP.plot, dpi=300, width=12, height=12, units="in")
+
 ```
 
 
@@ -509,6 +546,36 @@ GOenrich_Treatment_BP.plot <-  ggplot(GOenrich_Treatment_2, aes(x = ontology, y 
   axis.title.y = element_blank())
 
 ggsave(filename="../output/WGBS/DMG/GOenrich_Treatment.BP.plot.png", plot=GOenrich_Treatment_BP.plot, dpi=300, width=12, height=12, units="in")
+
+
+# Unique list of GOenrich Treatment genes
+GOenrich_Treatment_gene <- unique(GOenrich_Treatment_2$gene)
+GOenrich_Treatment_meth <- dplyr::filter(MD.LS_5x_means, gene %in% GOenrich_Treatment_gene)
+GOenrich_Treatment_meth_means <- aggregate(per.meth ~ Treatment*gene, data=GOenrich_Treatment_meth, FUN=mean)
+
+# Filtering for direction of change 
+GOenrich_Treatment_direction <- GOenrich_Treatment_meth_means %>% 
+  spread(Treatment, per.meth) %>% 
+  dplyr::mutate(direction = if_else(Ambient > Heated, "Ambient", "Heated")) %>%
+  dplyr::select(gene, direction)
+
+GOenrich_Treatment_3 <- merge(GOenrich_Treatment_2, GOenrich_Treatment_direction, by = "gene")
+
+## Treatment 
+GOenrich_Treatment_BP.plot <-  ggplot(GOenrich_Treatment_3, aes(x = direction, y = term)) + 
+  geom_tile(aes(fill =over_represented_pvalue)) + 
+  facet_grid(GOSlim_bin ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
+  theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+  panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
+  strip.text.y = element_text(angle=0, size = 10),
+  strip.text.x = element_text(size = 20),
+  axis.text = element_text(size = 8),
+  axis.title.x = element_blank(),
+  axis.title.y = element_blank())
+
+ggsave(filename="../output/WGBS/DMG/GOenrich_Treatment_Direction.BP.plot.png", plot=GOenrich_Treatment_BP.plot, dpi=300, width=12, height=12, units="in")
+
+
 ```
 
 ```{r}
@@ -517,7 +584,7 @@ ggsave(filename="../output/WGBS/DMG/GOenrich_Treatment.BP.plot.png", plot=GOenri
 # Plotting by BP function
 GOenrich_LifeStage_2 <- GOenrich_LifeStage %>%
   filter(over_represented_pvalue != "NA") %>%
-  filter(numInCat >5) %>%
+#  filter(numInCat >5) %>%
   filter(ontology == "BP") %>%
   arrange(., ontology, GOSlim_bin, over_represented_pvalue)
 
@@ -536,6 +603,34 @@ GOenrich_LifeStage_BP.plot <-  ggplot(GOenrich_LifeStage_2, aes(x = ontology, y 
   axis.title.y = element_blank())
 
 ggsave(filename="../output/WGBS/DMG/GOenrich_LifeStage.BP.plot.png", plot=GOenrich_LifeStage_BP.plot, dpi=300, width=12, height=12, units="in")
+
+# Unique list of GOenrich LifesStage genes
+GOenrich_LifeStage_gene <- unique(GOenrich_LifeStage_2$gene)
+GOenrich_LifeStage_meth <- dplyr::filter(MD.LS_5x_means, gene %in% GOenrich_LifeStage_gene)
+GOenrich_LifeStage_meth_means <- aggregate(per.meth ~ LifeStage*gene, data=GOenrich_LifeStage_meth, FUN=mean)
+
+# Filtering for direction of change 
+GOenrich_LifeStage_direction <- GOenrich_LifeStage_meth_means %>% 
+  spread(LifeStage, per.meth) %>% 
+  dplyr::mutate(direction = if_else(Adult > Larvae, "Adult", "Larvae")) %>%
+  dplyr::select(gene, direction)
+
+GOenrich_LifeStage_3 <- merge(GOenrich_LifeStage_2, GOenrich_LifeStage_direction, by = "gene")
+
+## LifesStage 
+GOenrich_LifeStage_BP.plot <-  ggplot(GOenrich_LifeStage_3, aes(x = direction, y = term)) + 
+  geom_tile(aes(fill =over_represented_pvalue)) + 
+  facet_grid(GOSlim_bin ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
+  theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+  panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
+  strip.text.y = element_text(angle=0, size = 10),
+  strip.text.x = element_text(size = 20),
+  axis.text = element_text(size = 8),
+  axis.title.x = element_blank(),
+  axis.title.y = element_blank())
+
+ggsave(filename="../output/WGBS/DMG/GOenrich_LifeStage_Direction.BP.plot.png", plot=GOenrich_LifeStage_BP.plot, dpi=300, width=12, height=12, units="in")
+
 ```
 
 
@@ -564,8 +659,36 @@ GOenrich_OxT_BP.plot <-  ggplot(GOenrich_OxT_2, aes(x = ontology, y = term)) +
   axis.title.y = element_blank())
 
 ggsave(filename="../output/WGBS/DMG/GOenrich_OxT.BP.plot.png", plot=GOenrich_OxT_BP.plot, dpi=300, width=12, height=12, units="in")
-```
+# 
+# # Unique list of GOenrich OxT genes
+# GOenrich_OxT_gene <- unique(GOenrich_OxT_2$gene)
+# GOenrich_OxT_meth <- dplyr::filter(MD.LS_5x_means, gene %in% GOenrich_OxT_gene)
+# GOenrich_OxT_meth$OT <- paste(GOenrich_OxT_meth$Origin, GOenrich_OxT_meth$Treatment, sep = "-")
+# GOenrich_OxT_meth_means <- aggregate(per.meth ~ OT*gene, data=GOenrich_OxT_meth, FUN=mean)
+# 
+# # Filtering for direction of change 
+# GOenrich_OxT_direction <- GOenrich_OxT_meth_means %>% 
+#   spread(OT, per.meth) %>% 
+#   dplyr::mutate(direction = if_else(Adult > Larvae, "Adult", "Larvae")) %>%
+#   dplyr::select(gene, direction)
+# 
+# GOenrich_LifeStage_3 <- merge(GOenrich_LifeStage_2, GOenrich_LifeStage_direction, by = "gene")
+# 
+# ## LifesStage 
+# GOenrich_LifeStage_BP.plot <-  ggplot(GOenrich_LifeStage_3, aes(x = direction, y = term)) + 
+#   geom_tile(aes(fill =over_represented_pvalue)) + 
+#   facet_grid(GOSlim_bin ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
+#   theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+#   panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
+#   strip.text.y = element_text(angle=0, size = 10),
+#   strip.text.x = element_text(size = 20),
+#   axis.text = element_text(size = 8),
+#   axis.title.x = element_blank(),
+#   axis.title.y = element_blank())
+# 
+# ggsave(filename="../output/WGBS/DMG/GOenrich_LifeStage_Direction.BP.plot.png", plot=GOenrich_LifeStage_BP.plot, dpi=300, width=12, height=12, units="in")
 
+```
 
 ```{r}
 #### OxL ####
@@ -652,14 +775,16 @@ ggsave(filename="../output/WGBS/DMG/GOenrich_OxTxL.BP.plot.png", plot=GOenrich_O
 
 
 ```{r}
-# Plotting heatmap of DMGs
+# Plotting heatmap of DMGs with inidividual variability 
 
 meth_table.means <- aggregate(per.meth ~ gene*Origin*Treatment*LifeStage, data=meth_table_filt, FUN=mean)
 meth_table.means2 <- meth_table.means[meth_table.means$gene %in% DMG_LS.sig$gene,]
 All_data <- meth_table.means2 %>% pivot_wider(names_from = c(Origin, Treatment, LifeStage), values_from = per.meth)
-All_mat <- as.matrix(All_data[,-1])
+All_mat <- as.matrix(All_data[,-1:4])
 
-pdf("../output/WGBS/Alldata.DMG_Rel_HEATMAP.pdf")
+xy <- as.matrix(All_data_collife[,-c(1:4)])
+
+pdf("../output/WGBS/Alldata.DMG_Rel_HEATMAP.pdf", width = 20)
 heatmap.2(All_mat, 
           cexCol = 1.5, 
           distfun = function(x) as.dist(1 - cor(t(x), use = "pa")), 
@@ -725,7 +850,7 @@ z_pca_all
 names(pca_data_all)[6] <- "PCA1"
 names(pca_data_all)[7] <- "PCA2"
 percentage_all <- round((scaled_pca_all$sdev^2) / sum((scaled_pca_all$sdev^2)) * 100, 2)
-percentage_all <- paste( colnames(pca_data_all[6:37]), "(",paste(as.character(percentage_all), "%", ")", sep="") )
+percentage_all <- paste(colnames(pca_data_all[6:37]), "(",paste(as.character(percentage_all), "%", ")", sep="") )
 
 #setting up data to add polygons
 pca_data_all$OTL <- paste(pca_data_all$Origin, pca_data_all$Treatment, pca_data_all$LifeStage)
@@ -740,7 +865,7 @@ hulls_all <- ddply(pca_data_all, "OTL", find_hull_all)
 PCA_all <- ggplot(pca_data_all, aes(PCA1, PCA2, color=OT, group = Col_Life)) + 
   geom_point(size = 4, aes(shape = LifeStage))+
   geom_line() +
-  scale_colour_manual(values=c("#ffae80", "#ff5d00", "#80d1ff", "#00a2ff")) +
+  scale_colour_manual(values=c("#00a2ff", "#ff5d00","#80d1ff", "#ffae80")) +
   scale_shape_manual(values=c(15, 17)) +
   theme_classic()+
 #  ylim(-20,15)+
@@ -748,9 +873,13 @@ PCA_all <- ggplot(pca_data_all, aes(PCA1, PCA2, color=OT, group = Col_Life)) +
   ylab(percentage_all[2])+
   xlab(percentage_all[1])+
   labs(color = "Thermal History", shape = "Life Stage", fill = "none") +
-  # geom_text(x=9, y=-12, label=paste("p(Day)=", z_pca_all$`Pr(>F)`[1]), size=7, color=ifelse(z_pca_all$`Pr(>F)`[1] < 0.05, "black", "darkgray")) + 
-  # geom_text(x=9, y=-13.25, label=paste("p(Group)=", z_pca_all$`Pr(>F)`[2]), size=7, color=ifelse(z_pca_all$`Pr(>F)`[2] < 0.05, "black", "darkgray")) + 
-  # geom_text(x=9, y=-14.5, label=paste("p(Day x Group)=", z_pca_all$`Pr(>F)`[3]), size=7, color=ifelse(z_pca_all$`Pr(>F)`[3] < 0.05, "black", "darkgray")) +
+  geom_text(x=100, y=-100, label=paste("p(Origin)=", z_pca_all$`Pr(>F)`[1]), size=6, color=ifelse(z_pca_all$`Pr(>F)`[1] < 0.05, "black", "darkgray")) +
+  geom_text(x=100, y=-115, label=paste("p(Treatment)=", z_pca_all$`Pr(>F)`[2]), size=6, color=ifelse(z_pca_all$`Pr(>F)`[2] < 0.05, "black", "darkgray")) +
+  geom_text(x=100, y=-130, label=paste("p(Life Stage)=", z_pca_all$`Pr(>F)`[3]), size=6, color=ifelse(z_pca_all$`Pr(>F)`[3] < 0.05, "black", "darkgray")) +
+  geom_text(x=100, y=-145, label=paste("p(Origin x Treatment)=", z_pca_all$`Pr(>F)`[4]), size=6, color=ifelse(z_pca_all$`Pr(>F)`[4] < 0.05, "black", "darkgray")) +
+  geom_text(x=100, y=-160, label=paste("p(Origin x Life Stage)=", z_pca_all$`Pr(>F)`[5]), size=6, color=ifelse(z_pca_all$`Pr(>F)`[5] < 0.05, "black", "darkgray")) +
+  geom_text(x=100, y=-175, label=paste("p(Treatment x Life Stage)=", z_pca_all$`Pr(>F)`[6]), size=6, color=ifelse(z_pca_all$`Pr(>F)`[6] < 0.05, "black", "darkgray")) +
+  geom_text(x=100, y=-190, label=paste("p(Origin x Treatment x Life Stage)=", z_pca_all$`Pr(>F)`[7]), size=6, color=ifelse(z_pca_all$`Pr(>F)`[7] < 0.05, "black", "darkgray")) +
   theme(legend.text = element_text(size=18), 
         legend.position="right",
         plot.background = element_blank(),

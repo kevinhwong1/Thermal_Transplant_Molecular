@@ -1,0 +1,957 @@
+﻿Vial,coral.id,Date.sampled,life.stage,metric
+1,P-4-B,20180628,Adult,Zoox
+2,P-4-B,20180628,Adult,Zoox
+3,P-4-B,20180628,Adult,Zoox
+4,P-4-B,20180628,Adult,Protein
+5,P-4-B,20180628,Adult,Protein
+6,P-4-B,20180628,Adult,Protein
+7,P-4-B,20180628,Adult,DNA
+8,P-4-B,20180628,Adult,DNA
+9,P-4-B,20180628,Adult,DNA
+10,P-4-B,20180628,Adult,Chl A
+11,P-4-B,20180628,Adult,Chl A
+12,P-4-B,20180628,Adult,Chl A
+13,R-7-B,20180628,Adult,Zoox
+14,R-7-B,20180628,Adult,Zoox
+15,R-7-B,20180628,Adult,Zoox
+16,R-7-B,20180628,Adult,Protein
+17,R-7-B,20180628,Adult,Protein
+18,R-7-B,20180628,Adult,Protein
+19,R-7-B,20180628,Adult,DNA
+20,R-7-B,20180628,Adult,DNA
+21,R-7-B,20180628,Adult,DNA
+22,R-7-B,20180628,Adult,Chl A
+23,R-7-B,20180628,Adult,Chl A
+24,R-7-B,20180628,Adult,Chl A
+25,P-12-B,20180626,Adult,Zoox
+26,P-12-B,20180626,Adult,Zoox
+27,P-12-B,20180626,Adult,Zoox
+28,P-12-B,20180626,Adult,Protein
+29,P-12-B,20180626,Adult,Protein
+30,P-12-B,20180626,Adult,Protein
+31,P-12-B,20180626,Adult,DNA
+32,P-12-B,20180626,Adult,DNA
+33,P-12-B,20180626,Adult,DNA
+34,P-12-B,20180626,Adult,Chl A
+35,P-12-B,20180626,Adult,Chl A
+36,P-12-B,20180626,Adult,Chl A
+37,R-19-B,20180626,Adult,Zoox
+38,R-19-B,20180626,Adult,Zoox
+39,R-19-B,20180626,Adult,Zoox
+40,R-19-B,20180626,Adult,Protein
+41,R-19-B,20180626,Adult,Protein
+42,R-19-B,20180626,Adult,Protein
+43,R-19-B,20180626,Adult,DNA
+44,R-19-B,20180626,Adult,DNA
+45,R-19-B,20180626,Adult,DNA
+46,R-19-B,20180626,Adult,Chl A
+47,R-19-B,20180626,Adult,Chl A
+48,R-19-B,20180626,Adult,Chl A
+49,R-7-A,20180628,Adult,Zoox
+50,R-7-A,20180628,Adult,Zoox
+51,R-7-A,20180628,Adult,Zoox
+52,R-7-A,20180628,Adult,Protein
+53,R-7-A,20180628,Adult,Protein
+54,R-7-A,20180628,Adult,Protein
+55,R-7-A,20180628,Adult,DNA
+56,R-7-A,20180628,Adult,DNA
+57,R-7-A,20180628,Adult,DNA
+58,R-7-A,20180628,Adult,Chl A
+59,R-7-A,20180628,Adult,Chl A
+60,R-7-A,20180628,Adult,Chl A
+61,P-14-B,20180626,Adult,Zoox
+62,P-14-B,20180626,Adult,Zoox
+63,P-14-B,20180626,Adult,Zoox
+64,P-14-B,20180626,Adult,Protein
+65,P-14-B,20180626,Adult,Protein
+66,P-14-B,20180626,Adult,Protein
+67,P-14-B,20180626,Adult,DNA
+68,P-14-B,20180626,Adult,DNA
+69,P-14-B,20180626,Adult,DNA
+70,P-14-B,20180626,Adult,Chl A
+71,P-14-B,20180626,Adult,Chl A
+72,P-14-B,20180626,Adult,Chl A
+73,R-14-A,20180628,Adult,Zoox
+74,R-14-A,20180628,Adult,Zoox
+75,R-14-A,20180628,Adult,Zoox
+76,R-14-A,20180628,Adult,Protein
+77,R-14-A,20180628,Adult,Protein
+78,R-14-A,20180628,Adult,Protein
+79,R-14-A,20180628,Adult,DNA
+80,R-14-A,20180628,Adult,DNA
+81,R-14-A,20180628,Adult,DNA
+82,R-14-A,20180628,Adult,Chl A
+83,R-14-A,20180628,Adult,Chl A
+84,R-14-A,20180628,Adult,Chl A
+85,R-14-B,20180626,Adult,Zoox
+86,R-14-B,20180626,Adult,Zoox
+87,R-14-B,20180626,Adult,Zoox
+88,R-14-B,20180626,Adult,Protein
+89,R-14-B,20180626,Adult,Protein
+90,R-14-B,20180626,Adult,Protein
+91,R-14-B,20180626,Adult,DNA
+92,R-14-B,20180626,Adult,DNA
+93,R-14-B,20180626,Adult,DNA
+94,R-14-B,20180626,Adult,Chl A
+95,R-14-B,20180626,Adult,Chl A
+96,R-14-B,20180626,Adult,Chl A
+97,P-19-A,20180628,Adult,Zoox
+98,P-19-A,20180628,Adult,Zoox
+99,P-19-A,20180628,Adult,Zoox
+100,P-19-A,20180628,Adult,Protein
+101,P-19-A,20180628,Adult,Protein
+102,P-19-A,20180628,Adult,Protein
+103,P-19-A,20180628,Adult,Chl A
+104,P-19-A,20180628,Adult,Chl A
+105,P-19-A,20180628,Adult,Chl A
+106,P-19-A,20180628,Adult,EXTRA
+107,P-19-A,20180628,Adult,EXTRA
+108,P-19-A,20180628,Adult,EXTRA
+109,P-6-A,20180628,Adult,Zoox
+110,P-6-A,20180628,Adult,Zoox
+111,P-6-A,20180628,Adult,Zoox
+112,P-6-A,20180628,Adult,Protein
+113,P-6-A,20180628,Adult,Protein
+114,P-6-A,20180628,Adult,Protein
+115,P-6-A,20180628,Adult,Chl A
+116,P-6-A,20180628,Adult,Chl A
+117,P-6-A,20180628,Adult,Chl A
+118,P-6-A,20180628,Adult,EXTRA
+119,P-6-A,20180628,Adult,EXTRA
+120,P-6-A,20180628,Adult,EXTRA
+121,R-5-A,20180628,Adult,Zoox
+122,R-5-A,20180628,Adult,Zoox
+123,R-5-A,20180628,Adult,Zoox
+124,R-5-A,20180628,Adult,Protein
+125,R-5-A,20180628,Adult,Protein
+126,R-5-A,20180628,Adult,Protein
+127,R-5-A,20180628,Adult,Chl A
+128,R-5-A,20180628,Adult,Chl A
+129,R-5-A,20180628,Adult,Chl A
+130,R-5-A,20180628,Adult,EXTRA
+131,R-5-A,20180628,Adult,EXTRA
+132,R-5-A,20180628,Adult,EXTRA
+133,R-8-A,20180628,Adult,Zoox
+134,R-8-A,20180628,Adult,Zoox
+135,R-8-A,20180628,Adult,Zoox
+136,R-8-A,20180628,Adult,Protein
+137,R-8-A,20180628,Adult,Protein
+138,R-8-A,20180628,Adult,Protein
+139,R-8-A,20180628,Adult,Chl A
+140,R-8-A,20180628,Adult,Chl A
+141,R-8-A,20180628,Adult,Chl A
+142,R-8-A,20180628,Adult,EXTRA
+143,R-8-A,20180628,Adult,EXTRA
+144,R-8-A,20180628,Adult,EXTRA
+145,R-18-A,20180428,Adult,Zoox
+146,R-18-A,20180428,Adult,Zoox
+147,R-18-A,20180428,Adult,Zoox
+148,R-18-A,20180428,Adult,Protein
+149,R-18-A,20180428,Adult,Protein
+150,R-18-A,20180428,Adult,Protein
+151,R-18-A,20180428,Adult,Chl A
+152,R-18-A,20180428,Adult,Chl A
+153,R-18-A,20180428,Adult,Chl A
+154,R-18-A,20180428,Adult,EXTRA
+155,R-18-A,20180428,Adult,EXTRA
+156,R-18-A,20180428,Adult,EXTRA
+157,R-19-A,20180428,Adult,Zoox
+158,R-19-A,20180428,Adult,Zoox
+159,R-19-A,20180428,Adult,Zoox
+160,R-19-A,20180428,Adult,Protein
+161,R-19-A,20180428,Adult,Protein
+162,R-19-A,20180428,Adult,Protein
+163,R-19-A,20180428,Adult,Chl A
+164,R-19-A,20180428,Adult,Chl A
+165,R-19-A,20180428,Adult,Chl A
+166,R-19-A,20180428,Adult,EXTRA
+167,R-19-A,20180428,Adult,EXTRA
+168,R-19-A,20180428,Adult,EXTRA
+169,R-5-B,20180626,Adult,Zoox
+170,R-5-B,20180626,Adult,Zoox
+171,R-5-B,20180626,Adult,Zoox
+172,R-5-B,20180626,Adult,Protein
+173,R-5-B,20180626,Adult,Protein
+174,R-5-B,20180626,Adult,Protein
+175,R-5-B,20180626,Adult,Chl A
+176,R-5-B,20180626,Adult,Chl A
+177,R-5-B,20180626,Adult,Chl A
+178,R-5-B,20180626,Adult,EXTRA
+179,R-5-B,20180626,Adult,EXTRA
+180,R-5-B,20180626,Adult,EXTRA
+181,P-14-A,20180628,Adult,Zoox
+182,P-14-A,20180628,Adult,Zoox
+183,P-14-A,20180628,Adult,Zoox
+184,P-14-A,20180628,Adult,Protein
+185,P-14-A,20180628,Adult,Protein
+186,P-14-A,20180628,Adult,Protein
+187,P-14-A,20180628,Adult,Chl A
+188,P-14-A,20180628,Adult,Chl A
+189,P-14-A,20180628,Adult,Chl A
+190,P-14-A,20180628,Adult,EXTRA
+191,P-14-A,20180628,Adult,EXTRA
+192,P-14-A,20180628,Adult,EXTRA
+193,P-4-A,20180428,Adult,Zoox
+194,P-4-A,20180428,Adult,Zoox
+195,P-4-A,20180428,Adult,Zoox
+196,P-4-A,20180428,Adult,Protein
+197,P-4-A,20180428,Adult,Protein
+198,P-4-A,20180428,Adult,Protein
+199,P-4-A,20180428,Adult,Chl A
+200,P-4-A,20180428,Adult,Chl A
+201,P-4-A,20180428,Adult,Chl A
+202,P-4-A,20180428,Adult,EXTRA
+203,P-4-A,20180428,Adult,EXTRA
+204,P-4-A,20180428,Adult,EXTRA
+205,R-18-B,20180426,Adult,Zoox
+206,R-18-B,20180426,Adult,Zoox
+207,R-18-B,20180426,Adult,Zoox
+208,R-18-B,20180426,Adult,Protein
+209,R-18-B,20180426,Adult,Protein
+210,R-18-B,20180426,Adult,Protein
+211,R-18-B,20180426,Adult,Chl A
+212,R-18-B,20180426,Adult,Chl A
+213,R-18-B,20180426,Adult,Chl A
+214,R-18-B,20180426,Adult,EXTRA
+215,R-18-B,20180426,Adult,EXTRA
+216,R-18-B,20180426,Adult,EXTRA
+217,R-11-A,20180628,Adult,Zoox
+218,R-11-A,20180628,Adult,Zoox
+219,R-11-A,20180628,Adult,Zoox
+220,R-11-A,20180628,Adult,Protein
+221,R-11-A,20180628,Adult,Protein
+222,R-11-A,20180628,Adult,Protein
+223,R-11-A,20180628,Adult,Chl A
+224,R-11-A,20180628,Adult,Chl A
+225,R-11-A,20180628,Adult,Chl A
+226,R-11-A,20180628,Adult,EXTRA
+227,R-11-A,20180628,Adult,EXTRA
+228,R-11-A,20180628,Adult,EXTRA
+229,R-8-B,20180626,Adult,Zoox
+230,R-8-B,20180626,Adult,Zoox
+231,R-8-B,20180626,Adult,Zoox
+232,R-8-B,20180626,Adult,Protein
+233,R-8-B,20180626,Adult,Protein
+234,R-8-B,20180626,Adult,Protein
+235,R-8-B,20180626,Adult,Chl A
+236,R-8-B,20180626,Adult,Chl A
+237,R-8-B,20180626,Adult,Chl A
+238,R-8-B,20180626,Adult,EXTRA
+239,R-8-B,20180626,Adult,EXTRA
+240,R-8-B,20180626,Adult,EXTRA
+241,R-11-B,20180626,Adult,Zoox
+242,R-11-B,20180626,Adult,Zoox
+243,R-11-B,20180626,Adult,Zoox
+244,R-11-B,20180626,Adult,Protein
+245,R-11-B,20180626,Adult,Protein
+246,R-11-B,20180626,Adult,Protein
+247,R-11-B,20180626,Adult,Chl A
+248,R-11-B,20180626,Adult,Chl A
+249,R-11-B,20180626,Adult,Chl A
+250,R-11-B,20180626,Adult,EXTRA
+251,R-11-B,20180626,Adult,EXTRA
+252,R-11-B,20180626,Adult,EXTRA
+253,P-15-B,20180626,Adult,Zoox
+254,P-15-B,20180626,Adult,Zoox
+255,P-15-B,20180626,Adult,Zoox
+256,P-15-B,20180626,Adult,Protein
+257,P-15-B,20180626,Adult,Protein
+258,P-15-B,20180626,Adult,Protein
+259,P-15-B,20180626,Adult,Chl A
+260,P-15-B,20180626,Adult,Chl A
+261,P-15-B,20180626,Adult,Chl A
+262,P-15-B,20180626,Adult,EXTRA
+263,P-15-B,20180626,Adult,EXTRA
+264,P-15-B,20180626,Adult,EXTRA
+265,P-3-B,20180626,Adult,Zoox
+266,P-3-B,20180626,Adult,Zoox
+267,P-3-B,20180626,Adult,Zoox
+268,P-3-B,20180626,Adult,Protein
+269,P-3-B,20180626,Adult,Protein
+270,P-3-B,20180626,Adult,Protein
+271,P-3-B,20180626,Adult,Chl A
+272,P-3-B,20180626,Adult,Chl A
+273,P-3-B,20180626,Adult,Chl A
+274,P-3-B,20180626,Adult,EXTRA
+275,P-3-B,20180626,Adult,EXTRA
+276,P-3-B,20180626,Adult,EXTRA
+277,P-16-B,20180626,Adult,Zoox
+278,P-16-B,20180626,Adult,Zoox
+279,P-16-B,20180626,Adult,Zoox
+280,P-16-B,20180626,Adult,Protein
+281,P-16-B,20180626,Adult,Protein
+282,P-16-B,20180626,Adult,Protein
+283,P-16-B,20180626,Adult,Chl A
+284,P-16-B,20180626,Adult,Chl A
+285,P-16-B,20180626,Adult,Chl A
+286,P-16-B,20180626,Adult,EXTRA
+287,P-16-B,20180626,Adult,EXTRA
+288,P-16-B,20180626,Adult,EXTRA
+289,R-4-A,20180628,Adult,Zoox
+290,R-4-A,20180628,Adult,Zoox
+291,R-4-A,20180628,Adult,Zoox
+292,R-4-A,20180628,Adult,Protein
+293,R-4-A,20180628,Adult,Protein
+294,R-4-A,20180628,Adult,Protein
+295,R-4-A,20180628,Adult,Chl A
+296,R-4-A,20180628,Adult,Chl A
+297,R-4-A,20180628,Adult,Chl A
+298,R-4-A,20180628,Adult,EXTRA
+299,R-4-A,20180628,Adult,EXTRA
+300,R-4-A,20180628,Adult,EXTRA
+301,P-10-B,20180626,Adult,Zoox
+302,P-10-B,20180626,Adult,Zoox
+303,P-10-B,20180626,Adult,Zoox
+304,P-10-B,20180626,Adult,Protein
+305,P-10-B,20180626,Adult,Protein
+306,P-10-B,20180626,Adult,Protein
+307,P-10-B,20180626,Adult,Chl A
+308,P-10-B,20180626,Adult,Chl A
+309,P-10-B,20180626,Adult,Chl A
+310,P-10-B,20180626,Adult,EXTRA
+311,P-10-B,20180626,Adult,EXTRA
+312,P-10-B,20180626,Adult,EXTRA
+313,P-9-A,20180628,Adult,Zoox
+314,P-9-A,20180628,Adult,Zoox
+315,P-9-A,20180628,Adult,Zoox
+316,P-9-A,20180628,Adult,Protein
+317,P-9-A,20180628,Adult,Protein
+318,P-9-A,20180628,Adult,Protein
+319,P-9-A,20180628,Adult,Chl A
+320,P-9-A,20180628,Adult,Chl A
+321,P-9-A,20180628,Adult,Chl A
+322,P-9-A,20180628,Adult,EXTRA
+323,P-9-A,20180628,Adult,EXTRA
+324,P-9-A,20180628,Adult,EXTRA
+325,P-19-B,20180626,Adult,Zoox
+326,P-19-B,20180626,Adult,Zoox
+327,P-19-B,20180626,Adult,Zoox
+328,P-19-B,20180626,Adult,Protein
+329,P-19-B,20180626,Adult,Protein
+330,P-19-B,20180626,Adult,Protein
+331,P-19-B,20180626,Adult,Chl A
+332,P-19-B,20180626,Adult,Chl A
+333,P-19-B,20180626,Adult,Chl A
+334,P-19-B,20180626,Adult,EXTRA
+335,P-19-B,20180626,Adult,EXTRA
+336,P-19-B,20180626,Adult,EXTRA
+337,P-6-B,20180626,Adult,Zoox
+338,P-6-B,20180626,Adult,Zoox
+339,P-6-B,20180626,Adult,Zoox
+340,P-6-B,20180626,Adult,Protein
+341,P-6-B,20180626,Adult,Protein
+342,P-6-B,20180626,Adult,Protein
+343,P-6-B,20180626,Adult,Chl A
+344,P-6-B,20180626,Adult,Chl A
+345,P-6-B,20180626,Adult,Chl A
+346,P-6-B,20180626,Adult,EXTRA
+347,P-6-B,20180626,Adult,EXTRA
+348,P-6-B,20180626,Adult,EXTRA
+349,P-10-A,20180628,Adult,Zoox
+350,P-10-A,20180628,Adult,Zoox
+351,P-10-A,20180628,Adult,Zoox
+352,P-10-A,20180628,Adult,Protein
+353,P-10-A,20180628,Adult,Protein
+354,P-10-A,20180628,Adult,Protein
+355,P-10-A,20180628,Adult,Chl A
+356,P-10-A,20180628,Adult,Chl A
+357,P-10-A,20180628,Adult,Chl A
+358,P-10-A,20180628,Adult,EXTRA
+359,P-10-A,20180628,Adult,EXTRA
+360,P-10-A,20180628,Adult,EXTRA
+361,P-15-A,20180628,Adult,Zoox
+362,P-15-A,20180628,Adult,Zoox
+363,P-15-A,20180628,Adult,Zoox
+364,P-15-A,20180628,Adult,Protein
+365,P-15-A,20180628,Adult,Protein
+366,P-15-A,20180628,Adult,Protein
+367,P-15-A,20180628,Adult,Chl A
+368,P-15-A,20180628,Adult,Chl A
+369,P-15-A,20180628,Adult,Chl A
+370,P-15-A,20180628,Adult,EXTRA
+371,P-15-A,20180628,Adult,EXTRA
+372,P-15-A,20180628,Adult,EXTRA
+373,R-4-B,20180626,Adult,Zoox
+374,R-4-B,20180626,Adult,Zoox
+375,R-4-B,20180626,Adult,Zoox
+376,R-4-B,20180626,Adult,Protein
+377,R-4-B,20180626,Adult,Protein
+378,R-4-B,20180626,Adult,Protein
+379,R-4-B,20180626,Adult,Chl A
+380,R-4-B,20180626,Adult,Chl A
+381,R-4-B,20180626,Adult,Chl A
+382,R-4-B,20180626,Adult,EXTRA
+383,R-4-B,20180626,Adult,EXTRA
+384,R-4-B,20180626,Adult,EXTRA
+385,P-9-B,20180626,Adult,Zoox
+386,P-9-B,20180626,Adult,Zoox
+387,P-9-B,20180626,Adult,Zoox
+388,P-9-B,20180626,Adult,Protein
+389,P-9-B,20180626,Adult,Protein
+390,P-9-B,20180626,Adult,Protein
+391,P-9-B,20180626,Adult,Chl A
+392,P-9-B,20180626,Adult,Chl A
+393,P-9-B,20180626,Adult,Chl A
+394,P-9-B,20180626,Adult,EXTRA
+395,P-9-B,20180626,Adult,EXTRA
+396,P-9-B,20180626,Adult,EXTRA
+397,R-15-A,20180628,Adult,Zoox
+398,R-15-A,20180628,Adult,Zoox
+399,R-15-A,20180628,Adult,Zoox
+400,R-15-A,20180628,Adult,Protein
+401,R-15-A,20180628,Adult,Protein
+402,R-15-A,20180628,Adult,Protein
+403,R-15-A,20180628,Adult,Chl A
+404,R-15-A,20180628,Adult,Chl A
+405,R-15-A,20180628,Adult,Chl A
+406,R-15-A,20180628,Adult,EXTRA
+407,R-15-A,20180628,Adult,EXTRA
+408,R-15-A,20180628,Adult,EXTRA
+409,R-9-A,20180628,Adult,Zoox
+410,R-9-A,20180628,Adult,Zoox
+411,R-9-A,20180628,Adult,Zoox
+412,R-9-A,20180628,Adult,Protein
+413,R-9-A,20180628,Adult,Protein
+414,R-9-A,20180628,Adult,Protein
+415,R-9-A,20180628,Adult,Chl A
+416,R-9-A,20180628,Adult,Chl A
+417,R-9-A,20180628,Adult,Chl A
+418,R-9-A,20180628,Adult,EXTRA
+419,R-9-A,20180628,Adult,EXTRA
+420,R-9-A,20180628,Adult,EXTRA
+421,P-3-A,20180628,Adult,Zoox
+422,P-3-A,20180628,Adult,Zoox
+423,P-3-A,20180628,Adult,Zoox
+424,P-3-A,20180628,Adult,Protein
+425,P-3-A,20180628,Adult,Protein
+426,P-3-A,20180628,Adult,Protein
+427,P-3-A,20180628,Adult,Chl A
+428,P-3-A,20180628,Adult,Chl A
+429,P-3-A,20180628,Adult,Chl A
+430,P-3-A,20180628,Adult,EXTRA
+431,P-3-A,20180628,Adult,EXTRA
+432,P-3-A,20180628,Adult,EXTRA
+433,R-9-B,20180626,Adult,Zoox
+434,R-9-B,20180626,Adult,Zoox
+435,R-9-B,20180626,Adult,Zoox
+436,R-9-B,20180626,Adult,Protein
+437,R-9-B,20180626,Adult,Protein
+438,R-9-B,20180626,Adult,Protein
+439,R-9-B,20180626,Adult,Chl A
+440,R-9-B,20180626,Adult,Chl A
+441,R-9-B,20180626,Adult,Chl A
+442,R-9-B,20180626,Adult,EXTRA
+443,R-9-B,20180626,Adult,EXTRA
+444,R-9-B,20180626,Adult,EXTRA
+445,P-12-A,20180628,Adult,Zoox
+446,P-12-A,20180628,Adult,Zoox
+447,P-12-A,20180628,Adult,Zoox
+448,P-12-A,20180628,Adult,Protein
+449,P-12-A,20180628,Adult,Protein
+450,P-12-A,20180628,Adult,Protein
+451,P-12-A,20180628,Adult,Chl A
+452,P-12-A,20180628,Adult,Chl A
+453,P-12-A,20180628,Adult,Chl A
+454,P-12-A,20180628,Adult,EXTRA
+455,P-12-A,20180628,Adult,EXTRA
+456,P-12-A,20180628,Adult,EXTRA
+457,R-15-B,20180626,Adult,Zoox
+458,R-15-B,20180626,Adult,Zoox
+459,R-15-B,20180626,Adult,Zoox
+460,R-15-B,20180626,Adult,Protein
+461,R-15-B,20180626,Adult,Protein
+462,R-15-B,20180626,Adult,Protein
+463,R-15-B,20180626,Adult,Chl A
+464,R-15-B,20180626,Adult,Chl A
+465,R-15-B,20180626,Adult,Chl A
+466,R-15-B,20180626,Adult,EXTRA
+467,R-15-B,20180626,Adult,EXTRA
+468,R-15-B,20180626,Adult,EXTRA
+469,P-16-A,20180628,Adult,Zoox
+470,P-16-A,20180628,Adult,Zoox
+471,P-16-A,20180628,Adult,Zoox
+472,P-16-A,20180628,Adult,Protein
+473,P-16-A,20180628,Adult,Protein
+474,P-16-A,20180628,Adult,Protein
+475,P-16-A,20180628,Adult,Chl A
+476,P-16-A,20180628,Adult,Chl A
+477,P-16-A,20180628,Adult,Chl A
+478,P-16-A,20180628,Adult,EXTRA
+479,P-16-A,20180628,Adult,EXTRA
+480,P-16-A,20180628,Adult,EXTRA
+481,,,Adult,
+482,,,Adult,
+483,,,Adult,
+484,,,Adult,
+485,,,Adult,
+486,,,Adult,
+487,,,Adult,
+488,,,Adult,
+489,,,Adult,
+490,,,Adult,
+491,,,Adult,
+492,,,Adult,
+493,,,Adult,
+494,,,Adult,
+495,,,Adult,
+496,,,Adult,
+497,,,Adult,
+498,,,Adult,
+499,,,Adult,
+500,,,Adult,
+501,,,Adult,
+502,,,Adult,
+503,,,Adult,
+504,,,Adult,
+505,,,Adult,
+506,,,Adult,
+507,,,Adult,
+508,,,Adult,
+509,,,Adult,
+510,,,Adult,
+511,,,Adult,
+512,,,Adult,
+513,,,Adult,
+514,,,Adult,
+515,,,Adult,
+516,,,Adult,
+517,,,Adult,
+518,,,Adult,
+519,,,Adult,
+520,,,Adult,
+521,,,Adult,
+522,,,Adult,
+523,,,Adult,
+524,,,Adult,
+525,,,Adult,
+526,,,Adult,
+527,,,Adult,
+528,,,Adult,
+529,,,Adult,
+530,,,Adult,
+531,,,Adult,
+532,,,Adult,
+533,,,Adult,
+534,,,Adult,
+535,,,Adult,
+536,,,Adult,
+537,,,Adult,
+538,,,Adult,
+539,,,Adult,
+540,,,Adult,
+541,,,Adult,
+542,,,Adult,
+543,,,Adult,
+544,,,Adult,
+545,,,Adult,
+546,,,Adult,
+547,,,Adult,
+548,,,Adult,
+549,,,Adult,
+550,,,Adult,
+551,,,Adult,
+552,,,Adult,
+553,,,Adult,
+554,,,Adult,
+555,,,Adult,
+556,,,Adult,
+557,,,Adult,
+558,,,Adult,
+559,,,Adult,
+560,,,Adult,
+561,,,Adult,
+562,,,Adult,
+563,,,Adult,
+564,,,Adult,
+565,,,Adult,
+566,,,Adult,
+567,,,Adult,
+568,,,Adult,
+569,,,Adult,
+570,,,Adult,
+571,,,Adult,
+572,,,Adult,
+573,,,Adult,
+574,,,Adult,
+575,,,Adult,
+576,,,Adult,
+577,,,Adult,
+578,,,Adult,
+579,,,Adult,
+580,,,Adult,
+581,,,Adult,
+582,,,Adult,
+583,,,Adult,
+584,,,Adult,
+585,,,Adult,
+586,,,Adult,
+587,,,Adult,
+588,,,Adult,
+589,,,Adult,
+590,,,Adult,
+591,,,Adult,
+592,,,Adult,
+593,,,Adult,
+594,,,Adult,
+595,,,Adult,
+596,,,Adult,
+597,,,Adult,
+598,,,Adult,
+599,,,Adult,
+600,,,Adult,
+601,,,Adult,
+602,,,Adult,
+603,,,Adult,
+604,,,Adult,
+605,,,Adult,
+606,,,Adult,
+607,,,Adult,
+608,,,Adult,
+609,,,Adult,
+610,,,Adult,
+611,,,Adult,
+612,,,Adult,
+613,,,Adult,
+614,,,Adult,
+615,,,Adult,
+616,,,Adult,
+617,,,Adult,
+618,,,Adult,
+619,,,Adult,
+620,,,Adult,
+621,,,Adult,
+622,,,Adult,
+623,,,Adult,
+624,,,Adult,
+625,,,Adult,
+626,,,Adult,
+627,,,Adult,
+628,,,Adult,
+629,,,Adult,
+630,,,Adult,
+631,,,Adult,
+632,,,Adult,
+633,,,Adult,
+634,,,Adult,
+635,,,Adult,
+636,,,Adult,
+637,,,Adult,
+638,,,Adult,
+639,,,Adult,
+640,,,Adult,
+641,,,Adult,
+642,,,Adult,
+643,,,Adult,
+644,,,Adult,
+645,,,Adult,
+646,,,Adult,
+647,,,Adult,
+648,,,Adult,
+649,,,Adult,
+650,,,Adult,
+651,,,Adult,
+652,,,Adult,
+653,,,Adult,
+654,,,Adult,
+655,,,Adult,
+656,,,Adult,
+657,,,Adult,
+658,,,Adult,
+659,,,Adult,
+660,,,Adult,
+661,,,Adult,
+662,,,Adult,
+663,,,Adult,
+664,,,Adult,
+665,,,Adult,
+666,,,Adult,
+667,,,Adult,
+668,,,Adult,
+669,,,Adult,
+670,,,Adult,
+671,,,Adult,
+672,,,Adult,
+673,,,Adult,
+674,,,Adult,
+675,,,Adult,
+676,,,Adult,
+677,,,Adult,
+678,,,Adult,
+679,,,Adult,
+680,,,Adult,
+681,,,Adult,
+682,,,Adult,
+683,,,Adult,
+684,,,Adult,
+685,,,Adult,
+686,,,Adult,
+687,,,Adult,
+688,,,Adult,
+689,,,Adult,
+690,,,Adult,
+691,,,Adult,
+692,,,Adult,
+693,,,Adult,
+694,,,Adult,
+695,,,Adult,
+696,,,Adult,
+697,,,Adult,
+698,,,Adult,
+699,,,Adult,
+700,,,Adult,
+701,,,Adult,
+702,,,Adult,
+703,,,Adult,
+704,,,Adult,
+705,,,Adult,
+706,,,Adult,
+707,,,Adult,
+708,,,Adult,
+709,,,Adult,
+710,,,Adult,
+711,,,Adult,
+712,,,Adult,
+713,,,Adult,
+714,,,Adult,
+715,,,Adult,
+716,,,Adult,
+717,,,Adult,
+718,,,Adult,
+719,,,Adult,
+720,,,Adult,
+721,,,Adult,
+722,,,Adult,
+723,,,Adult,
+724,,,Adult,
+725,,,Adult,
+726,,,Adult,
+727,,,Adult,
+728,,,Adult,
+729,,,Adult,
+730,,,Adult,
+731,,,Adult,
+732,,,Adult,
+733,,,Adult,
+734,,,Adult,
+735,,,Adult,
+736,,,Adult,
+737,,,Adult,
+738,,,Adult,
+739,,,Adult,
+740,,,Adult,
+741,,,Adult,
+742,,,Adult,
+743,,,Adult,
+744,,,Adult,
+745,,,Adult,
+746,,,Adult,
+747,,,Adult,
+748,,,Adult,
+749,,,Adult,
+750,,,Adult,
+751,,,Adult,
+752,,,Adult,
+753,,,Adult,
+754,,,Adult,
+755,,,Adult,
+756,,,Adult,
+757,,,Adult,
+758,,,Adult,
+759,,,Adult,
+760,,,Adult,
+761,,,Adult,
+762,,,Adult,
+763,,,Adult,
+764,,,Adult,
+765,,,Adult,
+766,,,Adult,
+767,,,Adult,
+768,,,Adult,
+769,,,Adult,
+770,,,Adult,
+771,,,Adult,
+772,,,Adult,
+773,,,Adult,
+774,,,Adult,
+775,,,Adult,
+776,,,Adult,
+777,,,Adult,
+778,,,Adult,
+779,,,Adult,
+780,,,Adult,
+781,,,Adult,
+782,,,Adult,
+783,,,Adult,
+784,,,Adult,
+785,,,Adult,
+786,,,Adult,
+787,,,Adult,
+788,,,Adult,
+789,,,Adult,
+790,,,Adult,
+791,,,Adult,
+792,,,Adult,
+793,,,Adult,
+794,,,Adult,
+795,,,Adult,
+796,,,Adult,
+797,,,Adult,
+798,,,Adult,
+799,,,Adult,
+800,,,Adult,
+801,,,Adult,
+802,,,Adult,
+803,,,Adult,
+804,,,Adult,
+805,,,Adult,
+806,,,Adult,
+807,,,Adult,
+808,,,Adult,
+809,,,Adult,
+810,,,Adult,
+811,,,Adult,
+812,,,Adult,
+813,,,Adult,
+814,,,Adult,
+815,,,Adult,
+816,,,Adult,
+817,,,Adult,
+818,,,Adult,
+819,,,Adult,
+820,,,Adult,
+821,,,Adult,
+822,,,Adult,
+823,,,Adult,
+824,,,Adult,
+825,,,Adult,
+826,,,Adult,
+827,,,Adult,
+828,,,Adult,
+829,,,Adult,
+830,,,Adult,
+831,,,Adult,
+832,,,Adult,
+833,,,Adult,
+834,,,Adult,
+835,,,Adult,
+836,,,Adult,
+837,,,Adult,
+838,,,Adult,
+839,,,Adult,
+840,,,Adult,
+841,,,Adult,
+842,,,Adult,
+843,,,Adult,
+844,,,Adult,
+845,,,Adult,
+846,,,Adult,
+847,,,Adult,
+848,,,Adult,
+849,,,Adult,
+850,,,Adult,
+851,,,Adult,
+852,,,Adult,
+853,,,Adult,
+854,,,Adult,
+855,,,Adult,
+856,,,Adult,
+857,,,Adult,
+858,,,Adult,
+859,,,Adult,
+860,,,Adult,
+861,,,Adult,
+862,,,Adult,
+863,,,Adult,
+864,,,Adult,
+865,,,Adult,
+866,,,Adult,
+867,,,Adult,
+868,,,Adult,
+869,,,Adult,
+870,,,Adult,
+871,,,Adult,
+872,,,Adult,
+873,,,Adult,
+874,,,Adult,
+875,,,Adult,
+876,,,Adult,
+877,,,Adult,
+878,,,Adult,
+879,,,Adult,
+880,,,Adult,
+881,,,Adult,
+882,,,Adult,
+883,,,Adult,
+884,,,Adult,
+885,,,Adult,
+886,,,Adult,
+887,,,Adult,
+888,,,Adult,
+889,,,Adult,
+890,,,Adult,
+891,,,Adult,
+892,,,Adult,
+893,,,Adult,
+894,,,Adult,
+895,,,Adult,
+896,,,Adult,
+897,,,Adult,
+898,,,Adult,
+899,,,Adult,
+900,,,Adult,
+901,,,Adult,
+902,,,Adult,
+903,,,Adult,
+904,,,Adult,
+905,,,Adult,
+906,,,Adult,
+907,,,Adult,
+908,,,Adult,
+909,,,Adult,
+910,,,Adult,
+911,,,Adult,
+912,,,Adult,
+913,,,Adult,
+914,,,Adult,
+915,,,Adult,
+916,,,Adult,
+917,,,Adult,
+918,,,Adult,
+919,,,Adult,
+920,,,Adult,
+921,,,Adult,
+922,,,Adult,
+923,,,Adult,
+924,,,Adult,
+925,,,Adult,
+926,,,Adult,
+927,,,Adult,
+928,,,Adult,
+929,,,Adult,
+930,,,Adult,
+931,,,Adult,
+932,,,Adult,
+933,,,Adult,
+934,,,Adult,
+935,,,Adult,
+936,,,Adult,
+937,,,Adult,
+938,,,Adult,
+939,,,Adult,
+940,,,Adult,
+941,,,Adult,
+942,,,Adult,
+943,,,Adult,
+944,,,Adult,
+945,,,Adult,
+946,,,Adult,
+947,,,Adult,
+948,,,Adult,
+949,,,Adult,
+950,,,Adult,
+951,,,Adult,
+952,,,Adult,
+953,,,Adult,
+954,,,Adult,
+955,,,Adult,
+956,,,Adult,

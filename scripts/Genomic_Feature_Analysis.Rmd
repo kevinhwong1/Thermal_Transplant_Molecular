@@ -63,6 +63,11 @@ feat$feature <- as.factor(feat$feature)
 
 
 ```{r, warning=FALSE}
+library(janitor)
+
+x<- tabyl(feat.filt, feature, comparison) %>%
+  adorn_percentages("col") %>%
+  adorn_pct_formatting(digits = 2)
 
 gfa_plot <- ggplot(feat.filt, aes(x = comparison, y = ..count.., fill = factor(feature), group = feature)) + 
   geom_bar(position = "fill", color = "black") + 
