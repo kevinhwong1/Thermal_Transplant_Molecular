@@ -171,14 +171,14 @@ library(vegan)
 relabun_wide <- dcast(rel_its2_strain_meta_select2, Coral.ID+History+LifeStage+Origin+Treatment~Strain, value.var= "relabund") %>%
   drop_na()
 
-#Examine PERMANOVA results.  
-# scale data
-vegan_all <- scale(relabun_wide[c(6:ncol(relabun_wide))])
+# Bray Curtis caluclations 
+dist <- vegdist(relabun_wide[c(6:ncol(relabun_wide))], method="bray")
 
-# PERMANOVA 
-permanova_all <- adonis(vegan_all ~ Origin*Treatment*LifeStage, data = relabun_wide, method='eu')
-z_pca_all <- permanova_all$aov.tab
-z_pca_all
+# PERMANOVA with Bray Curtis
+permanova_dist <- adonis(dist ~ Origin*Treatment*LifeStage, data = relabun_wide, method='eu', permutations=9999)
+z_dist <- permanova_dist$aov.tab
+z_dist
 
-capture.output(z_pca_all, file = "output/ITS2/PERMANOVA_ITS2.csv")
+capture.output(z_dist, file = "output/ITS2/PERMANOVA_ITS2_bray.csv")
+
 ```

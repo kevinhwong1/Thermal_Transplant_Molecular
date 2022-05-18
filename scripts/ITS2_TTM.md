@@ -159,34 +159,33 @@ library(vegan)
 relabun_wide <- dcast(rel_its2_strain_meta_select2, Coral.ID+History+LifeStage+Origin+Treatment~Strain, value.var= "relabund") %>%
   drop_na()
 
-#Examine PERMANOVA results.  
-# scale data
-vegan_all <- scale(relabun_wide[c(6:ncol(relabun_wide))])
+# Bray Curtis caluclations 
+dist <- vegdist(relabun_wide[c(6:ncol(relabun_wide))], method="bray")
 
-# PERMANOVA 
-permanova_all <- adonis(vegan_all ~ Origin*Treatment*LifeStage, data = relabun_wide, method='eu')
-z_pca_all <- permanova_all$aov.tab
-z_pca_all
+# PERMANOVA with Bray Curtis
+permanova_dist <- adonis(dist ~ Origin*Treatment*LifeStage, data = relabun_wide, method='eu', permutations=9999)
+z_dist <- permanova_dist$aov.tab
+z_dist
 ```
 
     ## Permutation: free
-    ## Number of permutations: 999
+    ## Number of permutations: 9999
     ## 
     ## Terms added sequentially (first to last)
     ## 
     ##                            Df SumsOfSqs MeanSqs F.Model      R2 Pr(>F)   
-    ## Origin                      1    10.723 10.7232 1.25977 0.04255  0.200   
-    ## Treatment                   1     7.510  7.5103 0.88231 0.02980  0.561   
-    ## LifeStage                   1    21.915 21.9153 2.57462 0.08697  0.005 **
-    ## Origin:Treatment            1     5.881  5.8811 0.69091 0.02334  0.814   
-    ## Origin:LifeStage            1     9.445  9.4446 1.10955 0.03748  0.293   
-    ## Treatment:LifeStage         1    11.849 11.8487 1.39199 0.04702  0.136   
-    ## Origin:Treatment:LifeStage  1     5.924  5.9236 0.69591 0.02351  0.808   
-    ## Residuals                  21   178.753  8.5121         0.70934          
-    ## Total                      28   252.000                 1.00000          
+    ## Origin                      1    0.4018 0.40179  1.6997 0.04877 0.1989   
+    ## Treatment                   1    0.0148 0.01483  0.0628 0.00180 0.9675   
+    ## LifeStage                   1    1.6995 1.69950  7.1895 0.20630 0.0058 **
+    ## Origin:Treatment            1    0.0553 0.05535  0.2341 0.00672 0.7190   
+    ## Origin:LifeStage            1    0.5079 0.50789  2.1485 0.06165 0.1247   
+    ## Treatment:LifeStage         1    0.5538 0.55381  2.3428 0.06722 0.1020   
+    ## Origin:Treatment:LifeStage  1    0.0409 0.04088  0.1729 0.00496 0.8263   
+    ## Residuals                  21    4.9641 0.23639         0.60258          
+    ## Total                      28    8.2382                 1.00000          
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 ``` r
-capture.output(z_pca_all, file = "output/ITS2/PERMANOVA_ITS2.csv")
+capture.output(z_dist, file = "output/ITS2/PERMANOVA_ITS2_bray.csv")
 ```

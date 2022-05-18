@@ -1,0 +1,17 @@
+Permutation: free
+Number of permutations: 9999
+
+Terms added sequentially (first to last)
+
+                           Df SumsOfSqs MeanSqs F.Model      R2 Pr(>F)   
+Origin                      1    0.4018 0.40179  1.6997 0.04877 0.1989   
+Treatment                   1    0.0148 0.01483  0.0628 0.00180 0.9675   
+LifeStage                   1    1.6995 1.69950  7.1895 0.20630 0.0058 **
+Origin:Treatment            1    0.0553 0.05535  0.2341 0.00672 0.7190   
+Origin:LifeStage            1    0.5079 0.50789  2.1485 0.06165 0.1247   
+Treatment:LifeStage         1    0.5538 0.55381  2.3428 0.06722 0.1020   
+Origin:Treatment:LifeStage  1    0.0409 0.04088  0.1729 0.00496 0.8263   
+Residuals                  21    4.9641 0.23639         0.60258          
+Total                      28    8.2382                 1.00000          
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
