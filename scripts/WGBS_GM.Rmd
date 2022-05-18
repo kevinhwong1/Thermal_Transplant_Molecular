@@ -1,12 +1,20 @@
 ---
-title: "Past_WGBS_GM"
-author: "Kevin Wong"
-date: "15/04/2022"
-output: html_document
+title: "Thermal Transplant WGBS DMG Analysis"
+author: "KH Wong"
+output:
+  github_document: default
+  pdf_document:
+    keep_tex: yes
+  html_document:
+    toc: yes
+    toc_depth: 6
+    toc_float: yes
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
 
 
@@ -20,7 +28,6 @@ library(ggplot2)
 library(gridExtra)
 library(seacarb) 
 library(pheatmap)
-library(dplyr)
 library(tidyverse)
 library(tidyr)
 library(goseq)
@@ -40,27 +47,28 @@ library(ropls)
 library(mixOmics)
 library(vegan)
 library(plyr)
+library(dplyr)
 ```
 
 # Loading annotation file
 ```{r}
-Annot <- read.csv("../data/Past_genome/Past_annotation_20220310.csv", header=TRUE, na.string="NA", stringsAsFactors = FALSE, skip=0)
+Annot <- read.csv("data/Past_genome/Past_annotation_20220310.csv", header=TRUE, na.string="NA", stringsAsFactors = FALSE, skip=0)
 
 Annot[Annot == ""] <- NA
 
 Annot.1 <- Annot %>%
-  select(gene, Length, InterPro_GO_Names, BLAST_GO_Names, SwissProt_GO_Names, TrEMBL_GO_Names) %>%
+  dplyr::select(gene, Length, InterPro_GO_Names, BLAST_GO_Names, SwissProt_GO_Names, TrEMBL_GO_Names) %>%
   mutate(InterPro_GO_Names = na_if(InterPro_GO_Names, "no GO terms")) %>%
   mutate(InterPro_GO_Names = na_if(InterPro_GO_Names, "no IPS match")) %>%
   unite("GO_Name", InterPro_GO_Names:TrEMBL_GO_Names, remove = FALSE, na.rm = TRUE) %>%
-  select(gene, Length, GO_Name)
+  dplyr::select(gene, Length, GO_Name)
 
 Annot.2 <- Annot %>%
-  select(gene, InterPro_GO_IDs, BLAST_GO_IDs, SwissProt_GO_IDs, TrEMBL_GO_IDs) %>%
+  dplyr::select(gene, InterPro_GO_IDs, BLAST_GO_IDs, SwissProt_GO_IDs, TrEMBL_GO_IDs) %>%
   mutate(InterPro_GO_IDs = na_if(InterPro_GO_IDs, "no GO terms")) %>%
   mutate(InterPro_GO_IDs = na_if(InterPro_GO_IDs, "no IPS match")) %>%
   unite("GO_IDs", InterPro_GO_IDs:TrEMBL_GO_IDs, remove = FALSE, na.rm = TRUE) %>%
-  select(gene, GO_IDs)
+ dplyr:: select(gene, GO_IDs)
 
 Annot.select <- merge(Annot.1, Annot.2, by = "gene")
 Annot.select$GO_Name <- gsub("F:*","",Annot.select$GO_Name)
@@ -78,7 +86,7 @@ Annot.select$GO_IDs <- gsub("_","; ",Annot.select$GO_IDs)
 # Load methylation data
 ```{r}
 #Lifestage data
-meth.data.LS_5x <- list.files(path = "../output/WGBS/meth_counts_5x", pattern = ".bed$", full.names=TRUE) %>%
+meth.data.LS_5x <- list.files(path = "output/WGBS/meth_counts_5x", pattern = ".bed$", full.names=TRUE) %>%
   set_names(.) %>% 
   map_dfr(read.csv,.id="Sample.ID", header=FALSE, sep="\t", na.string="NA", stringsAsFactors = FALSE) %>% 
   dplyr::select(-c(V3,V7:V14)) %>%
@@ -86,13 +94,13 @@ meth.data.LS_5x <- list.files(path = "../output/WGBS/meth_counts_5x", pattern = 
 colnames(meth.data.LS_5x) <- c("Sample.ID", "scaffold", "position","per.meth","meth","unmeth","gene")
 meth.data.LS_5x$gene <- gsub(";.*","",meth.data.LS_5x$gene) #remove extra characters
 meth.data.LS_5x$gene <- gsub("ID=","",meth.data.LS_5x$gene) #remove extra characters
-meth.data.LS_5x$Sample.ID <- gsub("../output/WGBS/meth_counts_5x/","",meth.data.LS_5x$Sample.ID) #remove extra characters
+meth.data.LS_5x$Sample.ID <- gsub("output/WGBS/meth_counts_5x/","",meth.data.LS_5x$Sample.ID) #remove extra characters
 meth.data.LS_5x$Sample.ID <- gsub("*._5x_sorted.tab_gene_CpG_5x_enrichment.bed","",meth.data.LS_5x$Sample.ID) #remove extra characters 
 meth.data.LS_5x$Sample.ID <- gsub("_...","",meth.data.LS_5x$Sample.ID) #remove extra characters
 
-sample.info <- read.csv("../data/metadata/Thermal_Transplant_Metadata_Analysis.csv", stringsAsFactors = TRUE)
+sample.info <- read.csv("data/metadata/Thermal_Transplant_Metadata_Analysis.csv", stringsAsFactors = TRUE)
 sample.info2 <- sample.info %>%
-  select(-Timepoint, -File_Name) %>%
+  dplyr::select(-Timepoint, -File_Name) %>%
   filter(Coral.ID %like% "-A")
 
 MD.LS_5x <- merge(meth.data.LS_5x, sample.info2, by="Sample.ID")
@@ -104,7 +112,7 @@ meth_table <- MD.LS_5x
 meth_table$sample_gene <- paste0(meth_table$Sample.ID, meth_table$gene)
 
 #filter for genes with >5 methylated positions
-min.filt <- count(meth_table, vars = c(sample_gene))
+min.filt <- dplyr::count(meth_table, vars = c(sample_gene))
 newdata <- min.filt[ which(min.filt$n > 9), ]
 meth_table_filt <- meth_table[meth_table$sample_gene %in% newdata$vars,] #consider checking this and run a pca on this - have a decent rational for this 
 ```
@@ -165,7 +173,7 @@ DMG_LS.sig.origin <- DMG_LS.sig.origin[which(DMG_LS.sig.origin$adj.pval.Origin<0
 DMG_LS.sig.origin <- merge(DMG_LS.sig.origin, Annot.select, by="gene", all.x=TRUE)
 DMG_LS.sig.origin <- DMG_LS.sig.origin[order(DMG_LS.sig.origin$adj.pval.Origin),]
 DMG_LS.sig.origin <- DMG_LS.sig.origin[!duplicated(DMG_LS.sig.origin$gene),]
-write.table(DMG_LS.sig.origin, '../output/WGBS/DMG/Origin_sig_annot.tsv', sep='\t', row.names=FALSE)
+write.table(DMG_LS.sig.origin, 'output/WGBS/DMG/Origin_sig_annot.tsv', sep='\t', row.names=FALSE)
 
 #Sanity check plotting of top DMGs with sig interaction
 origin <- MD.LS_5x %>%
