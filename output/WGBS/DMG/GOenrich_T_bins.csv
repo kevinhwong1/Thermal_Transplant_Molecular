@@ -1,0 +1,17 @@
+"","GOSlim_bin","direction","n"
+"1","cell organization and biogenesis","Ambient",2
+"2","cell organization and biogenesis","Heated",2
+"3","death","Ambient",2
+"4","death","Heated",3
+"5","developmental processes","Ambient",2
+"6","developmental processes","Heated",5
+"7","DNA metabolism","Ambient",22
+"8","DNA metabolism","Heated",43
+"9","other biological processes","Ambient",10
+"10","other biological processes","Heated",9
+"11","other metabolic processes","Ambient",9
+"12","other metabolic processes","Heated",22
+"13","protein metabolism","Ambient",1
+"14","protein metabolism","Heated",2
+"15","transport","Ambient",2
+"16","transport","Heated",7

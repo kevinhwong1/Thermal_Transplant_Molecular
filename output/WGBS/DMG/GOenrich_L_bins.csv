@@ -1,0 +1,20 @@
+"","GOSlim_bin","direction","n"
+"1","cell cycle and proliferation","Adult",2
+"2","cell organization and biogenesis","Adult",15
+"3","cell organization and biogenesis","Larvae",2
+"4","death","Adult",1
+"5","death","Larvae",1
+"6","developmental processes","Adult",10
+"7","developmental processes","Larvae",2
+"8","DNA metabolism","Adult",2
+"9","DNA metabolism","Larvae",47
+"10","other biological processes","Adult",5
+"11","other biological processes","Larvae",2
+"12","other metabolic processes","Adult",2
+"13","other metabolic processes","Larvae",20
+"14","protein metabolism","Adult",2
+"15","RNA metabolism","Adult",3
+"16","signal transduction","Adult",2
+"17","stress response","Adult",2
+"18","transport","Adult",12
+"19","transport","Larvae",1

@@ -1,0 +1,246 @@
+,ASV,Phylum,Class,Order,Family,Genus,Species,Metabolite,Corr.r
+1,ASV-1041,Bacteroidota,Bacteroidia,Chitinophagales,Saprospiraceae,uncultured,uncultured uncultured_bacterium,Glycerate,0.876436808
+2,ASV-1079,Bacteroidota,Bacteroidia,Chitinophagales,Saprospiraceae,Lewinella,Unclassified  Lewinella,Glycerate,0.876436808
+3,ASV-1101,Bacteroidota,Bacteroidia,Chitinophagales,Saprospiraceae,uncultured,Unclassified  uncultured,Glycerate,0.876436808
+4,ASV-1115,Bacteroidota,Bacteroidia,Chitinophagales,Saprospiraceae,Portibacter,Portibacter uncultured_bacterium,Glycerate,0.876436808
+5,ASV-1121,Bacteroidota,Bacteroidia,Chitinophagales,Saprospiraceae,uncultured,Unclassified  uncultured,Glycerate,0.876436808
+6,ASV-1164,Bacteroidota,Bacteroidia,Flavobacteriales,Crocinitomicaceae,Salinirepens,Unclassified  Salinirepens,Glycerate,0.876436808
+7,ASV-1176,Bacteroidota,Bacteroidia,Flavobacteriales,Unclassified Flavobacteriales,Unclassified Flavobacteriales,Unclassified Flavobacteriales,Glycerate,0.876436808
+8,ASV-1358,Bacteroidota,Bacteroidia,Flavobacteriales,Flavobacteriaceae,Tenacibaculum,Unclassified  Tenacibaculum,Glycerate,0.876436808
+9,ASV-1394,Bacteroidota,Bacteroidia,Flavobacteriales,Flavobacteriaceae,Winogradskyella,Unclassified  Winogradskyella,Glycerate,0.876436808
+10,ASV-1426,Bacteroidota,Bacteroidia,Chitinophagales,uncultured,uncultured,uncultured uncultured_organism,Glycerate,0.876436808
+11,ASV-147,Spirochaetota,Spirochaetia,Spirochaetales,Spirochaetaceae,uncultured,uncultured uncultured_soil,Glycerate,0.876436808
+12,ASV-1473,Bacteroidota,Bacteroidia,Cytophagales,Unclassified Cytophagales,Unclassified Cytophagales,Unclassified Cytophagales,Glycerate,0.876436808
+13,ASV-1525,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,uncultured,uncultured uncultured_Flammeovirgaceae,Glycerate,0.876436808
+14,ASV-1541,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Unclassified  Ekhidna,Feature 112,-0.853757718
+15,ASV-1541,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Unclassified  Ekhidna,Feature 126,-0.85113896
+16,ASV-1541,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Unclassified  Ekhidna,Feature 101,-0.851746654
+17,ASV-1546,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Unclassified  Ekhidna,Glycerate,0.876436808
+18,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 105,-0.948173839
+19,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 10,0.91878336
+20,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,4-Guanidinobutanoic acid,0.935350698
+21,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 114,-0.945968334
+22,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 113,-0.937373678
+23,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 117,-0.934519162
+24,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 110,-0.947660947
+25,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 103,-0.946000592
+26,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 108,-0.968623064
+27,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 125,-0.905174895
+28,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 139,-0.970087825
+29,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 12,0.944469705
+30,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 109,-0.963156155
+31,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 102,-0.971860139
+32,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Arginine,0.936308413
+33,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 56,-0.969153467
+34,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 137,-0.965359647
+35,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 104,-0.956938225
+36,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 118,-0.96728185
+37,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 140,-0.906539061
+38,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 138,-0.972313095
+39,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 16,0.906381207
+40,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 128,-0.914317199
+41,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 13,0.877380766
+42,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 40,0.885055954
+43,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 18,-0.870188094
+44,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 14,0.943008584
+45,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 106,-0.939773098
+46,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 126,-0.976747986
+47,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 25,0.863438365
+48,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 141,-0.89776588
+49,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 107,-0.958481435
+50,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 15,0.924772827
+51,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 127,-0.968329314
+52,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 9,0.955700059
+53,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 112,-0.971195609
+54,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 17,0.939580023
+55,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 101,-0.975107104
+56,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 91,-0.92025352
+57,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 133,-0.941140225
+58,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 96,-0.918020123
+59,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 11,0.944400518
+60,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 58,0.928568487
+61,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 51,-0.884769264
+62,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 60,-0.905057329
+63,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 100,-0.893293237
+64,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 61,0.934386887
+65,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 53,0.909620618
+66,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 62,0.941102578
+67,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 37,0.938964457
+68,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 65,0.880303188
+69,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,N-acetyl-glutamine,-0.864832371
+70,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 66,0.886296355
+71,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 57,0.93283574
+72,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 19,-0.870188094
+73,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 8,0.923915138
+74,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Ornithine,0.927854642
+75,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 84,0.913577347
+76,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 35,0.936108048
+77,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 89,0.927747878
+78,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 36,0.868223194
+79,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Homoarginine,0.885055954
+80,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 42,0.942372468
+81,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 90,-0.937959556
+82,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,Feature 43,0.863954861
+83,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,NADPH,0.864040791
+84,ASV-1567,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Ekhidna,Ekhidna uncultured_Flammeovirgaceae,NG-dimethyl-L-arginine,0.863830564
+85,ASV-1575,Bacteroidota,Bacteroidia,Cytophagales,Amoebophilaceae,Candidatus_Amoebophilus,Candidatus_Amoebophilus Dictyostelium_polycephalum,Glycerate,0.876436808
+86,ASV-1691,Bacteroidota,Bacteroidia,Cytophagales,Cyclobacteriaceae,Reichenbachiella,Reichenbachiella uncultured_Flammeovirgaceae,Glycerate,0.876436808
+87,ASV-1808,Planctomycetota,vadinHA49,vadinHA49,vadinHA49,vadinHA49,Unclassified  vadinHA49,Glycerate,0.876436808
+88,ASV-1914,Planctomycetota,Planctomycetes,Pirellulales,Pirellulaceae,Blastopirellula,Blastopirellula uncultured_bacterium,Glycerate,0.876436808
+89,ASV-202,Proteobacteria,Gammaproteobacteria,Alteromonadales,Alteromonadaceae,Alteromonadaceae,Alteromonadaceae uncultured_gamma,Glycerate,0.876436808
+90,ASV-2053,Planctomycetota,Planctomycetes,Planctomycetales,Rubinisphaeraceae,Fuerstia,Fuerstia uncultured_Planctomyces,Glycerate,0.876436808
+91,ASV-2061,Planctomycetota,Planctomycetes,Planctomycetales,Rubinisphaeraceae,uncultured,uncultured uncultured_bacterium,Glycerate,0.876436808
+92,ASV-2077,Planctomycetota,BD7-11,BD7-11,BD7-11,BD7-11,BD7-11 uncultured_bacterium,Glycerate,0.876436808
+93,ASV-2144,Planctomycetota,028H05-P-BN-P5,028H05-P-BN-P5,028H05-P-BN-P5,028H05-P-BN-P5,028H05-P-BN-P5 uncultured_bacterium,Glycerate,0.876436808
+94,ASV-2389,Verrucomicrobiota,Chlamydiae,Chlamydiales,Simkaniaceae,uncultured,Unclassified  uncultured,Glycerate,0.876436808
+95,ASV-2509,Verrucomicrobiota,Verrucomicrobiae,Opitutales,Puniceicoccaceae,Coraliomargarita,Unclassified  Coraliomargarita,Glycerate,0.876436808
+96,ASV-2691,Cyanobacteria,Cyanobacteriia,Phormidesmiales,Nodosilineaceae,MBIC10086,MBIC10086 Pseudanabaena_cf.,Glycerate,0.876436808
+97,ASV-2739,Patescibacteria,Gracilibacteria,Absconditabacteriales_(SR1),Absconditabacteriales_(SR1),Absconditabacteriales_(SR1),Absconditabacteriales_(SR1) uncultured_Epsilonproteobacteria,Glycerate,0.876436808
+98,ASV-2762,Firmicutes,Negativicutes,Veillonellales-Selenomonadales,Veillonellaceae,Dialister,Unclassified  Dialister,Glycerate,0.876436808
+99,ASV-2783,Proteobacteria,Alphaproteobacteria,uncultured,uncultured,uncultured,uncultured uncultured_marine,Glycerate,0.876436808
+100,ASV-285,Proteobacteria,Gammaproteobacteria,Vibrionales,Vibrionaceae,Vibrio,Unclassified  Vibrio,Glycerate,0.876436808
+101,ASV-290,Proteobacteria,Gammaproteobacteria,Vibrionales,Vibrionaceae,Vibrio,Unclassified  Vibrio,Feature 109,-0.86348821
+102,ASV-290,Proteobacteria,Gammaproteobacteria,Vibrionales,Vibrionaceae,Vibrio,Unclassified  Vibrio,Feature 137,-0.864829731
+103,ASV-290,Proteobacteria,Gammaproteobacteria,Vibrionales,Vibrionaceae,Vibrio,Unclassified  Vibrio,Feature 56,-0.856961687
+104,ASV-290,Proteobacteria,Gammaproteobacteria,Vibrionales,Vibrionaceae,Vibrio,Unclassified  Vibrio,Feature 102,-0.868251175
+105,ASV-290,Proteobacteria,Gammaproteobacteria,Vibrionales,Vibrionaceae,Vibrio,Unclassified  Vibrio,Feature 126,-0.870176632
+106,ASV-290,Proteobacteria,Gammaproteobacteria,Vibrionales,Vibrionaceae,Vibrio,Unclassified  Vibrio,Feature 106,-0.854614957
+107,ASV-290,Proteobacteria,Gammaproteobacteria,Vibrionales,Vibrionaceae,Vibrio,Unclassified  Vibrio,Feature 127,-0.86340123
+108,ASV-290,Proteobacteria,Gammaproteobacteria,Vibrionales,Vibrionaceae,Vibrio,Unclassified  Vibrio,Feature 107,-0.861067738
+109,ASV-290,Proteobacteria,Gammaproteobacteria,Vibrionales,Vibrionaceae,Vibrio,Unclassified  Vibrio,Feature 105,-0.855827936
+110,ASV-290,Proteobacteria,Gammaproteobacteria,Vibrionales,Vibrionaceae,Vibrio,Unclassified  Vibrio,Feature 118,-0.866529825
+111,ASV-290,Proteobacteria,Gammaproteobacteria,Vibrionales,Vibrionaceae,Vibrio,Unclassified  Vibrio,Feature 139,-0.863934621
+112,ASV-290,Proteobacteria,Gammaproteobacteria,Vibrionales,Vibrionaceae,Vibrio,Unclassified  Vibrio,N-acetyl-glutamine,-0.871629102
+113,ASV-290,Proteobacteria,Gammaproteobacteria,Vibrionales,Vibrionaceae,Vibrio,Unclassified  Vibrio,Feature 108,-0.867607167
+114,ASV-290,Proteobacteria,Gammaproteobacteria,Vibrionales,Vibrionaceae,Vibrio,Unclassified  Vibrio,Feature 112,-0.873211875
+115,ASV-290,Proteobacteria,Gammaproteobacteria,Vibrionales,Vibrionaceae,Vibrio,Unclassified  Vibrio,Feature 53,0.856154946
+116,ASV-290,Proteobacteria,Gammaproteobacteria,Vibrionales,Vibrionaceae,Vibrio,Unclassified  Vibrio,Feature 101,-0.870895713
+117,ASV-290,Proteobacteria,Gammaproteobacteria,Vibrionales,Vibrionaceae,Vibrio,Unclassified  Vibrio,Feature 138,-0.861718189
+118,ASV-3031,Proteobacteria,Alphaproteobacteria,Unclassified Alphaproteobacteria,Unclassified Alphaproteobacteria,Unclassified Alphaproteobacteria,Unclassified Alphaproteobacteria,Glycerate,0.876436808
+119,ASV-3057,Proteobacteria,Alphaproteobacteria,Micavibrionales,Micavibrionaceae,uncultured,uncultured uncultured_organism,Glycerate,0.876436808
+120,ASV-3074,Proteobacteria,Alphaproteobacteria,Rickettsiales,SM2D12,SM2D12,SM2D12 uncultured_organism,Glycerate,0.876436808
+121,ASV-3082,Proteobacteria,Alphaproteobacteria,Micavibrionales,Micavibrionaceae,uncultured,uncultured uncultured_bacterium,Glycerate,0.876436808
+122,ASV-3088,Proteobacteria,Alphaproteobacteria,Micavibrionales,Micavibrionaceae,uncultured,uncultured uncultured_bacterium,Glycerate,0.876436808
+123,ASV-3094,Proteobacteria,Alphaproteobacteria,Micavibrionales,Micavibrionaceae,uncultured,uncultured uncultured_bacterium,Glycerate,0.876436808
+124,ASV-3113,Proteobacteria,Alphaproteobacteria,Micavibrionales,Micavibrionaceae,uncultured,uncultured uncultured_bacterium,Feature 109,-0.862970545
+125,ASV-3113,Proteobacteria,Alphaproteobacteria,Micavibrionales,Micavibrionaceae,uncultured,uncultured uncultured_bacterium,Feature 137,-0.864360862
+126,ASV-3113,Proteobacteria,Alphaproteobacteria,Micavibrionales,Micavibrionaceae,uncultured,uncultured uncultured_bacterium,Feature 102,-0.867968532
+127,ASV-3113,Proteobacteria,Alphaproteobacteria,Micavibrionales,Micavibrionaceae,uncultured,uncultured uncultured_bacterium,Feature 112,-0.872491516
+128,ASV-3113,Proteobacteria,Alphaproteobacteria,Micavibrionales,Micavibrionaceae,uncultured,uncultured uncultured_bacterium,Feature 107,-0.860412998
+129,ASV-3113,Proteobacteria,Alphaproteobacteria,Micavibrionales,Micavibrionaceae,uncultured,uncultured uncultured_bacterium,Feature 118,-0.866061752
+130,ASV-3113,Proteobacteria,Alphaproteobacteria,Micavibrionales,Micavibrionaceae,uncultured,uncultured uncultured_bacterium,Feature 139,-0.863867978
+131,ASV-3113,Proteobacteria,Alphaproteobacteria,Micavibrionales,Micavibrionaceae,uncultured,uncultured uncultured_bacterium,N-acetyl-glutamine,-0.863572759
+132,ASV-3113,Proteobacteria,Alphaproteobacteria,Micavibrionales,Micavibrionaceae,uncultured,uncultured uncultured_bacterium,Feature 138,-0.861982379
+133,ASV-3113,Proteobacteria,Alphaproteobacteria,Micavibrionales,Micavibrionaceae,uncultured,uncultured uncultured_bacterium,Feature 101,-0.87063233
+134,ASV-3113,Proteobacteria,Alphaproteobacteria,Micavibrionales,Micavibrionaceae,uncultured,uncultured uncultured_bacterium,Feature 126,-0.87008504
+135,ASV-3113,Proteobacteria,Alphaproteobacteria,Micavibrionales,Micavibrionaceae,uncultured,uncultured uncultured_bacterium,Feature 127,-0.86325329
+136,ASV-3113,Proteobacteria,Alphaproteobacteria,Micavibrionales,Micavibrionaceae,uncultured,uncultured uncultured_bacterium,Feature 56,-0.857379251
+137,ASV-3113,Proteobacteria,Alphaproteobacteria,Micavibrionales,Micavibrionaceae,uncultured,uncultured uncultured_bacterium,Feature 108,-0.867148235
+138,ASV-3113,Proteobacteria,Alphaproteobacteria,Micavibrionales,Micavibrionaceae,uncultured,uncultured uncultured_bacterium,Feature 105,-0.854863284
+139,ASV-3113,Proteobacteria,Alphaproteobacteria,Micavibrionales,Micavibrionaceae,uncultured,uncultured uncultured_bacterium,Feature 106,-0.853156674
+140,ASV-3113,Proteobacteria,Alphaproteobacteria,Micavibrionales,Micavibrionaceae,uncultured,uncultured uncultured_bacterium,Feature 53,0.852460227
+141,ASV-3117,Proteobacteria,Alphaproteobacteria,Micavibrionales,Micavibrionaceae,uncultured,uncultured unidentified_marine,Glycerate,0.876436808
+142,ASV-3155,Proteobacteria,Alphaproteobacteria,Micavibrionales,Micavibrionaceae,uncultured,uncultured uncultured_bacterium,Glycerate,0.876436808
+143,ASV-3160,Proteobacteria,Alphaproteobacteria,Micavibrionales,uncultured,uncultured,uncultured uncultured_bacterium,Glycerate,0.876436808
+144,ASV-3166,Proteobacteria,Alphaproteobacteria,Micavibrionales,Micavibrionaceae,uncultured,uncultured uncultured_organism,Glycerate,0.876436808
+145,ASV-3268,Proteobacteria,Alphaproteobacteria,Sphingomonadales,Sphingomonadaceae,Sphingomonas,Unclassified  Sphingomonas,Glycerate,0.876436808
+146,ASV-3271,Proteobacteria,Alphaproteobacteria,Unclassified Alphaproteobacteria,Unclassified Alphaproteobacteria,Unclassified Alphaproteobacteria,Unclassified Alphaproteobacteria,Glycerate,0.876436808
+147,ASV-3286,Proteobacteria,Alphaproteobacteria,Rhizobiales,Unclassified Rhizobiales,Unclassified Rhizobiales,Unclassified Rhizobiales,Glycerate,0.876436808
+148,ASV-3330,Proteobacteria,Alphaproteobacteria,Rhizobiales,Rhizobiaceae,Roseitalea,Roseitalea uncultured_bacterium,Glycerate,0.876436808
+149,ASV-3337,Proteobacteria,Alphaproteobacteria,Rhizobiales,Stappiaceae,Labrenzia,Unclassified  Labrenzia,Feature 112,-0.853091168
+150,ASV-3337,Proteobacteria,Alphaproteobacteria,Rhizobiales,Stappiaceae,Labrenzia,Unclassified  Labrenzia,Feature 101,-0.851126184
+151,ASV-3337,Proteobacteria,Alphaproteobacteria,Rhizobiales,Stappiaceae,Labrenzia,Unclassified  Labrenzia,Feature 126,-0.85053571
+152,ASV-3339,Proteobacteria,Alphaproteobacteria,Rhizobiales,Stappiaceae,Labrenzia,Unclassified  Labrenzia,Glycerate,0.876436808
+153,ASV-3383,Proteobacteria,Alphaproteobacteria,Caulobacterales,Parvularculaceae,Marinicaulis,Marinicaulis uncultured_bacterium,Glycerate,0.876436808
+154,ASV-3454,Proteobacteria,Alphaproteobacteria,Rickettsiales,Unclassified Rickettsiales,Unclassified Rickettsiales,Unclassified Rickettsiales,Glycerate,0.876436808
+155,ASV-3475,Proteobacteria,Alphaproteobacteria,Kiloniellales,Kiloniellaceae,Tistlia,Tistlia marine_metagenome,Glycerate,0.876436808
+156,ASV-3556,Proteobacteria,Alphaproteobacteria,Rhodobacterales,Rhodobacteraceae,Unclassified Rhodobacteraceae,Unclassified Rhodobacteraceae,Glycerate,0.876436808
+157,ASV-3569,Proteobacteria,Alphaproteobacteria,Rhodobacterales,Rhodobacteraceae,Tateyamaria,Tateyamaria uncultured_Alphaproteobacteria,Glycerate,0.876436808
+158,ASV-379,Proteobacteria,Gammaproteobacteria,Cellvibrionales,Cellvibrionaceae,Unclassified Cellvibrionaceae,Unclassified Cellvibrionaceae,Glycerate,0.876436808
+159,ASV-398,Proteobacteria,Gammaproteobacteria,Unclassified Gammaproteobacteria,Unclassified Gammaproteobacteria,Unclassified Gammaproteobacteria,Unclassified Gammaproteobacteria,Glycerate,0.876436808
+160,ASV-457,Proteobacteria,Gammaproteobacteria,Oceanospirillales,Kangiellaceae,Aliikangiella,Unclassified  Aliikangiella,Glycerate,0.876436808
+161,ASV-609,Proteobacteria,Gammaproteobacteria,UBA10353_marine_group,UBA10353_marine_group,UBA10353_marine_group,UBA10353_marine_group uncultured_bacterium,Glycerate,0.876436808
+162,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 96,-0.932047765
+163,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 117,-0.933398204
+164,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 10,0.935875814
+165,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 102,-0.974166491
+166,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 126,-0.980061183
+167,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Arginine,0.949859819
+168,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 8,0.93986094
+169,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 103,-0.955188673
+170,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 104,-0.967330294
+171,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 107,-0.958811867
+172,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 118,-0.968611626
+173,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 109,-0.964213501
+174,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 105,-0.946861803
+175,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 128,-0.909206426
+176,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 125,-0.90070616
+177,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 25,0.877637767
+178,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 84,0.922327531
+179,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,NG-dimethyl-L-arginine,0.891806309
+180,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 106,-0.935875996
+181,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 11,0.954549452
+182,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 91,-0.924421546
+183,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 110,-0.951737748
+184,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 141,-0.89143455
+185,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 89,0.942063163
+186,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Ornithine,0.942604244
+187,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 108,-0.970005305
+188,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 112,-0.971236026
+189,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 90,-0.939330373
+190,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,4-Guanidinobutanoic acid,0.948275197
+191,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 139,-0.973504208
+192,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 133,-0.952628894
+193,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 114,-0.961545586
+194,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 19,-0.875495257
+195,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 140,-0.906899542
+196,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 58,0.926170707
+197,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 137,-0.966677856
+198,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 35,0.949655968
+199,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 127,-0.971318506
+200,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 12,0.954590194
+201,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 16,0.922182243
+202,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 37,0.951834337
+203,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 113,-0.949998115
+204,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 13,0.899702682
+205,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 18,-0.875495257
+206,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 42,0.950142921
+207,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 14,0.95689961
+208,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 43,0.891918121
+209,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 9,0.968370045
+210,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Homoarginine,0.900422757
+211,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 60,-0.910508296
+212,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 15,0.940551757
+213,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 101,-0.977525635
+214,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 56,-0.975069989
+215,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 62,0.941309006
+216,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 17,0.947468097
+217,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 67,0.862955282
+218,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 36,0.900478128
+219,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 66,0.868282997
+220,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 51,-0.894382063
+221,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 65,0.867847368
+222,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 138,-0.977448796
+223,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 53,0.894042352
+224,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 57,0.939202975
+225,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 40,0.900422757
+226,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 100,-0.897239627
+227,ASV-61,Proteobacteria,Alphaproteobacteria,Rickettsiales,Mitochondria,Mitochondria,Unclassified  Mitochondria,Feature 61,0.947031945
+228,ASV-680,Bdellovibrionota,Bdellovibrionia,Bdellovibrionales,Bdellovibrionaceae,OM27_clade,OM27_clade uncultured_proteobacterium,Glycerate,0.876436808
+229,ASV-682,Bdellovibrionota,Bdellovibrionia,Bdellovibrionales,Bdellovibrionaceae,OM27_clade,OM27_clade uncultured_organism,Glycerate,0.876436808
+230,ASV-683,Bdellovibrionota,Bdellovibrionia,Bdellovibrionales,Bdellovibrionaceae,OM27_clade,OM27_clade uncultured_organism,Glycerate,0.876436808
+231,ASV-698,Bdellovibrionota,Bdellovibrionia,Bdellovibrionales,Bdellovibrionaceae,OM27_clade,OM27_clade uncultured_bacterium,Glycerate,0.876436808
+232,ASV-725,Bdellovibrionota,Bdellovibrionia,Bdellovibrionales,Bdellovibrionaceae,Bdellovibrio,Bdellovibrio uncultured_marine,Glycerate,0.876436808
+233,ASV-728,Bdellovibrionota,Bdellovibrionia,Bdellovibrionales,Bdellovibrionaceae,Bdellovibrio,Bdellovibrio uncultured_bacterium,Glycerate,0.876436808
+234,ASV-749,Bdellovibrionota,Bdellovibrionia,Bacteriovoracales,Bacteriovoracaceae,Peredibacter,Peredibacter uncultured_bacterium,Glycerate,0.876436808
+235,ASV-753,Bdellovibrionota,Bdellovibrionia,Bacteriovoracales,Bacteriovoracaceae,Peredibacter,Unclassified  Peredibacter,Glycerate,0.876436808
+236,ASV-758,Bdellovibrionota,Bdellovibrionia,Bacteriovoracales,Bacteriovoracaceae,Peredibacter,Peredibacter uncultured_Peredibacter,Glycerate,0.876436808
+237,ASV-774,Bdellovibrionota,Bdellovibrionia,Bacteriovoracales,Bacteriovoracaceae,Halobacteriovorax,Halobacteriovorax Bacteriovorax_sp.,Glycerate,0.876436808
+238,ASV-777,Bdellovibrionota,Bdellovibrionia,Bacteriovoracales,Bacteriovoracaceae,Halobacteriovorax,Halobacteriovorax uncultured_phototrophic,Glycerate,0.876436808
+239,ASV-795,Myxococcota,Myxococcia,Myxococcales,Myxococcaceae,P3OB-42,Unclassified  P3OB-42,Glycerate,0.876436808
+240,ASV-826,Myxococcota,Myxococcia,Myxococcales,Myxococcaceae,P3OB-42,Unclassified  P3OB-42,Glycerate,0.876436808
+241,ASV-835,Myxococcota,Polyangia,Polyangiales,BIrii41,BIrii41,BIrii41 uncultured_Polyangiaceae,Glycerate,0.876436808
+242,ASV-885,Desulfobacterota,Desulfuromonadia,Bradymonadales,Bradymonadales,Bradymonadales,Unclassified  Bradymonadales,Glycerate,0.876436808
+243,ASV-895,Desulfobacterota,Desulfuromonadia,Bradymonadales,Bradymonadales,Bradymonadales,Bradymonadales uncultured_marine,Glycerate,0.876436808
+244,ASV-970,Bacteroidota,Bacteroidia,Cytophagales,Amoebophilaceae,uncultured,Unclassified  uncultured,Glycerate,0.876436808
+245,ASV-984,Bacteroidota,Bacteroidia,Chitinophagales,37-13,37-13,37-13 uncultured_Bacteroidetes,Glycerate,0.876436808

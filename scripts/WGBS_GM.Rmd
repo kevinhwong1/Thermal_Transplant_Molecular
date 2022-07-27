@@ -68,7 +68,7 @@ Annot.2 <- Annot %>%
   mutate(InterPro_GO_IDs = na_if(InterPro_GO_IDs, "no GO terms")) %>%
   mutate(InterPro_GO_IDs = na_if(InterPro_GO_IDs, "no IPS match")) %>%
   unite("GO_IDs", InterPro_GO_IDs:TrEMBL_GO_IDs, remove = FALSE, na.rm = TRUE) %>%
- dplyr:: select(gene, GO_IDs)
+ dplyr::select(gene, GO_IDs)
 
 Annot.select <- merge(Annot.1, Annot.2, by = "gene")
 Annot.select$GO_Name <- gsub("F:*","",Annot.select$GO_Name)
@@ -80,6 +80,23 @@ Annot.select$GO_IDs <- gsub("F:*","",Annot.select$GO_IDs)
 Annot.select$GO_IDs <- gsub("P:*","",Annot.select$GO_IDs)
 Annot.select$GO_IDs <- gsub("C:*","",Annot.select$GO_IDs)
 Annot.select$GO_IDs <- gsub("_","; ",Annot.select$GO_IDs)
+
+
+
+#### ANNOTATION STATSITICS 
+
+Annot.NA <- Annot %>%
+  dplyr::select(gene, Length, InterPro_GO_Names, BLAST_GO_Names, SwissProt_GO_Names, TrEMBL_GO_Names) %>%
+  mutate(InterPro_GO_Names = na_if(InterPro_GO_Names, "no GO terms")) %>%
+  mutate(InterPro_GO_Names = na_if(InterPro_GO_Names, "no IPS match")) %>%
+  mutate_all(na_if,"")
+
+Annot.IPS <- Annot.NA %>% drop_na(InterPro_GO_Names) # 24089
+Annot.BLAST <- Annot.NA %>% drop_na(BLAST_GO_Names) # 11443
+Annot.SP <- Annot.NA %>% drop_na(SwissProt_GO_Names) # 30284
+Annot.Trem <- Annot.NA %>% drop_na(TrEMBL_GO_Names) # 12178
+
+Annot.all <- Annot.select %>% mutate_all(na_if,"") %>% drop_na() #43154 
 
 ```
 
@@ -201,7 +218,7 @@ DMG_LS.sig.treatment <- DMG_LS.sig.treatment[which(DMG_LS.sig.treatment$adj.pval
 DMG_LS.sig.treatment <- merge(DMG_LS.sig.treatment, Annot.select, by="gene", all.x=TRUE)
 DMG_LS.sig.treatment <- DMG_LS.sig.treatment[order(DMG_LS.sig.treatment$adj.pval.Treatment),]
 DMG_LS.sig.treatment <- DMG_LS.sig.treatment[!duplicated(DMG_LS.sig.treatment$gene),]
-write.table(DMG_LS.sig.treatment, '../output/WGBS/DMG/Treatment_sig_annot.tsv', sep='\t', row.names=FALSE)
+write.table(DMG_LS.sig.treatment, 'output/WGBS/DMG/Treatment_sig_annot.tsv', sep='\t', row.names=FALSE)
 
 #Sanity check plotting of top DMGs with sig interaction
 treatment <- MD.LS_5x %>%
@@ -230,7 +247,7 @@ DMG_LS.sig.lifestage <- DMG_LS.sig.lifestage[which(DMG_LS.sig.lifestage$adj.pval
 DMG_LS.sig.lifestage <- merge(DMG_LS.sig.lifestage, Annot.select, by="gene", all.x=TRUE)
 DMG_LS.sig.lifestage <- DMG_LS.sig.lifestage[order(DMG_LS.sig.lifestage$adj.pval.LifeStage),]
 DMG_LS.sig.lifestage <- DMG_LS.sig.lifestage[!duplicated(DMG_LS.sig.lifestage$gene),]
-write.table(DMG_LS.sig.lifestage, '../output/WGBS/DMG/LifeStage_sig_annot.tsv', sep='\t', row.names=FALSE)
+write.table(DMG_LS.sig.lifestage, 'output/WGBS/DMG/LifeStage_sig_annot.tsv', sep='\t', row.names=FALSE)
 
 #Sanity check plotting of top DMGs with sig interaction
 lifestage <- MD.LS_5x %>%
@@ -259,7 +276,7 @@ DMG_LS.sig.OxT <- DMG_LS.sig.OxT[which(DMG_LS.sig.OxT$adj.pval.Origin_x_Treatmen
 DMG_LS.sig.OxT <- merge(DMG_LS.sig.OxT, Annot.select, by="gene", all.x=TRUE)
 DMG_LS.sig.OxT <- DMG_LS.sig.OxT[order(DMG_LS.sig.OxT$adj.pval.Origin_x_Treatment),]
 DMG_LS.sig.OxT <- DMG_LS.sig.OxT[!duplicated(DMG_LS.sig.OxT$gene),]
-write.table(DMG_LS.sig.OxT, '../output/WGBS/DMG/OxT_sig_annot.tsv', sep='\t', row.names=FALSE)
+write.table(DMG_LS.sig.OxT, 'output/WGBS/DMG/OxT_sig_annot.tsv', sep='\t', row.names=FALSE)
 
 #Sanity check plotting of top DMGs with sig interaction
 OxT <- MD.LS_5x %>%
@@ -287,7 +304,7 @@ DMG_LS.sig.OxL <- DMG_LS.sig.OxL[which(DMG_LS.sig.OxL$adj.pval.Origin_x_LifeStag
 DMG_LS.sig.OxL <- merge(DMG_LS.sig.OxL, Annot.select, by="gene", all.x=TRUE)
 DMG_LS.sig.OxL <- DMG_LS.sig.OxL[order(DMG_LS.sig.OxL$adj.pval.Origin_x_LifeStage),]
 DMG_LS.sig.OxL <- DMG_LS.sig.OxL[!duplicated(DMG_LS.sig.OxL$gene),]
-write.table(DMG_LS.sig.OxL, '../output/WGBS/DMG/OxL_sig_annot.tsv', sep='\t', row.names=FALSE)
+write.table(DMG_LS.sig.OxL, 'output/WGBS/DMG/OxL_sig_annot.tsv', sep='\t', row.names=FALSE)
 
 #Sanity check plotting of top DMGs with sig interaction
 OxL <- MD.LS_5x %>%
@@ -315,7 +332,7 @@ DMG_LS.sig.TxL <- DMG_LS.sig.TxL[which(DMG_LS.sig.TxL$adj.pval.Treatment_x_LifeS
 DMG_LS.sig.TxL <- merge(DMG_LS.sig.TxL, Annot.select, by="gene", all.x=TRUE)
 DMG_LS.sig.TxL <- DMG_LS.sig.TxL[order(DMG_LS.sig.TxL$adj.pval.Treatment_x_LifeStage),]
 DMG_LS.sig.TxL <- DMG_LS.sig.TxL[!duplicated(DMG_LS.sig.TxL$gene),]
-write.table(DMG_LS.sig.TxL, '../output/WGBS/DMG/TxL_sig_annot.tsv', sep='\t', row.names=FALSE)
+write.table(DMG_LS.sig.TxL, 'output/WGBS/DMG/TxL_sig_annot.tsv', sep='\t', row.names=FALSE)
 
 #Sanity check plotting of top DMGs with sig interaction
 TxL <- MD.LS_5x %>%
@@ -343,7 +360,7 @@ DMG_LS.sig.OxTxL <- DMG_LS.sig.OxTxL[which(DMG_LS.sig.OxTxL$adj.pval.Origin_x_Tr
 DMG_LS.sig.OxTxL <- merge(DMG_LS.sig.OxTxL, Annot.select, by="gene", all.x=TRUE)
 DMG_LS.sig.OxTxL <- DMG_LS.sig.OxTxL[order(DMG_LS.sig.OxTxL$adj.pval.Origin_x_Treatment_x_LifeStage),]
 DMG_LS.sig.OxTxL <- DMG_LS.sig.OxTxL[!duplicated(DMG_LS.sig.OxTxL$gene),]
-write.table(DMG_LS.sig.OxTxL, '../output/WGBS/DMG/OxTxL_sig_annot.tsv', sep='\t', row.names=FALSE)
+write.table(DMG_LS.sig.OxTxL, 'output/WGBS/DMG/OxTxL_sig_annot.tsv', sep='\t', row.names=FALSE)
 
 #Sanity check plotting of top DMGs with sig interaction
 OxTxL <- MD.LS_5x %>%
@@ -364,6 +381,238 @@ ggplot(data=means, aes(x=Origin, y=per.meth, group = Treatment_Life, colour=Trea
     theme_bw()
 ```
 
+Obtaining Unique and Shared DMGs for each group and interaction
+
+```{r}
+
+# Subseting gene column 
+gene.O <- DMG_LS.sig.origin[1]
+gene.T <- DMG_LS.sig.treatment[1]
+gene.L <- DMG_LS.sig.lifestage[1]
+gene.OxT <- DMG_LS.sig.OxT[1]
+gene.OxL <- DMG_LS.sig.OxL[1]
+gene.TxL <- DMG_LS.sig.TxL[1]
+gene.OxTxL <- DMG_LS.sig.OxTxL[1]
+
+#Length to obtain total number of DMGS per group
+length(gene.O$gene)
+length(gene.T$gene)
+length(gene.L$gene)
+length(gene.OxT$gene)
+length(gene.OxL$gene)
+length(gene.TxL$gene)
+length(gene.OxTxL$gene)
+
+#### ORIGIN ####
+
+#Finding Origin common genes 
+O_T_common <- merge(gene.O, gene.T, by = "gene")
+O_L_common <- merge(gene.O, gene.L, by = "gene")
+O_OxT_common <- merge(gene.O, gene.OxT, by = "gene")
+O_OxL_common <- merge(gene.O, gene.OxL, by = "gene")
+O_TxL_common <- merge(gene.O, gene.TxL, by = "gene")
+O_OxTxL_common <- merge(gene.O, gene.OxTxL, by = "gene")
+
+length(O_T_common$gene)
+length(O_L_common$gene)
+length(O_OxT_common$gene)
+length(O_OxL_common$gene)
+length(O_TxL_common$gene)
+length(O_OxTxL_common$gene)
+
+O_shared <- rbind(O_T_common, O_L_common, O_OxT_common, O_OxL_common, O_TxL_common, O_OxTxL_common) %>% distinct()
+
+O_unique <- as.data.frame(setdiff(gene.O$gene, O_shared$gene))
+colnames(O_unique)[1] <- "gene"
+length(O_unique$gene)
+
+#### TREATMENT ####
+
+#Finding treatment common genes 
+T_O_common <-     merge(gene.T, gene.O, by = "gene")
+T_L_common <-     merge(gene.T, gene.L, by = "gene")
+T_OxT_common <-   merge(gene.T, gene.OxT, by = "gene")
+T_OxL_common <-   merge(gene.T, gene.OxL, by = "gene")
+T_TxL_common <-   merge(gene.T, gene.TxL, by = "gene")
+T_OxTxL_common <- merge(gene.T, gene.OxTxL, by = "gene")
+
+length(T_O_common$gene)
+length(T_L_common$gene)
+length(T_OxT_common$gene)
+length(T_OxL_common$gene)
+length(T_TxL_common$gene)
+length(T_OxTxL_common$gene)
+
+T_shared <- rbind(T_O_common, 
+                  T_L_common, 
+                  T_OxT_common, 
+                  T_OxL_common, 
+                  T_TxL_common, 
+                  T_OxTxL_common) %>% distinct()
+
+T_unique <- as.data.frame(setdiff(gene.T$gene, T_shared$gene))
+colnames(T_unique)[1] <- "gene"
+length(T_unique$gene)
+
+#### LIFESTAGE ####
+
+#Finding lifestage common genes 
+L_O_common <-     merge(gene.L, gene.O, by = "gene")
+L_T_common <-     merge(gene.L, gene.T, by = "gene")
+L_OxT_common <-   merge(gene.L, gene.OxT, by = "gene")
+L_OxL_common <-   merge(gene.L, gene.OxL, by = "gene")
+L_TxL_common <-   merge(gene.L, gene.TxL, by = "gene")
+L_OxTxL_common <- merge(gene.L, gene.OxTxL, by = "gene")
+
+length(L_O_common$gene)
+length(L_T_common$gene)
+length(L_OxT_common$gene)
+length(L_OxL_common$gene)
+length(L_TxL_common$gene)
+length(L_OxTxL_common$gene)
+
+L_shared <- rbind(L_O_common, 
+                  L_T_common, 
+                  L_OxT_common, 
+                  L_OxL_common, 
+                  L_TxL_common, 
+                  L_OxTxL_common) %>% distinct()
+
+L_unique <- as.data.frame(setdiff(gene.L$gene, L_shared$gene))
+colnames(L_unique)[1] <- "gene"
+length(L_unique$gene)
+
+#### OxT ####
+
+#Finding lifestage common genes 
+OxT_O_common <-     merge(gene.OxT, gene.O, by = "gene")
+OxT_T_common <-     merge(gene.OxT, gene.T, by = "gene")
+OxT_L_common <-     merge(gene.OxT, gene.L, by = "gene")
+OxT_OxL_common <-   merge(gene.OxT, gene.OxL, by = "gene")
+OxT_TxL_common <-   merge(gene.OxT, gene.TxL, by = "gene")
+OxT_OxTxL_common <- merge(gene.OxT, gene.OxTxL, by = "gene")
+
+length(OxT_O_common$gene)
+length(OxT_T_common$gene)
+length(OxT_L_common$gene)
+length(OxT_OxL_common$gene)
+length(OxT_TxL_common$gene)
+length(OxT_OxTxL_common$gene)
+
+OxT_shared <- rbind(OxT_O_common, 
+                  OxT_T_common, 
+                  OxT_L_common, 
+                  OxT_OxL_common, 
+                  OxT_TxL_common, 
+                  OxT_OxTxL_common) %>% distinct()
+
+OxT_unique <- as.data.frame(setdiff(gene.OxT$gene, OxT_shared$gene))
+colnames(OxT_unique)[1] <- "gene"
+length(OxT_unique$gene)
+
+#### OxL ####
+
+#Finding lifestage common genes 
+OxL_O_common <-     merge(gene.OxL, gene.O, by = "gene")
+OxL_T_common <-     merge(gene.OxL, gene.T, by = "gene")
+OxL_L_common <-     merge(gene.OxL, gene.L, by = "gene")
+OxL_OxT_common <-   merge(gene.OxL, gene.OxT, by = "gene")
+OxL_TxL_common <-   merge(gene.OxL, gene.TxL, by = "gene")
+OxL_OxTxL_common <- merge(gene.OxL, gene.OxTxL, by = "gene")
+
+length(OxL_O_common$gene)
+length(OxL_T_common$gene)
+length(OxL_L_common$gene)
+length(OxL_OxT_common$gene)
+length(OxL_TxL_common$gene)
+length(OxL_OxTxL_common$gene)
+
+OxL_shared <- rbind(OxL_O_common, 
+                    OxL_T_common, 
+                    OxL_L_common, 
+                    OxL_OxT_common, 
+                    OxL_TxL_common, 
+                    OxL_OxTxL_common) %>% distinct()
+  
+OxL_unique <- as.data.frame(setdiff(gene.OxL$gene, OxL_shared$gene))
+colnames(OxL_unique)[1] <- "gene"
+length(OxL_unique$gene)
+
+
+#### TxL ####
+
+#Finding lifestage common genes 
+TxL_O_common <-     merge(gene.TxL, gene.O, by = "gene")
+TxL_T_common <-     merge(gene.TxL, gene.T, by = "gene")
+TxL_L_common <-     merge(gene.TxL, gene.L, by = "gene")
+TxL_OxT_common <-   merge(gene.TxL, gene.OxT, by = "gene")
+TxL_OxL_common <-   merge(gene.TxL, gene.OxL, by = "gene")
+TxL_OxTxL_common <- merge(gene.TxL, gene.OxTxL, by = "gene")
+
+length(TxL_O_common$gene)
+length(TxL_T_common$gene)
+length(TxL_L_common$gene)
+length(TxL_OxT_common$gene)
+length(TxL_OxL_common$gene)
+length(TxL_OxTxL_common$gene)
+
+TxL_shared <- rbind(TxL_O_common, 
+                    TxL_T_common, 
+                    TxL_L_common, 
+                    TxL_OxT_common, 
+                    TxL_OxL_common, 
+                    TxL_OxTxL_common) %>% distinct()
+  
+TxL_unique <- as.data.frame(setdiff(gene.TxL$gene, TxL_shared$gene))
+colnames(TxL_unique)[1] <- "gene"
+length(TxL_unique$gene)
+
+
+#### OxTxL ####
+
+#Finding lifestage common genes 
+OxTxL_O_common <-     merge(gene.OxTxL, gene.O, by = "gene")
+OxTxL_T_common <-     merge(gene.OxTxL, gene.T, by = "gene")
+OxTxL_L_common <-     merge(gene.OxTxL, gene.L, by = "gene")
+OxTxL_OxT_common <-   merge(gene.OxTxL, gene.OxT, by = "gene")
+OxTxL_OxL_common <-   merge(gene.OxTxL, gene.OxL, by = "gene")
+OxTxL_TxL_common <- merge(gene.OxTxL, gene.TxL, by = "gene")
+
+length(OxTxL_O_common$gene)
+length(OxTxL_T_common$gene)
+length(OxTxL_L_common$gene)
+length(OxTxL_OxT_common$gene)
+length(OxTxL_OxL_common$gene)
+length(OxTxL_TxL_common$gene)
+
+OxTxL_shared <- rbind(OxTxL_O_common, 
+                    OxTxL_T_common, 
+                    OxTxL_L_common, 
+                    OxTxL_OxT_common, 
+                    OxTxL_TxL_common, 
+                    OxTxL_TxL_common) %>% distinct()
+  
+OxTxL_unique <- as.data.frame(setdiff(gene.OxTxL$gene, OxTxL_shared$gene))
+colnames(OxTxL_unique)[1] <- "gene"
+length(OxTxL_unique$gene)
+```
+
+
+Adding annotations to each unique file 
+
+```{r}
+
+O_unique_annot <- merge(O_unique, Annot.select, by="gene", all.x=TRUE)
+T_unique_annot <- merge(T_unique, Annot.select, by="gene", all.x=TRUE)
+L_unique_annot <- merge(L_unique, Annot.select, by="gene", all.x=TRUE)
+OxT_unique_annot <- merge(OxT_unique, Annot.select, by="gene", all.x=TRUE)
+OxL_unique_annot <- merge(OxL_unique, Annot.select, by="gene", all.x=TRUE)
+TxL_unique_annot <- merge(TxL_unique, Annot.select, by="gene", all.x=TRUE)
+OxTxL_unique_annot <- merge(OxTxL_unique, Annot.select, by="gene", all.x=TRUE)
+```
+
+
+
 Gene Ontology Enrichment Analysis
 
 ```{r}
@@ -379,8 +628,8 @@ ALL.vector <-c(t(MD.ALL.Genes_annot$gene))
 ID.vector <- MD.ALL.Genes_annot$gene
 LENGTH.vector <-MD.ALL.Genes_annot$Length
 
-goslim <- read.csv("../data/WGBS/GO-GOslim.csv")
-goslim <- goslim %>% select(-term)
+goslim <- read.csv("data/WGBS/GO-GOslim.csv")
+goslim <- goslim %>% dplyr::select(-term)
 
 ## Defining goslim terms and seprating out goterms into single rows
 splitted <- strsplit(as.character(MD.ALL.Genes_annot$GO_IDs), "; ") #slit into multiple GO ids to get them all in a single row
@@ -413,7 +662,7 @@ goenrich <- function(filename,
                 filename_sig.GO <- GO.slim %>%
                   dplyr::filter(over_represented_pvalue <0.05) %>%
                   arrange(., ontology, term, over_represented_pvalue)
-                #write.csv(sig.GO , file = "../output/WGBS/DMG/sig.GO.OxTxL.csv")
+                #write.csv(sig.GO , file = "output/WGBS/DMG/sig.GO.OxTxL.csv")
                 
                 #Formatting sig gene file with a goterm per row
                 split <- strsplit(as.character(filename$GO_IDs), "; ") 
@@ -427,7 +676,7 @@ goenrich <- function(filename,
                 
                 # Merge sig meth genes with goslim
                 filename_GOslim <- merge(filename_GO, filename_sig.GO, by = "GO_ID", all = TRUE)
-                #write.csv(filename_GOslim , file = "../output/WGBS/DMG/sig.GO.OxTxL.GOSlim.csv")
+                #write.csv(filename_GOslim , file = "output/WGBS/DMG/sig.GO.OxTxL.GOSlim.csv")
                 
                 return(filename_GOslim)
                 }
@@ -436,39 +685,102 @@ goenrich <- function(filename,
 
 #Origin
 GOenrich_Origin <- goenrich(DMG_LS.sig.origin, Origin)
-write.csv(GOenrich_Origin , file = "../output/WGBS/DMG/GOenrich_Origin.csv")
+write.csv(GOenrich_Origin , file = "output/WGBS/DMG/GOenrich_Origin.csv")
 
 #Treatment
 GOenrich_Treatment <- goenrich(DMG_LS.sig.treatment, Treatment)
-write.csv(GOenrich_Treatment , file = "../output/WGBS/DMG/GOenrich_Treatment.csv")
+write.csv(GOenrich_Treatment , file = "output/WGBS/DMG/GOenrich_Treatment.csv")
 
 #LifeStage
 GOenrich_LifeStage <- goenrich(DMG_LS.sig.lifestage, LifeStage)
-write.csv(GOenrich_LifeStage , file = "../output/WGBS/DMG/GOenrich_LifeStage.csv")
+write.csv(GOenrich_LifeStage , file = "output/WGBS/DMG/GOenrich_LifeStage.csv")
 
 #OriginxTreatment
 GOenrich_OxT <- goenrich(DMG_LS.sig.OxT, OxT)
-write.csv(GOenrich_OxT , file = "../output/WGBS/DMG/GOenrich_OxT.csv")
+write.csv(GOenrich_OxT , file = "output/WGBS/DMG/GOenrich_OxT.csv")
 
 #OriginxLifeStage
 GOenrich_OxL <- goenrich(DMG_LS.sig.OxL, OxL)
-write.csv(GOenrich_OxL , file = "../output/WGBS/DMG/GOenrich_OxL.csv")
+write.csv(GOenrich_OxL , file = "output/WGBS/DMG/GOenrich_OxL.csv")
 
 #TreatmentxLifeStage
 GOenrich_TxL <- goenrich(DMG_LS.sig.TxL, TxL)
-write.csv(GOenrich_TxL , file = "../output/WGBS/DMG/GOenrich_TxL.csv")
+write.csv(GOenrich_TxL , file = "output/WGBS/DMG/GOenrich_TxL.csv")
 
 #OriginxTreatmentxLifestage
 GOenrich_OxTxL <- goenrich(DMG_LS.sig.OxTxL, OxTxL)
-write.csv(GOenrich_OxTxL , file = "../output/WGBS/DMG/GOenrich_OxTxL.csv")
+write.csv(GOenrich_OxTxL , file = "output/WGBS/DMG/GOenrich_OxTxL.csv")
 
 ```
 
+
+Go Enrichment for unique 
+
+```{r}
+GOenrich_O_Unique <- goenrich(O_unique_annot) %>% filter(over_represented_pvalue != "NA")
+GOenrich_T_Unique <- goenrich(T_unique_annot) %>% filter(over_represented_pvalue != "NA")
+GOenrich_L_Unique <- goenrich(L_unique_annot) %>% filter(over_represented_pvalue != "NA")
+GOenrich_OxT_Unique <- goenrich(OxT_unique_annot) %>% filter(over_represented_pvalue != "NA")
+GOenrich_OxL_Unique <- goenrich(OxL_unique_annot) %>% filter(over_represented_pvalue != "NA")
+GOenrich_TxL_Unique <- goenrich(TxL_unique_annot) %>% filter(over_represented_pvalue != "NA")
+GOenrich_OxTxL_Unique <- goenrich(OxTxL_unique_annot) %>% filter(over_represented_pvalue != "NA")
+
+```
 
 
 Prepping `MD.LS_5x` dataframe for directionality of change analysis
 ```{r}
 MD.LS_5x_means <- aggregate(per.meth ~ Origin*Treatment*LifeStage*Col_Life*gene, data=MD.LS_5x, FUN=mean)
+```
+
+Plotting unique DMGs
+
+```{r}
+
+# Unique list of GOenrich origin genes
+GOenrich_O_Unique_gene <- unique(GOenrich_O_Unique$gene)
+GOenrich_O_Unique_meth <- dplyr::filter(MD.LS_5x_means, gene %in% GOenrich_O_Unique_gene)
+GOenrich_O_Unique_meth_means <- aggregate(per.meth ~ Origin*gene, data=GOenrich_O_Unique_meth, FUN=mean)
+#GOenrich_O_Unique_meth_means_wide <- reshape(GOenrich_O_Unique_meth_means, idvar = "gene", timevar = "Origin", direction = "wide")
+
+# Filtering for direction of change 
+GOenrich_O_Unique_direction <- GOenrich_O_Unique_meth_means %>% 
+  spread(Origin, per.meth) %>% 
+  dplyr::mutate(direction = if_else(Patch > Rim, "Patch", "Rim")) %>%
+  dplyr::select(gene, direction)
+
+GOenrich_O_Unique_2 <- merge(GOenrich_O_Unique, GOenrich_O_Unique_direction, by = "gene")
+
+
+GOenrich_Origin_BP.plot <-  GOenrich_O_Unique_2 %>% dplyr::filter(ontology == "BP") %>%
+  ggplot(aes(x = direction, y = term)) + 
+  geom_tile(aes(fill =over_represented_pvalue)) + 
+  facet_grid(GOSlim_bin ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
+  theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+  panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
+  strip.text.y = element_text(angle=0, size = 10),
+  strip.text.x = element_text(size = 20),
+  axis.text = element_text(size = 8),
+  axis.title.x = element_blank(),
+  axis.title.y = element_blank())
+
+ggsave(filename="output/WGBS/DMG/GOenrich_Origin_Unique.BP.plot.png", plot=GOenrich_Origin_BP.plot, dpi=300, width=12, height=12, units="in")
+
+
+# 
+# # All origin DMGs
+# GOenrich_Origin_2 <- GOenrich_Origin %>%
+#   filter(over_represented_pvalue != "NA")
+# 
+# GOenrich_O_gene <- unique(GOenrich_Origin_2$gene)
+# GOenrich_O_meth <- dplyr::filter(MD.LS_5x_means, gene %in% GOenrich_O_gene)
+# GOenrich_O_meth_means <- aggregate(per.meth ~ Origin*gene, data=GOenrich_O_meth, FUN=mean)
+# GOenrich_O_meth_means_wide <- reshape(GOenrich_O_meth_means, idvar = "gene", timevar = "Origin", direction = "wide")
+# 
+# GOenrich_O_3 <- merge(GOenrich_Origin_2, GOenrich_O_meth_means_wide, by = "gene")
+# 
+# ggplot(GOenrich_O_3, aes(x=per.meth.Patch, y=per.meth.Rim), color = Ontology) +
+#   geom_point(size=2, shape=23) 
 ```
 
 
@@ -491,13 +803,14 @@ GOenrich_Origin_BP.plot <-  ggplot(GOenrich_Origin_2, aes(x = ontology, y = term
   facet_grid(GOSlim_bin ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
   theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
   panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-  strip.text.y = element_text(angle=0, size = 10),
+  strip.text.y = element_text(angle=0, size = 20),
   strip.text.x = element_text(size = 20),
-  axis.text = element_text(size = 8),
+  axis.text = element_text(size = 20),
   axis.title.x = element_blank(),
-  axis.title.y = element_blank())
+  axis.title.y = element_blank(), 
+  legend.position = "none")
 
-ggsave(filename="../output/WGBS/DMG/GOenrich_Origin.BP.plot.png", plot=GOenrich_Origin_BP.plot, dpi=300, width=12, height=12, units="in")
+ggsave(filename="output/WGBS/DMG/GOenrich_Origin.BP.plot.png", plot=GOenrich_Origin_BP.plot, dpi=300, width=13, height=20, units="in")
 
 # Unique list of GOenrich origin genes
 GOenrich_Origin_gene <- unique(GOenrich_Origin_2$gene)
@@ -511,6 +824,8 @@ GOenrich_Origin_direction <- GOenrich_Origin_meth_means %>%
   dplyr::select(gene, direction)
 
 GOenrich_Origin_3 <- merge(GOenrich_Origin_2, GOenrich_Origin_direction, by = "gene")
+write.csv(GOenrich_Origin_3 , file = "output/WGBS/DMG/GOenrich_O_direction.csv")
+
 
 ## Origin - Patch
 GOenrich_Origin_BP.plot <-  ggplot(GOenrich_Origin_3, aes(x = direction, y = term)) + 
@@ -524,7 +839,72 @@ GOenrich_Origin_BP.plot <-  ggplot(GOenrich_Origin_3, aes(x = direction, y = ter
   axis.title.x = element_blank(),
   axis.title.y = element_blank())
 
-ggsave(filename="../output/WGBS/DMG/GOenrich_Origin_Direction.BP.plot.png", plot=GOenrich_Origin_BP.plot, dpi=300, width=12, height=12, units="in")
+ggsave(filename="output/WGBS/DMG/GOenrich_Origin_Direction.BP.plot.png", plot=GOenrich_Origin_BP.plot, dpi=300, width=12, height=12, units="in")
+
+### Plotting by bin
+
+GOenrich_Origin_3$direction <- as.factor(GOenrich_Origin_3$direction)
+GOenrich_Origin_3$term <- as.factor(GOenrich_Origin_3$term)
+
+GOenrich_Origin_4<- GOenrich_Origin_3 %>%                    # take the data.frame "data"
+  # Using "data", filter out all rows with NAs in aa 
+  dplyr::group_by(GOSlim_bin, direction) %>%          # Then, with the filtered data, group it by "bb"
+  tally()
+
+write.csv(GOenrich_Origin_4 , file = "output/WGBS/DMG/GOenrich_O_bins.csv")
+
+# Plotting
+library(forcats)
+
+Origin_GObin_plot <- GOenrich_Origin_4 %>%
+  mutate(GOSlim_bin = fct_reorder(GOSlim_bin, n)) %>%
+  ggplot(aes(x = n, y = GOSlim_bin, shape = direction)) +
+  geom_hline(aes(yintercept = GOSlim_bin), linetype = "dotted", color = "grey") +
+  geom_point(size = 5, aes(shape = direction), color = "black") +
+#  xlim(1.2, 2) +
+  scale_shape_manual(values=c(1, 16)) +
+  # scale_colour_manual(values=c("#8B0046", "#468B00")) +
+  # scale_fill_manual(values=c("#8B0046", "#468B00")) +
+  ylab("GO Slim Bin Categories") +
+  xlab("Number of GO terms") +
+#  ggtitle("Bleached Unique") +
+  theme_bw() + theme(panel.border = element_rect(linetype = "solid", color = "black"), 
+                     panel.grid.major = element_blank(),
+                     panel.grid.minor = element_blank(),
+                     axis.text = element_text(size=15, color="black"), 
+                     title = element_text(size=17, face="bold"), 
+                     axis.title = element_text(size=17),
+                     legend.position = "none")
+
+ggsave(filename="output/WGBS/DMG/GOenrich_Origin_binP_plot.png", plot=Origin_GObin_plot, dpi=300, width=7, height=10, units="in")
+
+GOenrich_Origin_6<- GOenrich_Origin_3 %>%                    # take the data.frame "data"
+  # Using "data", filter out all rows with NAs in aa 
+  dplyr::group_by(term, direction) %>%          # Then, with the filtered data, group it by "bb"
+  tally()
+
+Origin_term_plot <- GOenrich_Origin_6 %>%
+  mutate(term = fct_reorder(term, n)) %>%
+  ggplot(aes(x = n, y = term, color = direction)) +
+  geom_hline(aes(yintercept = term), linetype = "dotted", color = "grey") +
+  geom_point(size = 5, aes(shape = direction), color = "black") +
+#  xlim(1.2, 2) +
+  scale_shape_manual(values=c(1, 16)) +
+  # scale_colour_manual(values=c("#8B0046", "#468B00")) +
+  # scale_fill_manual(values=c("#8B0046", "#468B00")) +
+  ylab("GO Slim Bin Categories") +
+  xlab("Number of DMGs") +
+#  ggtitle("Bleached Unique") +
+  theme_bw() + theme(panel.border = element_rect(linetype = "solid", color = "black"), 
+                     panel.grid.major = element_blank(),
+                     panel.grid.minor = element_blank(),
+                     axis.text = element_text(size=15, color="black"), 
+                     title = element_text(size=17, face="bold"), 
+                     axis.title = element_text(size=17),
+                     legend.position = "none")
+
+ggsave(filename="output/WGBS/DMG/GOenrich_Origin_term_plot.png", plot=Origin_term_plot, dpi=300, width=12, height=14, units="in")
+
 
 ```
 
@@ -547,13 +927,14 @@ GOenrich_Treatment_BP.plot <-  ggplot(GOenrich_Treatment_2, aes(x = ontology, y 
   facet_grid(GOSlim_bin ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
   theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
   panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-  strip.text.y = element_text(angle=0, size = 10),
+  strip.text.y = element_text(angle=0, size = 20),
   strip.text.x = element_text(size = 20),
-  axis.text = element_text(size = 8),
+  axis.text = element_text(size = 20),
   axis.title.x = element_blank(),
-  axis.title.y = element_blank())
+  axis.title.y = element_blank(), 
+  legend.position = "none")
 
-ggsave(filename="../output/WGBS/DMG/GOenrich_Treatment.BP.plot.png", plot=GOenrich_Treatment_BP.plot, dpi=300, width=12, height=12, units="in")
+ggsave(filename="output/WGBS/DMG/GOenrich_Treatment.BP.plot.png", plot=GOenrich_Treatment_BP.plot, dpi=300, width=12, height=20, units="in")
 
 
 # Unique list of GOenrich Treatment genes
@@ -568,10 +949,11 @@ GOenrich_Treatment_direction <- GOenrich_Treatment_meth_means %>%
   dplyr::select(gene, direction)
 
 GOenrich_Treatment_3 <- merge(GOenrich_Treatment_2, GOenrich_Treatment_direction, by = "gene")
+write.csv(GOenrich_Treatment_3 , file = "output/WGBS/DMG/GOenrich_T_direction.csv")
 
 ## Treatment 
 GOenrich_Treatment_BP.plot <-  ggplot(GOenrich_Treatment_3, aes(x = direction, y = term)) + 
-  geom_tile(aes(fill =over_represented_pvalue)) + 
+  geom_tile(aes(fill = tally(term))) + 
   facet_grid(GOSlim_bin ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
   theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
   panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
@@ -581,7 +963,72 @@ GOenrich_Treatment_BP.plot <-  ggplot(GOenrich_Treatment_3, aes(x = direction, y
   axis.title.x = element_blank(),
   axis.title.y = element_blank())
 
-ggsave(filename="../output/WGBS/DMG/GOenrich_Treatment_Direction.BP.plot.png", plot=GOenrich_Treatment_BP.plot, dpi=300, width=12, height=12, units="in")
+ggsave(filename="output/WGBS/DMG/GOenrich_Treatment_Direction.BP.plot.png", plot=GOenrich_Treatment_BP.plot, dpi=300, width=12, height=12, units="in")
+
+
+### Plotting by bin
+
+GOenrich_Treatment_3$direction <- as.factor(GOenrich_Treatment_3$direction)
+GOenrich_Treatment_3$term <- as.factor(GOenrich_Treatment_3$term)
+
+GOenrich_Treatment_4<- GOenrich_Treatment_3 %>%                    # take the data.frame "data"
+  # Using "data", filter out all rows with NAs in aa 
+  dplyr::group_by(GOSlim_bin, direction) %>%          # Then, with the filtered data, group it by "bb"
+  tally()
+
+write.csv(GOenrich_Treatment_4 , file = "output/WGBS/DMG/GOenrich_T_bins.csv")
+
+# Plotting
+library(forcats)
+
+Treatment_GObin_plot <- GOenrich_Treatment_4 %>%
+  mutate(GOSlim_bin = fct_reorder(GOSlim_bin, n)) %>%
+  ggplot(aes(x = n, y = GOSlim_bin, color = direction)) +
+  geom_hline(aes(yintercept = GOSlim_bin), linetype = "dotted", color = "grey") +
+  geom_point(size = 5, aes(color = direction)) +
+#  xlim(1.2, 2) +
+#  scale_shape_manual(values=c(1, 16)) +
+#   scale_fill_manual(values=c("#00a2ff", "#ff5d00")) +
+   scale_color_manual(values=c("#00a2ff", "#ff5d00")) +
+  ylab("GO Slim Bin Categories") +
+  xlab("Number of GO terms") +
+#  ggtitle("Bleached Unique") +
+  theme_bw() + theme(panel.border = element_rect(linetype = "solid", color = "black"), 
+                     panel.grid.major = element_blank(),
+                     panel.grid.minor = element_blank(),
+                     axis.text = element_text(size=15, color="black"), 
+                     title = element_text(size=17, face="bold"), 
+                     axis.title = element_text(size=17),
+                     legend.position = "none")
+
+ggsave(filename="output/WGBS/DMG/GOenrich_Treatment_binP_plot.png", plot=Treatment_GObin_plot, dpi=300, width=7, height=10, units="in")
+
+GOenrich_Treatment_6<- GOenrich_Treatment_3 %>%                    # take the data.frame "data"
+  # Using "data", filter out all rows with NAs in aa 
+  dplyr::group_by(term, direction) %>%          # Then, with the filtered data, group it by "bb"
+  tally()
+
+Treatment_term_plot <- GOenrich_Treatment_6 %>%
+  mutate(term = fct_reorder(term, n)) %>%
+  ggplot(aes(x = n, y = term, color = direction)) +
+  geom_hline(aes(yintercept = term), linetype = "dotted", color = "grey") +
+  geom_point(size = 5, aes(color = direction)) +
+#  xlim(1.2, 2) +
+#  scale_shape_manual(values=c(1, 16)) +
+#   scale_fill_manual(values=c("#00a2ff", "#ff5d00")) +
+   scale_color_manual(values=c("#00a2ff", "#ff5d00")) +
+  ylab("") +
+  xlab("Number of DMGs") +
+#  ggtitle("Bleached Unique") +
+  theme_bw() + theme(panel.border = element_rect(linetype = "solid", color = "black"), 
+                     panel.grid.major = element_blank(),
+                     panel.grid.minor = element_blank(),
+                     axis.text = element_text(size=15, color="black"), 
+                     title = element_text(size=17, face="bold"), 
+                     axis.title = element_text(size=17),
+                     legend.position = "none")
+
+ggsave(filename="output/WGBS/DMG/GOenrich_Treatment_term_plot.png", plot=Treatment_term_plot, dpi=300, width=7, height=10, units="in")
 
 
 ```
@@ -604,15 +1051,16 @@ GOenrich_LifeStage_BP.plot <-  ggplot(GOenrich_LifeStage_2, aes(x = ontology, y 
   facet_grid(GOSlim_bin ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
   theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
   panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-  strip.text.y = element_text(angle=0, size = 10),
+  strip.text.y = element_text(angle=0, size = 20),
   strip.text.x = element_text(size = 20),
-  axis.text = element_text(size = 8),
+  axis.text = element_text(size = 20),
   axis.title.x = element_blank(),
-  axis.title.y = element_blank())
+  axis.title.y = element_blank(), 
+  legend.position = "none")
 
-ggsave(filename="../output/WGBS/DMG/GOenrich_LifeStage.BP.plot.png", plot=GOenrich_LifeStage_BP.plot, dpi=300, width=12, height=12, units="in")
+ggsave(filename="output/WGBS/DMG/GOenrich_LifeStage.BP.plot.png", plot=GOenrich_LifeStage_BP.plot, dpi=300, width=12, height=20, units="in")
 
-# Unique list of GOenrich LifesStage genes
+ # Unique list of GOenrich LifesStage genes
 GOenrich_LifeStage_gene <- unique(GOenrich_LifeStage_2$gene)
 GOenrich_LifeStage_meth <- dplyr::filter(MD.LS_5x_means, gene %in% GOenrich_LifeStage_gene)
 GOenrich_LifeStage_meth_means <- aggregate(per.meth ~ LifeStage*gene, data=GOenrich_LifeStage_meth, FUN=mean)
@@ -624,6 +1072,7 @@ GOenrich_LifeStage_direction <- GOenrich_LifeStage_meth_means %>%
   dplyr::select(gene, direction)
 
 GOenrich_LifeStage_3 <- merge(GOenrich_LifeStage_2, GOenrich_LifeStage_direction, by = "gene")
+write.csv(GOenrich_LifeStage_3 , file = "output/WGBS/DMG/GOenrich_L_direction.csv")
 
 ## LifesStage 
 GOenrich_LifeStage_BP.plot <-  ggplot(GOenrich_LifeStage_3, aes(x = direction, y = term)) + 
@@ -637,7 +1086,97 @@ GOenrich_LifeStage_BP.plot <-  ggplot(GOenrich_LifeStage_3, aes(x = direction, y
   axis.title.x = element_blank(),
   axis.title.y = element_blank())
 
-ggsave(filename="../output/WGBS/DMG/GOenrich_LifeStage_Direction.BP.plot.png", plot=GOenrich_LifeStage_BP.plot, dpi=300, width=12, height=12, units="in")
+ggsave(filename="output/WGBS/DMG/GOenrich_LifeStage_Direction.BP.plot.png", plot=GOenrich_LifeStage_BP.plot, dpi=300, width=12, height=12, units="in")
+
+
+
+### Plotting by bin
+
+GOenrich_LifeStage_3$direction <- as.factor(GOenrich_LifeStage_3$direction)
+GOenrich_LifeStage_3$term <- as.factor(GOenrich_LifeStage_3$term)
+
+GOenrich_LifeStage_4<- GOenrich_LifeStage_3 %>%                    # take the data.frame "data"
+  # Using "data", filter out all rows with NAs in aa 
+  dplyr::group_by(GOSlim_bin, direction) %>%          # Then, with the filtered data, group it by "bb"
+  tally()
+
+write.csv(GOenrich_LifeStage_4 , file = "output/WGBS/DMG/GOenrich_L_bins.csv")
+
+# Plotting
+library(forcats)
+
+LifeStage_GObin_plot <- GOenrich_LifeStage_4 %>%
+  mutate(GOSlim_bin = fct_reorder(GOSlim_bin, n)) %>%
+  ggplot(aes(x = n, y = GOSlim_bin, shape = direction)) +
+  geom_hline(aes(yintercept = GOSlim_bin), linetype = "dotted", color = "grey") +
+  geom_point(size = 5, aes(shape = direction), color = "black") +
+#  xlim(1.2, 2) +
+  scale_shape_manual(values=c(15, 17)) +
+#   scale_fill_manual(values=c("#00a2ff", "#ff5d00")) +
+#   scale_color_manual(values=c("#00a2ff", "#ff5d00")) +
+  ylab("GO Slim Bin Categories") +
+  xlab("Number of DMGs") +
+#  ggtitle("Bleached Unique") +
+  theme_bw() + theme(panel.border = element_rect(linetype = "solid", color = "black"), 
+                     panel.grid.major = element_blank(),
+                     panel.grid.minor = element_blank(),
+                     axis.text = element_text(size=15, color="black"), 
+                     title = element_text(size=17, face="bold"), 
+                     axis.title = element_text(size=17),
+                     legend.position = "none")
+
+ggsave(filename="output/WGBS/DMG/GOenrich_LifeStage_binP_plot.png", plot=LifeStage_GObin_plot, dpi=300, width=7, height=10, units="in")
+
+ # # Chisquared
+# 
+# GOenrich_LifeStage_5 <- GOenrich_LifeStage_4 %>%
+#   pivot_wider(names_from = direction, values_from = n, values_fill = 0) %>%
+#   rownames(GOSlim_bin)
+# 
+# test <- chisq.test(table(GOenrich_LifeStage_4$GOSlim_bin, GOenrich_LifeStage_4$direction))
+# test <- fisher.test(table(GOenrich_LifeStage_5))
+# summary(test)
+
+GOenrich_LifeStage_6<- GOenrich_LifeStage_3 %>%                    # take the data.frame "data"
+  # Using "data", filter out all rows with NAs in aa 
+  dplyr::group_by(term, direction) %>%          # Then, with the filtered data, group it by "bb"
+  tally()
+
+LifeStage_term_plot <- GOenrich_LifeStage_6 %>%
+  mutate(term = fct_reorder(term, n)) %>%
+  ggplot(aes(x = n, y = term, color = direction)) +
+  geom_hline(aes(yintercept = term), linetype = "dotted", color = "grey") +
+  geom_point(size = 5, aes(shape = direction), color = "black") +
+#  xlim(1.2, 2) +
+  scale_shape_manual(values=c(15, 17)) +
+#   scale_fill_manual(values=c("#00a2ff", "#ff5d00")) +
+#   scale_color_manual(values=c("#00a2ff", "#ff5d00")) +
+  ylab("") +
+  xlab("Number of DMGs") +
+#  ggtitle("Bleached Unique") +
+  theme_bw() + theme(panel.border = element_rect(linetype = "solid", color = "black"), 
+                     panel.grid.major = element_blank(),
+                     panel.grid.minor = element_blank(),
+                     axis.text = element_text(size=15, color="black"), 
+                     title = element_text(size=17, face="bold"), 
+                     axis.title = element_text(size=17),
+                     legend.position = "none")
+
+ggsave(filename="output/WGBS/DMG/GOenrich_LifeStage_term_plot.png", plot=LifeStage_term_plot, dpi=300, width=12, height=14, units="in")
+
+GOplots_comb <- ggarrange(Origin_term_plot, Treatment_term_plot, LifeStage_term_plot, 
+          labels = c("A)", "B)", "C)"),
+          ncol = 3, nrow = 1)
+ggsave(filename="output/WGBS/DMG/GOenrich_ALL_term_plot.png", plot=GOplots_comb, dpi=300, width=30, height=14, units="in")
+
+
+GOplots_comb_multi <- ggarrange(Origin_term_plot, Treatment_term_plot, LifeStage_term_plot, 
+                                GOenrich_Origin_BP.plot, GOenrich_Treatment_BP.plot, GOenrich_LifeStage_BP.plot,
+          labels = c("A)", "B)", "C)"),
+          ncol = 3, nrow = 2)
+ggsave(filename="output/WGBS/DMG/GOenrich_ALL_term_plot2.png", plot=GOplots_comb_multi, dpi=300, width=30, height=30, units="in")
+
+GOenrich_LifeStage_BP.plot
 
 ```
 
@@ -666,7 +1205,7 @@ GOenrich_OxT_BP.plot <-  ggplot(GOenrich_OxT_2, aes(x = ontology, y = term)) +
   axis.title.x = element_blank(),
   axis.title.y = element_blank())
 
-ggsave(filename="../output/WGBS/DMG/GOenrich_OxT.BP.plot.png", plot=GOenrich_OxT_BP.plot, dpi=300, width=12, height=12, units="in")
+ggsave(filename="output/WGBS/DMG/GOenrich_OxT.BP.plot.png", plot=GOenrich_OxT_BP.plot, dpi=300, width=12, height=12, units="in")
 # 
 # # Unique list of GOenrich OxT genes
 # GOenrich_OxT_gene <- unique(GOenrich_OxT_2$gene)
@@ -722,7 +1261,7 @@ GOenrich_OxL_BP.plot <-  ggplot(GOenrich_OxL_2, aes(x = ontology, y = term)) +
   axis.title.x = element_blank(),
   axis.title.y = element_blank())
 
-ggsave(filename="../output/WGBS/DMG/GOenrich_OxL.BP.plot.png", plot=GOenrich_OxL_BP.plot, dpi=300, width=12, height=12, units="in")
+ggsave(filename="output/WGBS/DMG/GOenrich_OxL.BP.plot.png", plot=GOenrich_OxL_BP.plot, dpi=300, width=12, height=12, units="in")
 ```
 
 
@@ -750,7 +1289,7 @@ GOenrich_TxL_BP.plot <-  ggplot(GOenrich_TxL_2, aes(x = ontology, y = term)) +
   axis.title.x = element_blank(),
   axis.title.y = element_blank())
 
-ggsave(filename="../output/WGBS/DMG/GOenrich_TxL.BP.plot.png", plot=GOenrich_TxL_BP.plot, dpi=300, width=12, height=12, units="in")
+ggsave(filename="output/WGBS/DMG/GOenrich_TxL.BP.plot.png", plot=GOenrich_TxL_BP.plot, dpi=300, width=12, height=12, units="in")
 ```
 
 ```{r}
@@ -778,7 +1317,7 @@ GOenrich_OxTxL_BP.plot <-  ggplot(GOenrich_OxTxL_2, aes(x = ontology, y = term))
   axis.title.x = element_blank(),
   axis.title.y = element_blank())
 
-ggsave(filename="../output/WGBS/DMG/GOenrich_OxTxL.BP.plot.png", plot=GOenrich_OxTxL_BP.plot, dpi=300, width=12, height=12, units="in")
+ggsave(filename="output/WGBS/DMG/GOenrich_OxTxL.BP.plot.png", plot=GOenrich_OxTxL_BP.plot, dpi=300, width=12, height=12, units="in")
 ```
 
 
@@ -792,7 +1331,7 @@ All_mat <- as.matrix(All_data[,-1:4])
 
 xy <- as.matrix(All_data_collife[,-c(1:4)])
 
-pdf("../output/WGBS/Alldata.DMG_Rel_HEATMAP.pdf", width = 20)
+pdf("output/WGBS/Alldata.DMG_Rel_HEATMAP.pdf", width = 20)
 heatmap.2(All_mat, 
           cexCol = 1.5, 
           distfun = function(x) as.dist(1 - cor(t(x), use = "pa")), 
@@ -830,24 +1369,21 @@ fviz_eig(scaled_pca_all)
 coral_info <- All_data_collife[c(1:4)]
 
 pca_data_all <- scaled_pca_all%>%
-  augment(coral_info)%>%
+  broom::augment(coral_info)%>%
   group_by(Origin, Treatment, LifeStage, Col_Life)%>%
   mutate(PC1.mean = mean(.fittedPC1),
          PC2.mean = mean(.fittedPC2))
-
-# pca.centroids_all<- pca_data_all%>%
-#   dplyr::select(Origin, Treatment, LifeStage, PC1.mean, PC2.mean)%>%
-#   dplyr::group_by(Origin, Treatment, LifeStage)%>%
-#   dplyr::summarise(PC1.mean = mean(PC1.mean), PC2.mean = mean(PC2.mean))
 
 #Examine PERMANOVA results.  
 # scale data
 vegan_all <- scale(All_data_collife[c(5:ncol(All_data_collife))])
 
 # PERMANOVA 
-permanova_all <- adonis(vegan_all ~ Origin*Treatment*LifeStage, data = All_data_collife, method='eu')
+permanova_all <- adonis(vegan_all ~ Origin*Treatment*LifeStage, data = All_data_collife, method='eu', permutations = 9999)
 z_pca_all <- permanova_all$aov.tab
 z_pca_all
+
+capture.output(z_pca_all, file = "output/WGBS/PERMANOVA_DMG.csv")
 
 #Assemble plot with background points
 
@@ -863,31 +1399,29 @@ percentage_all <- paste(colnames(pca_data_all[6:37]), "(",paste(as.character(per
 #setting up data to add polygons
 pca_data_all$OTL <- paste(pca_data_all$Origin, pca_data_all$Treatment, pca_data_all$LifeStage)
 pca_data_all$OT <- paste(pca_data_all$Origin, pca_data_all$Treatment)
-pca_data_all$Col_Life <- gsub("_Adult","",pca_data_all$Col_Life) #remove extra characters
-pca_data_all$Col_Life <- gsub("_Larvae","",pca_data_all$Col_Life) #remove extra characters
+pca_data_all$OL <- paste(pca_data_all$Origin, pca_data_all$LifeStage)
+pca_data_all$Col_Life2 <- gsub("_Adult","",pca_data_all$Col_Life) #remove extra characters
+pca_data_all$Col_Life2 <- gsub("_Larvae","",pca_data_all$Col_Life2) #remove extra characters
+pca_data_all$Col_ID <- gsub("-A","",pca_data_all$Col_Life) #remove extra characters
 
-find_hull_all <- function(pca_data_all) pca_data_all[chull(pca_data_all$PCA1, pca_data_all$PCA2), ]
-hulls_all <- ddply(pca_data_all, "OTL", find_hull_all)
+library(ggrepel)
 
 
-PCA_all <- ggplot(pca_data_all, aes(PCA1, PCA2, color=OT, group = Col_Life)) + 
-  geom_point(size = 4, aes(shape = LifeStage))+
+PCA_all <- ggplot(pca_data_all, aes(PCA1, PCA2, color=Treatment, group = Col_Life2)) + 
+  geom_point(size = 4, aes(shape = OL))+
   geom_line() +
-  scale_colour_manual(values=c("#00a2ff", "#ff5d00","#80d1ff", "#ffae80")) +
-  scale_shape_manual(values=c(15, 17)) +
+  scale_colour_manual(values=c("#00a2ff", "#ff5d00")) +
+  scale_shape_manual(values=c(0, 2, 15, 17)) +
   theme_classic()+
+  geom_label_repel(aes(label = Col_ID),
+                  box.padding   = 0.5, 
+                  point.padding = 1,
+                  segment.color = 'black') +
 #  ylim(-20,15)+
 #  xlim(-15,15)+
   ylab(percentage_all[2])+
   xlab(percentage_all[1])+
-  labs(color = "Thermal History", shape = "Life Stage", fill = "none") +
-  geom_text(x=100, y=-100, label=paste("p(Origin)=", z_pca_all$`Pr(>F)`[1]), size=6, color=ifelse(z_pca_all$`Pr(>F)`[1] < 0.05, "black", "darkgray")) +
-  geom_text(x=100, y=-115, label=paste("p(Treatment)=", z_pca_all$`Pr(>F)`[2]), size=6, color=ifelse(z_pca_all$`Pr(>F)`[2] < 0.05, "black", "darkgray")) +
-  geom_text(x=100, y=-130, label=paste("p(Life Stage)=", z_pca_all$`Pr(>F)`[3]), size=6, color=ifelse(z_pca_all$`Pr(>F)`[3] < 0.05, "black", "darkgray")) +
-  geom_text(x=100, y=-145, label=paste("p(Origin x Treatment)=", z_pca_all$`Pr(>F)`[4]), size=6, color=ifelse(z_pca_all$`Pr(>F)`[4] < 0.05, "black", "darkgray")) +
-  geom_text(x=100, y=-160, label=paste("p(Origin x Life Stage)=", z_pca_all$`Pr(>F)`[5]), size=6, color=ifelse(z_pca_all$`Pr(>F)`[5] < 0.05, "black", "darkgray")) +
-  geom_text(x=100, y=-175, label=paste("p(Treatment x Life Stage)=", z_pca_all$`Pr(>F)`[6]), size=6, color=ifelse(z_pca_all$`Pr(>F)`[6] < 0.05, "black", "darkgray")) +
-  geom_text(x=100, y=-190, label=paste("p(Origin x Treatment x Life Stage)=", z_pca_all$`Pr(>F)`[7]), size=6, color=ifelse(z_pca_all$`Pr(>F)`[7] < 0.05, "black", "darkgray")) +
+  labs(color = "Treatment", shape = "Life Stage", fill = "Origin") +
   theme(legend.text = element_text(size=18), 
         legend.position="right",
         plot.background = element_blank(),
@@ -896,7 +1430,646 @@ PCA_all <- ggplot(pca_data_all, aes(PCA1, PCA2, color=OT, group = Col_Life)) +
         axis.text = element_text(size=18), 
         title = element_text(size=25, face="bold"), 
         axis.title = element_text(size=18))
+PCA_all
+ggsave(filename="output/WGBS/DMG/PerMeth_PCA.jpeg", plot=PCA_all, dpi=300, width=12, height=12, units="in")
 
-ggsave(filename="../output/WGBS/DMG/PerMeth_PCA.jpeg", plot=PCA_all, dpi=300, width=12, height=12, units="in")
+PCA_noleg <- ggplot(pca_data_all, aes(PCA1, PCA2, color=Treatment, group = Col_Life2)) + 
+  geom_point(size = 4, aes(shape = OL))+
+  geom_line() +
+  scale_colour_manual(values=c("#00a2ff", "#ff5d00")) +
+  scale_shape_manual(values=c(0, 2, 15, 17)) +
+  theme_classic()+
+  geom_label_repel(aes(label = Col_ID),
+                  box.padding   = 0.5, 
+                  point.padding = 1,
+                  segment.color = 'black') +
+#  ylim(-20,15)+
+#  xlim(-15,15)+
+  ylab(percentage_all[2])+
+  xlab(percentage_all[1])+
+  labs(color = "Treatment", shape = "Life Stage", fill = "Origin") +
+  theme(legend.text = element_text(size=18), 
+        legend.position="none",
+        plot.background = element_blank(),
+        legend.title = element_text(size=20), 
+        plot.margin = margin(1, 1, 1, 1, "cm"),
+        axis.text = element_text(size=18), 
+        title = element_text(size=25, face="bold"), 
+        axis.title = element_text(size=18))
+PCA_noleg
+ggsave(filename="output/WGBS/DMG/PerMeth_PCA_noleg.jpeg", plot=PCA_noleg, dpi=300, width=12, height=12, units="in")
+
+```
+
+# WCNA
+
+## Pipeline Overview
+
+1. Data preparation
+  + Load and format clean data
+  + Data filtering: PoverA and genefilter
+  + Outlier detection
+2. Network construction and consensus modlue detection
+  + Choosing a soft-thresholding power: Analysis of a network topology β
+  + Co-expression adjacency and topological overlap matrix similarity
+  + Clustering using TOM
+  + Module idenification using dynamicTreeCut
+3. Correlate groups/timepoints
+4. Plot module-trait associations
+5. Plot eigennene over groupings
+6. Calculating gene significance and module membership
+
+This pipeline is modified from AH: 
+* https://github.com/AHuffmyer/EarlyLifeHistory_Energetics/blob/master/Mcap2020/Scripts/Metabolomics/metabolomics_WGCNA.Rmd
+
+
+```{r dependencies, warning=FALSE, message=FALSE}
+
+## install packages if you dont already have them in your library
+if ("tidyverse" %in% rownames(installed.packages()) == 'FALSE') install.packages('tidyverse') 
+if ("vegan" %in% rownames(installed.packages()) == 'FALSE') install.packages('vegan') 
+if ("ggplot2" %in% rownames(installed.packages()) == 'FALSE') install.packages('ggplot2') 
+if ("factoextra" %in% rownames(installed.packages()) == 'FALSE') install.packages('factoextra') 
+if ("ggfortify" %in% rownames(installed.packages()) == 'FALSE') install.packages('ggfortify') 
+if ("naniar" %in% rownames(installed.packages()) == 'FALSE') install.packages('naniar') 
+if ("cowplot" %in% rownames(installed.packages()) == 'FALSE') install.packages('cowplot') 
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+if ("mixOmics" %in% rownames(installed.packages()) == 'FALSE') BiocManager::install("mixOmics") 
+if ("RVAideMemoire" %in% rownames(installed.packages()) == 'FALSE') install.packages('RVAideMemoire') 
+if ("VennDiagram" %in% rownames(installed.packages()) == 'FALSE') install.packages('VennDiagram') 
+if ("broom" %in% rownames(installed.packages()) == 'FALSE') install.packages('broom') 
+
+#load packages
+library("ggplot2")
+library('vegan')
+library('factoextra')
+library('ggfortify')
+library('naniar')
+library('cowplot')
+library("mixOmics")
+library("tidyverse")
+library("RVAideMemoire")
+library("VennDiagram")
+library("broom")
+
+if ("genefilter" %in% rownames(installed.packages()) == 'FALSE') install.packages('genefilter') 
+if ("DESeq2" %in% rownames(installed.packages()) == 'FALSE') install.packages('DESeq2') 
+if ("RColorBrewer" %in% rownames(installed.packages()) == 'FALSE') install.packages('RColorBrewer') 
+if ("WGCNA" %in% rownames(installed.packages()) == 'FALSE') install.packages('WGCNA') 
+if ("flashClust" %in% rownames(installed.packages()) == 'FALSE') install.packages('flashClust') 
+if ("gridExtra" %in% rownames(installed.packages()) == 'FALSE') install.packages('gridExtra') 
+if ("ComplexHeatmap" %in% rownames(installed.packages()) == 'FALSE') install.packages('ComplexHeatmap') 
+if ("goseq" %in% rownames(installed.packages()) == 'FALSE') install.packages('goseq') 
+if ("dplyr" %in% rownames(installed.packages()) == 'FALSE') install.packages('dplyr') 
+if ("clusterProfiler" %in% rownames(installed.packages()) == 'FALSE') install.packages('clusterProfiler') 
+if ("pheatmap" %in% rownames(installed.packages()) == 'FALSE') install.packages('pheatmap') 
+if ("magrittr" %in% rownames(installed.packages()) == 'FALSE') install.packages('magrittr') 
+
+library("genefilter")
+library("DESeq2")
+library("RColorBrewer")
+library("WGCNA")
+library("flashClust")
+library("gridExtra")
+library("ComplexHeatmap")
+library("goseq")
+library("dplyr")
+library("clusterProfiler")
+library("pheatmap")
+library("magrittr")
+library("reshape2")
+```
+
+
+```{r}
+
+#Creating metadata file
+metadata <-unique(meth_table_filt[c(10:15)])
+
+#manipulating dataframe so sample IDs are the columns and genes are the rows (values are percent methylation of that gene)
+gcount <- meth_collife.means %>% 
+  dplyr::select(-Origin, - Treatment, -LifeStage) %>%
+  spread(key = "Col_Life", value = "per.meth") %>%
+  column_to_rownames(var="gene")
+
+#Check that there are no metabolites with 0 counts for all samples. Should return TRUE.
+rowSums(dplyr::count(gcount)) > 0
+
+```
+
+
+## Data filtering: PoverA and genefilter
+
+Conduct data filtering, this includes:  
+
+*pOverA*: Specifying the minimum count for a proportion of samples for each gene. Here, we are using a pOverA of 0.10. This is because we have 30 samples with a minimum of n=3 samples per group Therefore, we will accept genes that are present in 3/30 = 0.10 of the samples because we expect different expression by life stage. We are further setting the minimum percentage of genes to 1, such that 7% of the samples must have a methylation percentage >1 in order for the gene to remain in the data set.  
+
+Filter in the package "genefilter". Pre-filtering our dataset to reduce the memory size dataframe, increase the speed of the transformation and testing functions, and improve quality of statistical analysis by removing low-coverage counts. Removed counts could represent outliers in the data and removing these improves sensitivity of statistical tests.    
+
+
+``` {r, echo=TRUE, warning=FALSE, message=FALSE}
+
+filt <- filterfun(pOverA(0.10,0.1)) #consider changing
+#create filter for the counts data
+gfilt <- genefilter(gcount, filt)
+#identify genes to keep by count filter
+keep <- gcount[gfilt,]
+
+#identify gene lists
+n.keep <- rownames(keep)
+#gene count data filtered in PoverA, P percent of the samples have counts over A
+data_filt <- as.data.frame(gcount[which(rownames(gcount) %in% n.keep),])
+#How many rows do we have before and after filtering?
+nrow(gcount) #Before
+nrow(data_filt) #After
+
+#Filtering removed 0 genes
+```
+
+
+##Outlier detection
+``` {r, echo=TRUE, warning=FALSE, message=FALSE}
+#Checking that all row and column names match. Should return "TRUE"
+all(rownames(metadata$Col_Life) %in% colnames(data_filt))
+all(rownames(metadata$Col_Life) == colnames(data_filt))
+
+sampleTree = hclust(dist(data_filt), method = "average");
+# Plot the sample tree: Open a graphic output window of size 12 by 9 inches
+# The user should change the dimensions if the window is too large or too small.
+pdf("output/WGBS/WCNA/outliers_genes.pdf")
+plot(sampleTree, main = "Sample clustering to detect outliers", sub="", xlab="", cex.lab = 1.5, cex.axis = 1.5, cex.main = 2)
+dev.off()
+
+#no metabolite outliers
+
+#Transpose such that samples are in rows and metabolites are in columns.
+
+tdata_filt <- t(data_filt) 
+
+#Look for outliers by examining tree of samples  
+sampleTree = hclust(dist(tdata_filt), method = "average");
+# Plot the sample tree: Open a graphic output window of size 12 by 9 inches
+# The user should change the dimensions if the window is too large or too small.
+pdf("output/WGBS/WCNA/outliers_samples.pdf")
+plot(sampleTree, main = "Sample clustering to detect outliers", sub="", xlab="", cex.lab = 1.5, cex.axis = 1.5, cex.main = 2)
+dev.off()
+
+```
+
+
+# 2. Network construction and consensus modlue detection
+## Choosing a soft-thresholding power: Analysis of a network topology β
+``` {r, echo=TRUE, warning=FALSE, message=FALSE}
+# Choose a set of soft-thresholding powers
+#powers <- c(seq(from = 1, to=200, by=2), c(21:30)) #Create a string of numbers from 1 through 10, and even numbers from 10 through 20
+
+allowWGCNAThreads() 
+powers <- c(c(1:20), seq(from = 12, to=20, by=2)) #Create a string of numbers from 1 through 10, and even numbers from 10 through 20
+
+# Call the network topology analysis function
+sft <-pickSoftThreshold(tdata_filt, powerVector = powers, verbose = 10)
+
+#Plot the results.  
+sizeGrWindow(9, 5)
+par(mfrow = c(1,2));
+cex1 = 0.9;
+# # # Scale-free topology fit index as a function of the soft-thresholding power
+plot(sft$fitIndices[,1], -sign(sft$fitIndices[,3])*sft$fitIndices[,2],
+      xlab="Soft Threshold (power)",ylab="Scale Free Topology Model Fit,signed R^2",type="n",
+     main = paste("Scale independence"));
+ text(sft$fitIndices[,1], -sign(sft$fitIndices[,3])*sft$fitIndices[,2],
+     labels=powers,cex=cex1,col="red");
+# # # this line corresponds to using an R^2 cut-off
+ abline(h=0.8,col="red")
+# # # Mean connectivity as a function of the soft-thresholding power
+ plot(sft$fitIndices[,1], sft$fitIndices[,5],
+     xlab="Soft Threshold (power)",ylab="Mean Connectivity", type="n",
+     main = paste("Mean connectivity"))
+ text(sft$fitIndices[,1], sft$fitIndices[,5], labels=powers, cex=cex1,col="red")
+
+ # Soft Threshold power is 5 
+```
+
+https://bioinformaticsworkbook.org/tutorials/wgcna.html#gsc.tab=0
+
+
+``` {r, echo=TRUE, warning=FALSE, message=FALSE}
+
+picked_power = 5
+temp_cor <- cor       
+cor <- WGCNA::cor                                             # Force it to use WGCNA cor function (fix a namespace conflict issue)
+netwk <- blockwiseModules(tdata_filt,                         # <= input here
+
+                          # == Adjacency Function ==
+                          power = picked_power,               # <= power here
+                          networkType = "unsigned",
+
+                          # == Tree and Block Options ==
+                          deepSplit = 2,
+                          pamRespectsDendro = F,
+                          # detectCutHeight = 0.75,
+                          minModuleSize = 30,                  #condsider inreasing or decreasing this
+                          maxBlockSize = 4000,
+
+                          # == Module Adjustments ==
+                          reassignThreshold = 0,
+                          mergeCutHeight = 0.25,
+
+                          # == TOM == Archive the run results in TOM file (saves time)
+                          saveTOMs = T,
+                          saveTOMFileBase = "ER",
+
+                          # == Output Options
+                          numericLabels = T,
+                          verbose = 3)
+
+cor <- temp_cor     # Return cor function to original namespace
+
+# Convert labels to colors for plotting
+mergedColors = labels2colors(netwk$colors)
+# Plot the dendrogram and the module colors underneath
+plotDendroAndColors(
+  netwk$dendrograms[[1]],
+  mergedColors[netwk$blockGenes[[1]]],
+  "Module colors",
+  dendroLabels = FALSE,
+  hang = 0.03,
+  addGuide = TRUE,
+  guideHang = 0.05 )
+
+```
+
+
+## Relate Module (cluster) Assignments to SampleID 
+
+``` {r, echo=TRUE, warning=FALSE, message=FALSE}
+module_df <- data.frame(
+  gene = names(netwk$colors),
+  colors = labels2colors(netwk$colors)
+)
+
+
+module_df[1:5,]
+
+write.csv(module_df, "output/WGBS/WCNA/gene_modules.csv")
+
+module_counts <- module_df %>% dplyr::count(colors)
+
+# Get Module Eigengenes per cluster
+MEs <- moduleEigengenes(tdata_filt, mergedColors)$eigengenes
+
+# Reorder modules so similar modules are next to each other
+MEs <- orderMEs(MEs)
+module_order = names(MEs) %>% gsub("ME","", .)
+
+# Add Sample names
+MEs0 <- MEs
+MEs0$Col_Life = row.names(MEs)
+
+# tidy & plot data
+mME = MEs0 %>%
+  pivot_longer(-Col_Life) %>%
+  mutate(
+    name = gsub("ME", "", name),
+    name = factor(name, levels = module_order)
+  )
+
+mME %>% ggplot(., aes(x=Col_Life, y=name, fill=value)) +
+  geom_tile() +
+  theme_bw() +
+  scale_fill_gradient2(
+    low = "blue",
+    high = "red",
+    mid = "white",
+    midpoint = 0,
+    limit = c(-1,1)) +
+  theme(axis.text.x = element_text(angle=90)) +
+  labs(title = "Module-Sample Relationships", y = "Modules", fill="corr")
+```
+
+
+## Relate Module (cluster) Assignments to Groupings 
+
+Prepare trait data. Data has to be numeric, so I will substitute time points/developmental stages for numeric values. The "trait" we are considering here is Grouping  
+
+Make a dataframe that has a column for each lifestage name and a row for samples. Populate a 1 for samples that match each Group and a 0 for samples not matching respective Groups 
+
+This process changes Groups from a categorical variable into a binary variable. This will allow for correlations between mean eigengenes and Groups  
+
+``` {r, echo=TRUE, warning=FALSE, message=FALSE}
+
+# metadata$num <- c("1")
+# allTraits <- as.data.frame(pivot_wider(metadata, names_from = Group, values_from = num, id_cols = Col_Life))
+# allTraits[is.na(allTraits)] <- c("0")
+# rownames(allTraits) <- allTraits$Col_Life
+# datTraits <- allTraits[,c(-1)]
+# head(datTraits)
+
+metadata$num <- c("1")
+OriginTraits <- as.data.frame(pivot_wider(metadata, names_from = Origin, values_from = num, id_cols = Col_Life))
+OriginTraits[is.na(OriginTraits)] <- c("0")
+
+TreatmentTraits <- as.data.frame(pivot_wider(metadata, names_from = Treatment, values_from = num, id_cols = Col_Life))
+TreatmentTraits[is.na(TreatmentTraits)] <- c("0")
+
+LifeStageTraits <- as.data.frame(pivot_wider(metadata, names_from = LifeStage, values_from = num, id_cols = Col_Life))
+LifeStageTraits[is.na(LifeStageTraits)] <- c("0")
+
+traits <- merge(OriginTraits, TreatmentTraits, by = "Col_Life")
+allTraits <- merge(traits, LifeStageTraits)
+rownames(allTraits) <- allTraits$Col_Life
+datTraits <- allTraits[,c(-1)]
+head(datTraits)
+
+
+# Define numbers of genes and samples and print. 
+nGenes = ncol(tdata_filt)
+nSamples = nrow(tdata_filt)
+nGenes #3106
+nSamples#30
+
+# Correlations of traits with eigengenes
+Colors=sub("ME", "", names(MEs))
+moduleTraitCor = cor(MEs, datTraits, use = "p");
+moduleTraitPvalue = corPvalueStudent(moduleTraitCor, nSamples);
+
+moduleTraitTree = hclust(dist(t(moduleTraitCor)), method = "average")
+pdf(file="output/WGBS/WCNA/ModuleTraitClusterTree.pdf", height=8, width=22)
+plot(moduleTraitTree)
+dev.off()
+
+# Correlations of metabolites with eigengenes. Calculate correlations between ME's and groups 
+moduleGeneCor=cor(MEs,tdata_filt)
+moduleGenePvalue = corPvalueStudent(moduleGeneCor, nSamples);
+head(moduleGenePvalue)
+
+#Calculate kME values (module membership). 
+#datKME = signedKME(tdata_filt, MEs0, outputColumnName = "kME")
+#head(datKME)
+
+#Save module colors and labels for use in subsequent analyses.  
+#save(MEs, moduleLabels, moduleColors, geneTree, file = "Mcap2020/Output/Metabolomics/NetworkConstructionWGCNA.RData") 
+```
+
+
+## Plot module-trait associations
+
+Represent module trait correlations as a heatmap 
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
+textMatrix = paste(signif(moduleTraitCor, 2), "\n(",signif(moduleTraitPvalue, 1), ")", sep = "")
+dim(textMatrix) = dim(moduleTraitCor)
+head(textMatrix)
+labeledHeatmap(Matrix = moduleTraitCor, xLabels = names(datTraits),  yLabels = names(MEs), ySymbols = names(MEs), cex.lab.y= 0.55, cex.lab.x= 0.55, colors = blueWhiteRed(50), textMatrix = textMatrix, setStdMargins = TRUE, cex.text = 0.25, textAdj = , zlim = c(-1,1), main = paste("Module-trait relationships"))
+pdf(file="output/WGBS/WCNA/Module-trait-relationships.pdf")
+labeledHeatmap(Matrix = moduleTraitCor, xLabels = names(datTraits),  yLabels = names(MEs), ySymbols = names(MEs), cex.lab.y= 0.55, cex.lab.x= 0.55, colors = blueWhiteRed(50), textMatrix = textMatrix, setStdMargins = TRUE, cex.text = 0.25, textAdj = , zlim = c(-1,1), main = paste("Module-trait relationships"))
+dev.off()
+
+```
+
+
+# Generate a complex heatmap of module-trait relationships.  
+
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
+#bold sig p-values
+#dendrogram with WGCNA MEtree cut-off
+#colored y-axis
+#Create list of pvalues for eigengene correlation with specific life stages
+heatmappval <- signif(moduleTraitPvalue, 1)
+#Make list of heatmap row colors
+htmap.colors <- names(MEs)
+htmap.colors <- gsub("ME", "", htmap.colors)
+library(dendsort)
+row_dend = dendsort(hclust(dist(moduleTraitCor)))
+col_dend = dendsort(hclust(dist(t(moduleTraitCor))))
+
+
+#row_ha = rowAnnotation(ModuleSize = anno_text("11", "127", "8", "64", "85"), just = "left", 
+#        location = unit(0.5, "npc"), show_name = TRUE)
+# brown (11), grey (127), yellow (8), blue (64), turqoise (85) #figure out how to do row annotations to add sample sizes
+
+pdf(file = "output/WGBS/WCNA/Module-trait-relationship-heatmap.pdf", height = 8, width = 8)
+# ht=Heatmap(moduleTraitCor, name = "Eigengene", column_title = "Module-Group Eigengene Correlation", 
+#         col = blueWhiteRed(50), 
+#         row_names_side = "left", 
+#         row_dend_side = "left",
+#         width = unit(5, "in"), 
+#         height = unit(4.5, "in"), 
+#         column_dend_reorder = TRUE, 
+#         #cluster_columns = hclust(dist(t(moduleTraitCor)), method = "average"),
+#         cluster_columns = col_dend,
+#         row_dend_reorder = FALSE,
+#         column_split = 6, 
+#         column_dend_height = unit(.5, "in"),
+#         #cluster_rows = METree, 
+#         cluster_rows = row_dend, 
+#         row_gap = unit(2.5, "mm"), 
+#         border = TRUE,
+#         cell_fun = function(j, i, x, y, w, h, col) {
+#         if(heatmappval[i, j] < 0.05) {
+#             grid.text(sprintf("%s", heatmappval[i, j]), x, y, gp = gpar(fontsize = 10, fontface = "bold"))
+#         }
+#         else {
+#             grid.text(sprintf("%s", heatmappval[i, j]), x, y, gp = gpar(fontsize = 10, fontface = "plain"))
+#         }},
+#         column_names_gp =  gpar(fontsize = 12, border=FALSE),
+#         row_names_gp = gpar(fontsize = 12, alpha = 0.75, border = FALSE))
+
+ht <- Heatmap(moduleTraitCor, name = "Eigenvalue", cluster_rows = row_dend, cluster_columns = FALSE,
+        col = blueWhiteRed(50), 
+        row_names_side = "left",
+        row_dend_side = "left",
+        width = unit(5, "in"),
+        height = unit(4.5, "in"), 
+        row_gap = unit(2.5, "mm"), 
+        border = TRUE,
+        cell_fun = function(j, i, x, y, w, h, col) {
+        if(heatmappval[i, j] < 0.051) {
+            grid.text(sprintf("%s", heatmappval[i, j]), x, y, gp = gpar(fontsize = 10, fontface = "bold"))
+        }
+        else {
+            grid.text(sprintf("%s", heatmappval[i, j]), x, y, gp = gpar(fontsize = 10, fontface = "plain", col = "grey"))
+        }},
+        column_names_gp =  gpar(fontsize = 12, border=FALSE),
+        column_names_rot = 0,
+        row_names_gp = gpar(fontsize = 12, alpha = 0.75, border = FALSE))
+draw(ht)
+dev.off()
+```
+
+# Gene ontology for sigificant modules
+
+Modules to subset: 
+- brown
+- tan
+- cyan
+- grey60
+- black
+
+```{r}
+
+#annotating modules
+module_df_annot <- merge(module_df, Annot.select, by="gene", all.x=TRUE)
+
+# Subsetting for a gene list for each module
+
+mod_brown <- module_df_annot %>% dplyr::filter(colors == "brown")
+mod_tan <- module_df_annot %>% dplyr::filter(colors == "tan")
+mod_cyan <- module_df_annot %>% dplyr::filter(colors == "cyan")
+mod_grey60 <- module_df_annot %>% dplyr::filter(colors == "grey60")
+mod_black <- module_df_annot %>% dplyr::filter(colors == "black")
+
+
+### Executing GOenrichment for each module
+
+#Brown
+GOenrich_brown <- goenrich(mod_brown, brown)
+GOenrich_brown2 <- GOenrich_brown %>% 
+  distinct(gene, .keep_all = TRUE) %>%
+  filter(over_represented_pvalue != "NA")
+
+write.csv(GOenrich_brown2 , file = "output/WGBS/WCNA/GOenrich_brown.csv")
+
+#Tan
+GOenrich_tan <- goenrich(mod_tan, tan)
+GOenrich_tan2 <- GOenrich_tan %>% 
+  distinct(gene, .keep_all = TRUE) %>%
+  filter(over_represented_pvalue != "NA")
+
+write.csv(GOenrich_tan2 , file = "output/WGBS/WCNA/GOenrich_tan.csv")
+
+#cyan
+GOenrich_cyan <- goenrich(mod_cyan, cyan)
+GOenrich_cyan2 <- GOenrich_cyan %>% 
+  distinct(gene, .keep_all = TRUE) %>%
+  filter(over_represented_pvalue != "NA")
+
+write.csv(GOenrich_cyan2 , file = "output/WGBS/WCNA/GOenrich_cyan.csv")
+
+#grey60
+GOenrich_grey60 <- goenrich(mod_grey60, grey60)
+GOenrich_grey60_2 <- GOenrich_grey60 %>% 
+  distinct(gene, .keep_all = TRUE) %>%
+  filter(over_represented_pvalue != "NA")
+
+write.csv(GOenrich_grey60_2 , file = "output/WGBS/WCNA/GOenrich_grey60.csv")
+
+
+#black
+GOenrich_black <- goenrich(mod_black, black)
+GOenrich_black2 <- GOenrich_black %>% 
+  distinct(gene, .keep_all = TRUE) %>%
+  filter(over_represented_pvalue != "NA")
+
+write.csv(GOenrich_black2 , file = "output/WGBS/WCNA/GOenrich_black.csv")
+
+### Plotting
+
+Brown_GO_plot_leg <- GOenrich_brown2 %>%
+  ggplot(aes(x = over_represented_pvalue, y = term, color = ontology)) +
+  geom_hline(aes(yintercept = term), linetype = "dotted", color = "grey") +
+  geom_point(size = 8, aes(color = ontology)) +
+  facet_grid(GOSlim_bin ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
+  theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+  panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
+  strip.text.y = element_text(angle=0, size = 20),
+  strip.text.x = element_text(size = 20),
+  axis.text = element_text(size = 20),
+  axis.title.x = element_blank(),
+  axis.title.y = element_blank(), 
+  legend.position = "right") +
+  xlab("Over Represented P-value")
+
+ggsave(filename="output/WGBS/WCNA/GOenrich_brown_term_plot_leg.png", plot=Brown_GO_plot_leg, dpi=300, width=12, height=14, units="in")
+
+Brown_GO_plot <- GOenrich_brown2 %>%
+  ggplot(aes(x = over_represented_pvalue, y = term, color = ontology)) +
+  geom_hline(aes(yintercept = term), linetype = "dotted", color = "grey") +
+  geom_point(size = 8, aes(color = ontology)) +
+  facet_grid(GOSlim_bin ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
+  theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+  panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
+  strip.text.y = element_text(angle=0, size = 20),
+  strip.text.x = element_text(size = 20),
+  axis.text = element_text(size = 20),
+  axis.title.x = element_blank(),
+  axis.title.y = element_blank(), 
+  legend.position = "none") +
+  xlab("Over Represented P-value")
+
+ggsave(filename="output/WGBS/WCNA/GOenrich_brown_term_plot.png", plot=Brown_GO_plot, dpi=300, width=12, height=14, units="in")
+
+
+Tan_GO_plot <- GOenrich_tan2 %>%
+  ggplot(aes(x = over_represented_pvalue, y = term, color = ontology)) +
+  geom_hline(aes(yintercept = term), linetype = "dotted", color = "grey") +
+  geom_point(size = 8, aes(color = ontology)) +
+  facet_grid(GOSlim_bin ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
+  theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+  panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
+  strip.text.y = element_text(angle=0, size = 20),
+  strip.text.x = element_text(size = 20),
+  axis.text = element_text(size = 20),
+  axis.title.x = element_blank(),
+  axis.title.y = element_blank(), 
+  legend.position = "none") +
+  xlab("Over Represented P-value")
+
+ggsave(filename="output/WGBS/WCNA/GOenrich_tan_term_plot.png", plot=Tan_GO_plot, dpi=300, width=18, height=14, units="in")
+
+
+Cyan_GO_plot <- GOenrich_cyan2 %>%
+  ggplot(aes(x = over_represented_pvalue, y = term, color = ontology)) +
+  geom_hline(aes(yintercept = term), linetype = "dotted", color = "grey") +
+  geom_point(size = 8, aes(color = ontology)) +
+  facet_grid(GOSlim_bin ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
+  theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+  panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
+  strip.text.y = element_text(angle=0, size = 20),
+  strip.text.x = element_text(size = 20),
+  axis.text = element_text(size = 20),
+  axis.title.x = element_blank(),
+  axis.title.y = element_blank(), 
+  legend.position = "none") +
+  xlab("Over Represented P-value")
+
+ggsave(filename="output/WGBS/WCNA/GOenrich_cyan_term_plot.png", plot=Cyan_GO_plot, dpi=300, width=18, height=18, units="in")
+
+
+Grey60_GO_plot <- GOenrich_grey60_2 %>%
+  ggplot(aes(x = over_represented_pvalue, y = term, color = ontology)) +
+  geom_hline(aes(yintercept = term), linetype = "dotted", color = "grey") +
+  geom_point(size = 8, aes(color = ontology)) +
+  facet_grid(GOSlim_bin ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
+  theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+  panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
+  strip.text.y = element_text(angle=0, size = 20),
+  strip.text.x = element_text(size = 20),
+  axis.text = element_text(size = 20),
+  axis.title.x = element_blank(),
+  axis.title.y = element_blank(), 
+  legend.position = "none") +
+  xlab("Over Represented P-value")
+
+ggsave(filename="output/WGBS/WCNA/GOenrich_grey60_term_plot.png", plot=Grey60_GO_plot, dpi=300, width=18, height=18, units="in")
+
+
+Black_GO_plot <- GOenrich_black2 %>%
+  ggplot(aes(x = over_represented_pvalue, y = term, color = ontology)) +
+  geom_hline(aes(yintercept = term), linetype = "dotted", color = "grey") +
+  geom_point(size = 8, aes(color = ontology)) +
+  facet_grid(GOSlim_bin ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
+  theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+  panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
+  strip.text.y = element_text(angle=0, size = 20),
+  strip.text.x = element_text(size = 20),
+  axis.text = element_text(size = 20),
+  axis.title.x = element_blank(),
+  axis.title.y = element_blank(), 
+  legend.position = "none") +
+  xlab("Over Represented P-value")
+
+ggsave(filename="output/WGBS/WCNA/GOenrich_black_term_plot.png", plot=Black_GO_plot, dpi=300, width=18, height=18, units="in")
+
 ```
 
