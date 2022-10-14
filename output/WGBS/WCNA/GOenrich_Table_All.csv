@@ -1,0 +1,17 @@
+,GO_ID,gene,colors,over_represented_pvalue,under_represented_pvalue,numDEInCat,numInCat,term,ontology,GOSlim_bin,aspect
+1,GO:0000105,Pastreoides06628,black,0.045143434,1,1,1,histidine biosynthetic process,BP,other metabolic processes,P
+2,GO:0000146,Pastreoides13475,black,0.018496708,0.999157494,2,5,microfilament motor activity,MF,cytoskeletal activity,F
+3,GO:0000146,Pastreoides11659,black,0.018496708,0.999157494,2,5,microfilament motor activity,MF,cytoskeletal activity,F
+4,GO:0000245,Pastreoides41380,black,0.045077071,1,1,1,spliceosomal complex assembly,BP,RNA metabolism,P
+5,GO:0000302,Pastreoides27682,black,0.04514595,1,1,1,response to reactive oxygen species,BP,stress response,P
+6,GO:0000335,Pastreoides24500,black,0.044971371,1,1,1,"negative regulation of transposition, DNA-mediated",BP,DNA metabolism,P
+7,GO:0000805,Pastreoides15597,black,0.044997,1,1,1,X chromosome,CC,other cellular component,C
+8,GO:0001522,Pastreoides24374,black,0.04507076,1,1,1,pseudouridine synthesis,BP,RNA metabolism,P
+9,GO:0001955,Pastreoides45785,black,0.045098916,1,1,1,blood vessel maturation,BP,developmental processes,P
+10,GO:0004308,Pastreoides28894,black,0.001629702,0.99994433,3,6,exo-alpha-sialidase activity,MF,other molecular function,F
+11,GO:0004308,Pastreoides28897,black,0.001629702,0.99994433,3,6,exo-alpha-sialidase activity,MF,other molecular function,F
+12,GO:0004308,Pastreoides28896,black,0.001629702,0.99994433,3,6,exo-alpha-sialidase activity,MF,other molecular function,F
+13,GO:0005176,Pastreoides37990,black,0.045014499,1,1,1,ErbB-2 class receptor binding,MF,signal transduction activity,F
+14,GO:0005319,Pastreoides02042,black,0.005884938,0.999910036,2,3,lipid transporter activity,MF,transporter activity,F
+15,GO:0005319,Pastreoides50459,black,0.005884938,0.999910036,2,3,lipid transporter activity,MF,transporter activity,F
+16,GO:0030430,Pastreoides12735,black,0.000347854,0.999996025,3,4,host cell cytoplasm,CC,non-structural extracellular,C

@@ -2009,7 +2009,7 @@ Tan_GO_plot <- GOenrich_tan2 %>%
   panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
   strip.text.y = element_text(angle=0, size = 20),
   strip.text.x = element_text(size = 20),
-  axis.text = element_text(size = 20),
+  axis.text = element_text(size = 25),
   axis.title.x = element_blank(),
   axis.title.y = element_blank(), 
   legend.position = "none") +
@@ -2027,7 +2027,7 @@ Cyan_GO_plot <- GOenrich_cyan2 %>%
   panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
   strip.text.y = element_text(angle=0, size = 20),
   strip.text.x = element_text(size = 20),
-  axis.text = element_text(size = 20),
+  axis.text = element_text(size = 30),
   axis.title.x = element_blank(),
   axis.title.y = element_blank(), 
   legend.position = "none") +
@@ -2045,7 +2045,7 @@ Grey60_GO_plot <- GOenrich_grey60_2 %>%
   panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
   strip.text.y = element_text(angle=0, size = 20),
   strip.text.x = element_text(size = 20),
-  axis.text = element_text(size = 20),
+  axis.text = element_text(size = 25),
   axis.title.x = element_blank(),
   axis.title.y = element_blank(), 
   legend.position = "none") +
@@ -2063,13 +2063,122 @@ Black_GO_plot <- GOenrich_black2 %>%
   panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
   strip.text.y = element_text(angle=0, size = 20),
   strip.text.x = element_text(size = 20),
+  axis.text = element_text(size = 30),
+  axis.title.x = element_blank(),
+  axis.title.y = element_blank(), 
+  legend.position = "none") +
+  xlab("Over Represented P-value")
+
+ggsave(filename="output/WGBS/WCNA/GOenrich_black_term_plot.png", plot=Black_GO_plot, dpi=300, width=16, height=18, units="in")
+
+
+#### 20220929 new fig
+
+Brown_GO_plot_term <- GOenrich_brown2 %>%
+  ggplot(aes(x = over_represented_pvalue, y = reorder(term, over_represented_pvalue))) +
+  geom_hline(aes(yintercept = term), linetype = "dotted", color = "grey") +
+  geom_point(size = 8, shape = 21, fill = "brown", color = "black") +
+  theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+  panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
+  strip.text.y = element_text(angle=0, size = 20),
+  strip.text.x = element_text(size = 20),
   axis.text = element_text(size = 20),
   axis.title.x = element_blank(),
   axis.title.y = element_blank(), 
   legend.position = "none") +
   xlab("Over Represented P-value")
 
-ggsave(filename="output/WGBS/WCNA/GOenrich_black_term_plot.png", plot=Black_GO_plot, dpi=300, width=18, height=18, units="in")
+Tan_GO_plot_term <- GOenrich_tan2 %>%
+  ggplot(aes(x = over_represented_pvalue, y = reorder(term, over_represented_pvalue))) +
+  geom_hline(aes(yintercept = term), linetype = "dotted", color = "grey") +
+  geom_point(size = 8, shape = 21, fill = "tan", color = "black") +
+  theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+  panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
+  strip.text.y = element_text(angle=0, size = 20),
+  strip.text.x = element_text(size = 20),
+  axis.text = element_text(size = 20),
+  axis.title.x = element_blank(),
+  axis.title.y = element_blank(), 
+  legend.position = "none") +
+  xlab("Over Represented P-value")
 
+Grey60_GO_plot_term <- GOenrich_grey60_2 %>%
+  ggplot(aes(x = over_represented_pvalue, y = reorder(term, over_represented_pvalue))) +
+  geom_hline(aes(yintercept = term), linetype = "dotted", color = "grey") +
+  geom_point(size = 8, shape = 21, fill = "grey", color = "black") +
+  theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+  panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
+  strip.text.y = element_text(angle=0, size = 20),
+  strip.text.x = element_text(size = 20),
+  axis.text = element_text(size = 20),
+  axis.title.x = element_blank(),
+  axis.title.y = element_blank(), 
+  legend.position = "none") +
+  xlab("Over Represented P-value")
+
+Black_GO_plot_term <- GOenrich_black2 %>%
+  ggplot(aes(x = over_represented_pvalue, y = reorder(term, over_represented_pvalue))) +
+  geom_hline(aes(yintercept = term), linetype = "dotted", color = "grey") +
+  geom_point(size = 8, shape = 21, fill = "black", color = "black") +
+  theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+  panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
+  strip.text.y = element_text(angle=0, size = 20),
+  strip.text.x = element_text(size = 20),
+  axis.text = element_text(size = 20),
+  axis.title.x = element_blank(),
+  axis.title.y = element_blank(), 
+  legend.position = "none") +
+  xlab("Over Represented P-value")
+
+go_fig_mod <- ggarrange(Brown_GO_plot_term, Tan_GO_plot_term, Grey60_GO_plot_term, Black_GO_plot_term, ncol = 1, nrow = 4)
+
+
+GOenrich_brown2$Module <- "Brown"
+GOenrich_tan2$Module <- "Tan"
+GOenrich_grey60_2$Module <- "Grey60"
+GOenrich_black2$Module <- "Black"
+
+GOenrich_all <- rbind(GOenrich_brown2, GOenrich_tan2, GOenrich_grey60_2, GOenrich_black2)
+
+go_fig_all <- GOenrich_all %>%
+  ggplot(aes(x = over_represented_pvalue, y = reorder(term, over_represented_pvalue), fill = colors)) +
+  xlab("Over Represented P-value") +
+  geom_hline(aes(yintercept = term), linetype = "dotted", color = "grey") +
+  geom_point(size = 8, shape = 21, color = "black") +
+  theme_bw() + theme(panel.grid.major = element_blank(),
+  panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
+  strip.text.y = element_text(angle=0, size = 20),
+  strip.text.x = element_text(size = 20),
+  axis.text = element_text(size = 20),
+  axis.title.x = element_text(size = 20),
+  axis.title.y = element_blank(), 
+  legend.position = "none") +
+  facet_grid(Module ~., scale = "free")
+
+
+
+# Plot with gene ratio
+
+GOenrich_all$GeneRatio <- GOenrich_all$numDEInCat / GOenrich_all$numInCat
+
+GOenrich_all$Module_f = factor(GOenrich_all$Module, levels=c('Brown','Tan','Grey60','Black'))
+
+GeneRatio_fig_all <- GOenrich_all %>%
+  ggplot(aes(x = GeneRatio, y = reorder(term, GeneRatio), fill = over_represented_pvalue)) +
+  xlab("Gene Ratio") +
+  scale_y_discrete(position = "right") +
+  geom_hline(aes(yintercept = term), linetype = "dotted", color = "grey") +
+  geom_point(size = 8, shape = 21, color = "black") +
+  theme_bw() + theme(panel.grid.major = element_blank(),
+  panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
+  strip.text.y = element_text(size = 35),
+  strip.text.x = element_text(size = 20),
+  axis.text = element_text(size = 40, color = "black"),
+  axis.title.x = element_text(size = 30),
+  axis.title.y = element_blank(), 
+  legend.position = "none") +
+  facet_grid(Module_f ~., scale = "free", switch="both")
+
+ggsave(filename="output/WGBS/WCNA/GOenrich_generatio_plot.png", plot=GeneRatio_fig_all, dpi=300, width=27, height=22, units="in")
 ```
 
