@@ -52,8 +52,6 @@ Removing the first line as it is currently blank
 000008F 1871416
 ```
 
-cat Past.genome_assembly-sequence-lengths_clean.txt  | awk '{ print NF}'
-
 #### Adding introns to the gff
 
 ```
@@ -356,3 +354,389 @@ Steps:
 `mkdir genome_feature_20221014`
 
 `cd genome_feature_20221014`
+
+#### 1. Characterize CG motif locations in feature tracks
+
+##### 1a. Symbiolically link genome feature files
+
+`ln -s ../../../Past_Genome/past_struc_annotations_v1/20221014_GF_Analysis/ ./
+`
+##### 1b. Characterize overlaps with bedtools
+
+`module load BEDTools/2.27.1-foss-2018b`
+
+###### Genes:
+
+```
+intersectBed \
+-u \
+-a 20221014_GF_Analysis/Past_CpG.gff \
+-b 20221014_GF_Analysis/Past.GFFannotation.gene.gff \
+> Past-CGMotif-Gene-Overlaps.txt
+```
+
+`wc -l Past-CGMotif-Gene-Overlaps.txt`
+
+7551011 Past-CGMotif-Gene-Overlaps.txt
+
+###### CDS:
+
+```
+intersectBed \
+-u \
+-a 20221014_GF_Analysis/Past_CpG.gff \
+-b 20221014_GF_Analysis/Past.GFFannotation.cds.gff \
+> Past-CGMotif-CDS-Overlaps.txt
+```
+
+`wc -l Past-CGMotif-CDS-Overlaps.txt`
+
+1893256 Past-CGMotif-CDS-Overlaps.txt
+
+###### Intron:
+
+```
+intersectBed \
+-u \
+-a 20221014_GF_Analysis/Past_CpG.gff \
+-b 20221014_GF_Analysis/Past.GFFannotation.intron.gff \
+> Past-CGMotif-Intron-Overlaps.txt
+```
+
+`wc -l Past-CGMotif-Intron-Overlaps.txt`
+
+5649303 Past-CGMotif-Intron-Overlaps.txt
+
+###### Flanks:
+
+```
+intersectBed \
+-u \
+-a 20221014_GF_Analysis/Past_CpG.gff \
+-b 20221014_GF_Analysis/Past.GFFannotation.flanks.gff \
+> Past-CGMotif-Flanks-Overlaps.txt
+```
+
+`wc -l Past-CGMotif-Flanks-Overlaps.txt`
+
+3041507 Past-CGMotif-Flanks-Overlaps.txt
+
+###### Upstream flanks:
+
+```
+intersectBed \
+-u \
+-a 20221014_GF_Analysis/Past_CpG.gff \
+-b 20221014_GF_Analysis/Past.GFFannotation.flanks.Upstream.gff \
+> Past-CGMotif-Flanks-Upstream-Overlaps.txt
+```
+
+`wc -l Past-CGMotif-Flanks-Upstream-Overlaps.txt`
+
+1680722 Past-CGMotif-Flanks-Upstream-Overlaps.txt
+
+###### Downstream flanks:
+
+```
+intersectBed \
+-u \
+-a 20221014_GF_Analysis/Past_CpG.gff \
+-b 20221014_GF_Analysis/Past.GFFannotation.flanks.Downstream.gff \
+> Past-CGMotif-Flanks-Downstream-Overlaps.txt
+```
+Currently getting this error:
+
+```
+ERROR: Received illegal bin number 4294967295 from getBin call.
+ERROR: Unable to add record to tree.
+```
+Apparently the coordinates are too large for bedtools to bin.
+
+Trying with BEDOPS:
+https://www.biostars.org/p/129072/
+
+`module load BEDOPS/2.4.39-foss-2020b`
+
+```
+bedops --intersect 20221014_GF_Analysis/Past_CpG.gff 20221014_GF_Analysis/Past.GFFannotation.flanks.Downstream.sorted.gff > Past-CGMotif-Flanks-Downstream-Overlaps.txt
+```
+
+No error message but still not producing overlaps in text file. Will need to revisit or obtain downstream flank numbers by subtracting the upstream from all flanks?
+
+###### Intergenic regions:
+
+```
+intersectBed \
+-u \
+-a 20221014_GF_Analysis/Past_CpG.gff \
+-b 20221014_GF_Analysis/Past.GFFannotation.intergenic.bed \
+> Past-CGMotif-Intergenic-Overlaps.txt
+```
+`wc -l Past-CGMotif-Intergenic-Overlaps.txt`
+
+18128757 Past-CGMotif-Intergenic-Overlaps.txt
+
+##### Create summary file
+
+`wc -l *CGMotif* > Past-CGMotif-Overlaps-counts.txt`
+
+#### 2. Organize coverage files
+
+I am using the 5x coverage files for all files. Will select certain files (adult - larval pairs) in R later.
+
+
+##### Symbiolically link files
+
+`mkdir coverage_files`
+
+`ln -s ../../cov_to_cyto/*5x_sorted.bedgraph ./`
+
+Checking all files were linked:
+
+`ls | wc -l` : 47
+
+```
+cd ..
+wc -l coverage_files/*bedgraph > Past-5x-bedgraph-counts.txt
+```
+
+#### 3. Characterize methylation for each CpG dinucleotide
+
+* Methylated: > 50% methylation
+* Sparsely methylated: 10-50% methylation
+* Unmethylated: < 10% methylation
+
+
+##### Methylated
+
+```
+for f in *bedgraph
+do
+    awk '{if ($4 >= 50) { print $1, $2, $3, $4 }}' ${f} \
+    > ${f}-Meth
+done
+```
+
+`wc -l *-Meth > ../Past-5x-Meth-counts.txt`
+
+Visual inspection:
+
+`head 18-106_S163_5x_sorted.bedgraph-Meth`
+
+```
+000000F 36744 36746 80.000000
+000000F 36972 36974 50.000000
+000000F 37243 37245 60.000000
+000000F 37585 37587 50.000000
+000000F 37895 37897 80.000000
+000000F 38807 38809 100.000000
+000000F 38898 38900 100.000000
+000000F 39011 39013 66.666667
+000000F 39280 39282 100.000000
+000000F 39292 39294 100.000000
+```
+
+##### Sparsely methylated
+
+```
+for f in *bedgraph
+do
+    awk '{if ($4 < 50) { print $1, $2, $3, $4}}' ${f} \
+    | awk '{if ($4 > 10) { print $1, $2, $3, $4 }}' \
+    > ${f}-sparseMeth
+done
+```
+
+`wc -l *-sparseMeth > ../Past-5x-sparseMeth-counts.txt`
+
+Visual inspection:
+
+`head 18-106_S163_5x_sorted.bedgraph-sparseMeth`
+
+```
+000000F 28784 28786 11.111111
+000000F 28791 28793 11.111111
+000000F 28813 28815 28.571429
+000000F 28851 28853 20.000000
+000000F 28992 28994 16.666667
+000000F 29277 29279 11.111111
+000000F 29282 29284 14.285714
+000000F 29313 29315 12.500000
+000000F 29778 29780 12.500000
+000000F 30159 30161 12.500000
+```
+
+##### Unmethylated
+
+```
+for f in *bedgraph
+do
+    awk '{if ($4 <= 10) { print $1, $2, $3, $4 }}' ${f} \
+    > ${f}-unMeth
+done
+```
+
+`wc -l *-unMeth > ../Past-5x-unMeth-counts.txt`
+
+Visual inspection:
+
+`head 18-106_S163_5x_sorted.bedgraph-unMeth`
+```
+000000F 19640 19642 0.000000
+000000F 19656 19658 0.000000
+000000F 20445 20447 0.000000
+000000F 20884 20886 0.000000
+000000F 20888 20890 0.000000
+000000F 20917 20919 0.000000
+000000F 21145 21147 0.000000
+000000F 21148 21150 0.000000
+000000F 21173 21175 0.000000
+000000F 21175 21177 0.000000
+```
+
+#### 4. Characterize genomic locations of CpGs
+
+##### 4.a Create BEDfiles
+
+```
+for f in *bedgraph
+do
+    awk '{print $1"\t"$2"\t"$3"\t"$4}' ${f} > ${f}.bed
+    wc -l ${f}.bed
+done
+```
+
+```
+for f in *bedgraph-Meth
+do
+    awk '{print $1"\t"$2"\t"$3"\t"$4}' ${f} > ${f}.bed
+    wc -l ${f}.bed
+done
+```
+
+```
+for f in *bedgraph-sparseMeth
+do
+    awk '{print $1"\t"$2"\t"$3"\t"$4}' ${f} > ${f}.bed
+    wc -l ${f}.bed
+done
+```
+
+```
+for f in *bedgraph-unMeth
+do
+    awk '{print $1"\t"$2"\t"$3"\t"$4}' ${f} > ${f}.bed
+    wc -l ${f}.bed
+done
+```
+
+##### 4.b Genes
+
+```
+for f in *bed
+do
+  intersectBed \
+  -u \
+  -a ${f} \
+  -b ../20221014_GF_Analysis/Past.GFFannotation.gene.gff \
+  > ${f}-paGenes
+done
+```
+
+`wc -l *paGenes > ../Past-5x-paGenes-counts.txt`
+
+##### 4.c Coding Sequencing (CDS)
+
+```
+for f in *bed
+do
+  intersectBed \
+  -u \
+  -a ${f} \
+  -b ../20221014_GF_Analysis/Past.GFFannotation.cds.gff \
+  > ${f}-paCDS
+done
+```
+
+`wc -l *paCDS > ../Past-5x-paCDS-counts.txt`
+
+##### 4.d Introns
+
+```
+for f in *bed
+do
+  intersectBed \
+  -u \
+  -a ${f} \
+  -b ../20221014_GF_Analysis/Past.GFFannotation.intron.gff \
+  > ${f}-paIntrons
+done
+```
+
+`wc -l *paIntrons > ../Past-5x-paIntrons-counts.txt`
+
+##### 4.e Flanking Regions
+
+```
+for f in *bed
+do
+  intersectBed \
+  -u \
+  -a ${f} \
+  -b ../20221014_GF_Analysis/Past.GFFannotation.flanks.gff \
+  > ${f}-paFlanks
+done
+```
+
+`wc -l *paFlanks > ../Past-5x-paFlanks-counts.txt`
+
+##### 4.f Upstream flanking Regions
+
+```
+for f in *bed
+do
+  intersectBed \
+  -u \
+  -a ${f} \
+  -b ../20221014_GF_Analysis/Past.GFFannotation.flanks.Upstream.gff  \
+  > ${f}-paFlanksUpstream
+done
+```
+
+`wc -l *paFlanksUpstream > ../Past-5x-paFlanksUpstream-counts.txt`
+
+##### 4.g Downstream flanking Regions
+
+```
+for f in *bed
+do
+  intersectBed \
+  -u \
+  -a ${f} \
+  -b ../20221014_GF_Analysis/Past.GFFannotation.flanks.Downstream.gff  \
+  > ${f}-paFlanksDownstream
+done
+```
+
+I am recieving the same error `ERROR: Received illegal bin number 4294967295 from getBin call.
+ERROR: Unable to add record to tree.` so I will skip this for now.
+
+##### 4.h Intergenic
+
+```
+for f in *bed
+do
+  intersectBed \
+  -u \
+  -a ${f} \
+  -b ../20221014_GF_Analysis/Past.GFFannotation.intergenic.bed  \
+  > ${f}-paIntergenic
+done
+```
+
+`wc -l *paIntergenic > ../Past-5x-paIntergenic-counts.txt`
+
+
+#### Copy files to local computer for R analysis
+
+`scp 'kevin_wong1@ssh3.hac.uri.edu:/data/putnamlab/kevin_wong1/Thermal_Transplant_WGBS/Past_WGBS/genome_feature_20221014/*counts.txt' ~/MyProjects/Thermal_Transplant_Molecular/output/WGBS/genome_feature_20221017`
