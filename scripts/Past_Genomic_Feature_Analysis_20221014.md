@@ -1,10 +1,21 @@
-## Genomic Feature Analysis
+Symbolically# Genomic Feature Analysis
 
-Following [this pipeline](https://github.com/hputnam/Geoduck_Meth/blob/master/code/Geoduck_Meth_Pipeline.md) created by H. Putnam and [this pipeline](https://github.com/hputnam/Meth_Compare/blob/master/code/03.01-Generating-Genome-Feature-Tracks.ipynb) by Yaamini R. Venkataraman
+This script determines where methylated CpGs are in certain genomic features.
 
-### 1. Prepare Reference File
+I followed [this pipeline](https://github.com/hputnam/Geoduck_Meth/blob/master/code/Geoduck_Meth_Pipeline.md) created by H. Putnam and [this pipeline](https://github.com/hputnam/Meth_Compare/blob/master/code/03.01-Generating-Genome-Feature-Tracks.ipynb) by Yaamini R. Venkataraman
 
-#### Creating a reference fasta file
+**Table of Contents:**
+1. [**Prepare Reference File**](#reference)  
+2. [**Filtering GFF for specific features**](#filter)  
+3. [**Create CpG motifs**](#cpgmotif)   
+4. [**Characterize CG motif locations in feature tracks**](#characterize)    
+5. [**Organize coverage files**](#organize)    
+6. [**Characterize methylation for each CpG dinucleotide**](#Char_meth)    
+7. [**Characterize genomic locations of CpGs**](#char_gene)    
+
+## <a name="reference"></a> **1. Prepare Reference File**
+
+#### 1.a) Creating a reference fasta file
 
 ```
 module load SAMtools/1.9-foss-2018b
@@ -52,16 +63,16 @@ Removing the first line as it is currently blank
 000008F 1871416
 ```
 
-#### Adding introns to the gff
+#### 1.b) Adding introns to the GFF
 
 ```
 module load AGAT/0.8.1-foss-2020b
 agat_sp_add_introns.pl --gff Pastreoides_noseq_v1.gff --out Pastreoides_noseq_v1_introns.gff
 ```
 
-### 2. Filtering gff for specific features
+## <a name="filter"></a> **2. Filtering GFF for specific features**
 
-#### Gene
+#### 2.a) Gene
 
 `awk '{if ($3 == "gene") print $0;}' Pastreoides_noseq_v1_introns.gff > Past.GFFannotation.gene.gff`
 
@@ -84,7 +95,7 @@ agat_sp_add_introns.pl --gff Pastreoides_noseq_v1.gff --out Pastreoides_noseq_v1
 
 64636 Past.GFFannotation.gene.gff
 
-#### CDS
+#### 2.b) CDS
 
 `awk '{if ($3 == "CDS") print $0;}' Pastreoides_noseq_v1_introns.gff > Past.GFFannotation.cds.gff`
 
@@ -107,7 +118,7 @@ agat_sp_add_introns.pl --gff Pastreoides_noseq_v1.gff --out Pastreoides_noseq_v1
 
 315399 Past.GFFannotation.cds.gff
 
-#### Intron
+#### 2.c) Intron
 
 `awk '{if ($3 == "intron") print $0;}' Pastreoides_noseq_v1_introns.gff > Past.GFFannotation.intron.gff`
 
@@ -130,15 +141,11 @@ agat_sp_add_introns.pl --gff Pastreoides_noseq_v1.gff --out Pastreoides_noseq_v1
 
 252668 Past.GFFannotation.intron.gff
 
-
-#### Flanking regions
-
-##### All Regions
+#### 2.d) All Regions
 
 Create 1kb flanking regions. Subtract existing genes so flanks do not have any overlap.
 
 `module load BEDTools/2.27.1-foss-2018b`
-
 
 Sorting  gene file:
 
@@ -189,7 +196,7 @@ flankBed \
 
 133449 Past.GFFannotation.flanks.gff
 
-##### Upstream flanks
+#### 2.e) Upstream flanks
 
 * Create flanking regions
 * Create upstream flanks (-l) based on strand (-s)
@@ -227,7 +234,7 @@ flankBed \
 
 66757 Past.GFFannotation.flanks.Upstream.gff
 
-##### Downstream flanks
+#### 2.f) Downstream flanks
 
 * Create flanking regions
 * Create downstream flanks (-r) based on strand (-s)
@@ -264,7 +271,7 @@ flankBed \
 
 66696 Past.GFFannotation.flanks.Downstream.gff
 
-#### Intergenic regions
+#### 2.g) Intergenic regions
 
 * Find intergenic regions
 * By definition, these are regions that are not in genes and do not include flanking regions
@@ -305,7 +312,7 @@ complementBed \
 
 101146 Past.GFFannotation.intergenic.bed
 
-### 3. Create CpG motifs
+## <a name="cpgmotif"></a> **3. Create CpG motifs**
 
 I am following [this script](https://robertslab.github.io/sams-notebook/2019/08/21/Data-Wrangling-Create-a-CpG-GFF-from-Pgenerosa_v074-using-EMBOSS-fuzznuc-on-Swoose.html) to characterize the CpGs in the Porites astreoides genome.
 
@@ -334,18 +341,11 @@ fuzznuc \
 000000F	fuzznuc	nucleotide_motif	56	57	2	+	.	ID=000000F.5;note=*pat pattern:CG
 ```
 
-### 4. Characterizing CpG methylation (5x data)
+## <a name="characterize"></a> **4. Characterize CG motif locations in feature tracks**
 
 * Using the 5x coverage data on the reduced dataset (i.e. removal of samples with low reads) that contains adult-larval pairs
 
-Steps:
-
-1. Characterize overlap between CG motifs and genome feature tracks
-2. Download coverage files
-3. Characterize methylation for each CpG dinucleotide
-4. Characterize genomic locations of all sequenced data, methylated CpGs, sparsely methylated CpGs, and unmethylated CpGs for each sequencing type
-
-#### Set up
+#### 4.a) Symbolically link genome feature files
 
 `pwd`
 
@@ -355,17 +355,13 @@ Steps:
 
 `cd genome_feature_20221014`
 
-#### 1. Characterize CG motif locations in feature tracks
-
-##### 1a. Symbiolically link genome feature files
-
 `ln -s ../../../Past_Genome/past_struc_annotations_v1/20221014_GF_Analysis/ ./
 `
-##### 1b. Characterize overlaps with bedtools
+#### 4.b) Characterize overlaps with bedtools
 
 `module load BEDTools/2.27.1-foss-2018b`
 
-###### Genes:
+##### Genes:
 
 ```
 intersectBed \
@@ -379,7 +375,7 @@ intersectBed \
 
 7551011 Past-CGMotif-Gene-Overlaps.txt
 
-###### CDS:
+##### CDS:
 
 ```
 intersectBed \
@@ -393,7 +389,7 @@ intersectBed \
 
 1893256 Past-CGMotif-CDS-Overlaps.txt
 
-###### Intron:
+##### Intron:
 
 ```
 intersectBed \
@@ -407,7 +403,7 @@ intersectBed \
 
 5649303 Past-CGMotif-Intron-Overlaps.txt
 
-###### Flanks:
+##### Flanks:
 
 ```
 intersectBed \
@@ -421,7 +417,7 @@ intersectBed \
 
 3041507 Past-CGMotif-Flanks-Overlaps.txt
 
-###### Upstream flanks:
+##### Upstream flanks:
 
 ```
 intersectBed \
@@ -435,7 +431,7 @@ intersectBed \
 
 1680722 Past-CGMotif-Flanks-Upstream-Overlaps.txt
 
-###### Downstream flanks:
+##### Downstream flanks:
 
 ```
 intersectBed \
@@ -463,7 +459,7 @@ bedops --intersect 20221014_GF_Analysis/Past_CpG.gff 20221014_GF_Analysis/Past.G
 
 No error message but still not producing overlaps in text file. Will need to revisit or obtain downstream flank numbers by subtracting the upstream from all flanks?
 
-###### Intergenic regions:
+##### Intergenic regions:
 
 ```
 intersectBed \
@@ -480,12 +476,11 @@ intersectBed \
 
 `wc -l *CGMotif* > Past-CGMotif-Overlaps-counts.txt`
 
-#### 2. Organize coverage files
+## <a name="organize"></a> **5. Organize coverage files**
 
 I am using the 5x coverage files for all files. Will select certain files (adult - larval pairs) in R later.
 
-
-##### Symbiolically link files
+##### Symbolically link files
 
 `mkdir coverage_files`
 
@@ -500,14 +495,14 @@ cd ..
 wc -l coverage_files/*bedgraph > Past-5x-bedgraph-counts.txt
 ```
 
-#### 3. Characterize methylation for each CpG dinucleotide
+## <a name="char_meth"></a> **6. Characterize methylation for each CpG dinucleotide**
 
 * Methylated: > 50% methylation
 * Sparsely methylated: 10-50% methylation
 * Unmethylated: < 10% methylation
 
 
-##### Methylated
+#### Methylated
 
 ```
 for f in *bedgraph
@@ -536,7 +531,7 @@ Visual inspection:
 000000F 39292 39294 100.000000
 ```
 
-##### Sparsely methylated
+#### Sparsely methylated
 
 ```
 for f in *bedgraph
@@ -566,7 +561,7 @@ Visual inspection:
 000000F 30159 30161 12.500000
 ```
 
-##### Unmethylated
+#### Unmethylated
 
 ```
 for f in *bedgraph
@@ -594,9 +589,9 @@ Visual inspection:
 000000F 21175 21177 0.000000
 ```
 
-#### 4. Characterize genomic locations of CpGs
+## <a name="char_gene"></a> 7. Characterize genomic locations of CpGs**
 
-##### 4.a Create BEDfiles
+#### 7.a) Create BEDfiles
 
 ```
 for f in *bedgraph
@@ -630,7 +625,7 @@ do
 done
 ```
 
-##### 4.b Genes
+#### 7.b) Genes
 
 ```
 for f in *bed
@@ -645,7 +640,7 @@ done
 
 `wc -l *paGenes > ../Past-5x-paGenes-counts.txt`
 
-##### 4.c Coding Sequencing (CDS)
+#### 7.c) Coding Sequencing (CDS)
 
 ```
 for f in *bed
@@ -660,7 +655,7 @@ done
 
 `wc -l *paCDS > ../Past-5x-paCDS-counts.txt`
 
-##### 4.d Introns
+#### 7.d) Introns
 
 ```
 for f in *bed
@@ -675,7 +670,7 @@ done
 
 `wc -l *paIntrons > ../Past-5x-paIntrons-counts.txt`
 
-##### 4.e Flanking Regions
+#### 7.e) Flanking Regions
 
 ```
 for f in *bed
@@ -690,7 +685,7 @@ done
 
 `wc -l *paFlanks > ../Past-5x-paFlanks-counts.txt`
 
-##### 4.f Upstream flanking Regions
+#### 7.f) Upstream flanking Regions
 
 ```
 for f in *bed
@@ -705,7 +700,7 @@ done
 
 `wc -l *paFlanksUpstream > ../Past-5x-paFlanksUpstream-counts.txt`
 
-##### 4.g Downstream flanking Regions
+#### 7.g) Downstream flanking Regions
 
 ```
 for f in *bed
@@ -721,7 +716,7 @@ done
 I am recieving the same error `ERROR: Received illegal bin number 4294967295 from getBin call.
 ERROR: Unable to add record to tree.` so I will skip this for now.
 
-##### 4.h Intergenic
+#### 7.h) Intergenic
 
 ```
 for f in *bed
@@ -740,3 +735,5 @@ done
 #### Copy files to local computer for R analysis
 
 `scp 'kevin_wong1@ssh3.hac.uri.edu:/data/putnamlab/kevin_wong1/Thermal_Transplant_WGBS/Past_WGBS/genome_feature_20221014/*counts.txt' ~/MyProjects/Thermal_Transplant_Molecular/output/WGBS/genome_feature_20221017`
+
+`scp 'kevin_wong1@ssh3.hac.uri.edu:/data/putnamlab/kevin_wong1/Thermal_Transplant_WGBS/Past_WGBS/genome_feature_20221014/Past-CGMotif-CDS-Overlaps.txt' ~/MyProjects/Thermal_Transplant_Molecular/output/WGBS/genome_feature_20221017`

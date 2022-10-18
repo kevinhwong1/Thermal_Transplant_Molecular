@@ -1,142 +1,189 @@
    1842628 18-106_S163_5x_sorted.bedgraph.bed-paGenes
     207777 18-106_S163_5x_sorted.bedgraph-Meth.bed-paGenes
     126128 18-106_S163_5x_sorted.bedgraph-sparseMeth.bed-paGenes
+   1508723 18-106_S163_5x_sorted.bedgraph-unMeth.bed-paGenes
    2250393 18-118_S162_5x_sorted.bedgraph.bed-paGenes
     247490 18-118_S162_5x_sorted.bedgraph-Meth.bed-paGenes
     141840 18-118_S162_5x_sorted.bedgraph-sparseMeth.bed-paGenes
+   1861063 18-118_S162_5x_sorted.bedgraph-unMeth.bed-paGenes
    1697060 18-130_S172_5x_sorted.bedgraph.bed-paGenes
     151783 18-130_S172_5x_sorted.bedgraph-Meth.bed-paGenes
     114625 18-130_S172_5x_sorted.bedgraph-sparseMeth.bed-paGenes
+   1430652 18-130_S172_5x_sorted.bedgraph-unMeth.bed-paGenes
    2004938 18-142_S189_5x_sorted.bedgraph.bed-paGenes
     192953 18-142_S189_5x_sorted.bedgraph-Meth.bed-paGenes
     111228 18-142_S189_5x_sorted.bedgraph-sparseMeth.bed-paGenes
+   1700757 18-142_S189_5x_sorted.bedgraph-unMeth.bed-paGenes
    1031169 18-167_S166_5x_sorted.bedgraph.bed-paGenes
     104928 18-167_S166_5x_sorted.bedgraph-Meth.bed-paGenes
      70633 18-167_S166_5x_sorted.bedgraph-sparseMeth.bed-paGenes
+    855608 18-167_S166_5x_sorted.bedgraph-unMeth.bed-paGenes
    2125120 18-178_S191_5x_sorted.bedgraph.bed-paGenes
     216995 18-178_S191_5x_sorted.bedgraph-Meth.bed-paGenes
     109542 18-178_S191_5x_sorted.bedgraph-sparseMeth.bed-paGenes
+   1798583 18-178_S191_5x_sorted.bedgraph-unMeth.bed-paGenes
    2109395 18-190_S186_5x_sorted.bedgraph.bed-paGenes
     233829 18-190_S186_5x_sorted.bedgraph-Meth.bed-paGenes
     121096 18-190_S186_5x_sorted.bedgraph-sparseMeth.bed-paGenes
+   1754470 18-190_S186_5x_sorted.bedgraph-unMeth.bed-paGenes
    1361831 18-202_S188_5x_sorted.bedgraph.bed-paGenes
     137703 18-202_S188_5x_sorted.bedgraph-Meth.bed-paGenes
      74391 18-202_S188_5x_sorted.bedgraph-sparseMeth.bed-paGenes
+   1149737 18-202_S188_5x_sorted.bedgraph-unMeth.bed-paGenes
    1904690 18-20_S202_5x_sorted.bedgraph.bed-paGenes
     188181 18-20_S202_5x_sorted.bedgraph-Meth.bed-paGenes
     105969 18-20_S202_5x_sorted.bedgraph-sparseMeth.bed-paGenes
+   1610540 18-20_S202_5x_sorted.bedgraph-unMeth.bed-paGenes
    1927885 18-227_S170_5x_sorted.bedgraph.bed-paGenes
     158976 18-227_S170_5x_sorted.bedgraph-Meth.bed-paGenes
     128733 18-227_S170_5x_sorted.bedgraph-sparseMeth.bed-paGenes
+   1640176 18-227_S170_5x_sorted.bedgraph-unMeth.bed-paGenes
    1640090 18-239_S185_5x_sorted.bedgraph.bed-paGenes
     149713 18-239_S185_5x_sorted.bedgraph-Meth.bed-paGenes
      96367 18-239_S185_5x_sorted.bedgraph-sparseMeth.bed-paGenes
+   1394010 18-239_S185_5x_sorted.bedgraph-unMeth.bed-paGenes
    2473359 18-250_S195_5x_sorted.bedgraph.bed-paGenes
     244352 18-250_S195_5x_sorted.bedgraph-Meth.bed-paGenes
     134534 18-250_S195_5x_sorted.bedgraph-sparseMeth.bed-paGenes
+   2094473 18-250_S195_5x_sorted.bedgraph-unMeth.bed-paGenes
    2723857 18-262_S179_5x_sorted.bedgraph.bed-paGenes
     294112 18-262_S179_5x_sorted.bedgraph-Meth.bed-paGenes
     136581 18-262_S179_5x_sorted.bedgraph-sparseMeth.bed-paGenes
+   2293164 18-262_S179_5x_sorted.bedgraph-unMeth.bed-paGenes
    2292027 18-311_S187_5x_sorted.bedgraph.bed-paGenes
     229235 18-311_S187_5x_sorted.bedgraph-Meth.bed-paGenes
     139314 18-311_S187_5x_sorted.bedgraph-sparseMeth.bed-paGenes
+   1923478 18-311_S187_5x_sorted.bedgraph-unMeth.bed-paGenes
    2242517 18-322_S180_5x_sorted.bedgraph.bed-paGenes
     236794 18-322_S180_5x_sorted.bedgraph-Meth.bed-paGenes
     132618 18-322_S180_5x_sorted.bedgraph-sparseMeth.bed-paGenes
+   1873105 18-322_S180_5x_sorted.bedgraph-unMeth.bed-paGenes
    2197995 18-32_S178_5x_sorted.bedgraph.bed-paGenes
     253780 18-32_S178_5x_sorted.bedgraph-Meth.bed-paGenes
     124812 18-32_S178_5x_sorted.bedgraph-sparseMeth.bed-paGenes
+   1819403 18-32_S178_5x_sorted.bedgraph-unMeth.bed-paGenes
     154595 18-334_S164_5x_sorted.bedgraph.bed-paGenes
      18903 18-334_S164_5x_sorted.bedgraph-Meth.bed-paGenes
      10257 18-334_S164_5x_sorted.bedgraph-sparseMeth.bed-paGenes
+    125435 18-334_S164_5x_sorted.bedgraph-unMeth.bed-paGenes
    2805351 18-346_S193_5x_sorted.bedgraph.bed-paGenes
     316493 18-346_S193_5x_sorted.bedgraph-Meth.bed-paGenes
     143625 18-346_S193_5x_sorted.bedgraph-sparseMeth.bed-paGenes
+   2345233 18-346_S193_5x_sorted.bedgraph-unMeth.bed-paGenes
    2021084 18-358_S201_5x_sorted.bedgraph.bed-paGenes
     193827 18-358_S201_5x_sorted.bedgraph-Meth.bed-paGenes
     166711 18-358_S201_5x_sorted.bedgraph-sparseMeth.bed-paGenes
+   1660546 18-358_S201_5x_sorted.bedgraph-unMeth.bed-paGenes
    2359066 18-370_S171_5x_sorted.bedgraph.bed-paGenes
     246608 18-370_S171_5x_sorted.bedgraph-Meth.bed-paGenes
     154120 18-370_S171_5x_sorted.bedgraph-sparseMeth.bed-paGenes
+   1958338 18-370_S171_5x_sorted.bedgraph-unMeth.bed-paGenes
    1824748 18-394_S192_5x_sorted.bedgraph.bed-paGenes
     178103 18-394_S192_5x_sorted.bedgraph-Meth.bed-paGenes
     108664 18-394_S192_5x_sorted.bedgraph-sparseMeth.bed-paGenes
+   1537981 18-394_S192_5x_sorted.bedgraph-unMeth.bed-paGenes
    2445753 18-406_S177_5x_sorted.bedgraph.bed-paGenes
     261071 18-406_S177_5x_sorted.bedgraph-Meth.bed-paGenes
     137408 18-406_S177_5x_sorted.bedgraph-sparseMeth.bed-paGenes
+   2047274 18-406_S177_5x_sorted.bedgraph-unMeth.bed-paGenes
    2296708 18-418_S196_5x_sorted.bedgraph.bed-paGenes
     241211 18-418_S196_5x_sorted.bedgraph-Meth.bed-paGenes
     121680 18-418_S196_5x_sorted.bedgraph-sparseMeth.bed-paGenes
+   1933817 18-418_S196_5x_sorted.bedgraph-unMeth.bed-paGenes
    3131993 18-442_S165_5x_sorted.bedgraph.bed-paGenes
     393457 18-442_S165_5x_sorted.bedgraph-Meth.bed-paGenes
     190517 18-442_S165_5x_sorted.bedgraph-sparseMeth.bed-paGenes
+   2548019 18-442_S165_5x_sorted.bedgraph-unMeth.bed-paGenes
    2637537 18-44_S198_5x_sorted.bedgraph.bed-paGenes
     292397 18-44_S198_5x_sorted.bedgraph-Meth.bed-paGenes
     142486 18-44_S198_5x_sorted.bedgraph-sparseMeth.bed-paGenes
+   2202654 18-44_S198_5x_sorted.bedgraph-unMeth.bed-paGenes
    2998302 18-454_S197_5x_sorted.bedgraph.bed-paGenes
     342494 18-454_S197_5x_sorted.bedgraph-Meth.bed-paGenes
     160652 18-454_S197_5x_sorted.bedgraph-sparseMeth.bed-paGenes
+   2495156 18-454_S197_5x_sorted.bedgraph-unMeth.bed-paGenes
    3107314 18-466_S199_5x_sorted.bedgraph.bed-paGenes
     348043 18-466_S199_5x_sorted.bedgraph-Meth.bed-paGenes
     175941 18-466_S199_5x_sorted.bedgraph-sparseMeth.bed-paGenes
+   2583330 18-466_S199_5x_sorted.bedgraph-unMeth.bed-paGenes
    2373436 18-55_S190_5x_sorted.bedgraph.bed-paGenes
     240712 18-55_S190_5x_sorted.bedgraph-Meth.bed-paGenes
     128374 18-55_S190_5x_sorted.bedgraph-sparseMeth.bed-paGenes
+   2004350 18-55_S190_5x_sorted.bedgraph-unMeth.bed-paGenes
    1668755 18-67_S176_5x_sorted.bedgraph.bed-paGenes
     162465 18-67_S176_5x_sorted.bedgraph-Meth.bed-paGenes
      97076 18-67_S176_5x_sorted.bedgraph-sparseMeth.bed-paGenes
+   1409214 18-67_S176_5x_sorted.bedgraph-unMeth.bed-paGenes
    2844566 18-79_S181_5x_sorted.bedgraph.bed-paGenes
     310037 18-79_S181_5x_sorted.bedgraph-Meth.bed-paGenes
     159033 18-79_S181_5x_sorted.bedgraph-sparseMeth.bed-paGenes
+   2375496 18-79_S181_5x_sorted.bedgraph-unMeth.bed-paGenes
     429911 18-91_S160_5x_sorted.bedgraph.bed-paGenes
      31477 18-91_S160_5x_sorted.bedgraph-Meth.bed-paGenes
      38646 18-91_S160_5x_sorted.bedgraph-sparseMeth.bed-paGenes
+    359788 18-91_S160_5x_sorted.bedgraph-unMeth.bed-paGenes
     308018 18-9_S159_5x_sorted.bedgraph.bed-paGenes
      23481 18-9_S159_5x_sorted.bedgraph-Meth.bed-paGenes
      28182 18-9_S159_5x_sorted.bedgraph-sparseMeth.bed-paGenes
+    256355 18-9_S159_5x_sorted.bedgraph-unMeth.bed-paGenes
    1973820 L-1029_S183_5x_sorted.bedgraph.bed-paGenes
     200288 L-1029_S183_5x_sorted.bedgraph-Meth.bed-paGenes
      89622 L-1029_S183_5x_sorted.bedgraph-sparseMeth.bed-paGenes
+   1683910 L-1029_S183_5x_sorted.bedgraph-unMeth.bed-paGenes
    1887017 L-1038_S184_5x_sorted.bedgraph.bed-paGenes
     189968 L-1038_S184_5x_sorted.bedgraph-Meth.bed-paGenes
      92877 L-1038_S184_5x_sorted.bedgraph-sparseMeth.bed-paGenes
+   1604172 L-1038_S184_5x_sorted.bedgraph-unMeth.bed-paGenes
    2544499 L-1053_S167_5x_sorted.bedgraph.bed-paGenes
     304109 L-1053_S167_5x_sorted.bedgraph-Meth.bed-paGenes
     137294 L-1053_S167_5x_sorted.bedgraph-sparseMeth.bed-paGenes
+   2103096 L-1053_S167_5x_sorted.bedgraph-unMeth.bed-paGenes
    3018782 L-1059_S175_5x_sorted.bedgraph.bed-paGenes
     319324 L-1059_S175_5x_sorted.bedgraph-Meth.bed-paGenes
     135714 L-1059_S175_5x_sorted.bedgraph-sparseMeth.bed-paGenes
+   2563744 L-1059_S175_5x_sorted.bedgraph-unMeth.bed-paGenes
    2873325 L-1093_S168_5x_sorted.bedgraph.bed-paGenes
     339791 L-1093_S168_5x_sorted.bedgraph-Meth.bed-paGenes
     156871 L-1093_S168_5x_sorted.bedgraph-sparseMeth.bed-paGenes
+   2376663 L-1093_S168_5x_sorted.bedgraph-unMeth.bed-paGenes
    3417373 L-1257_S205_5x_sorted.bedgraph.bed-paGenes
     417656 L-1257_S205_5x_sorted.bedgraph-Meth.bed-paGenes
     149521 L-1257_S205_5x_sorted.bedgraph-sparseMeth.bed-paGenes
+   2850196 L-1257_S205_5x_sorted.bedgraph-unMeth.bed-paGenes
    3215256 L-1263_S173_5x_sorted.bedgraph.bed-paGenes
     357484 L-1263_S173_5x_sorted.bedgraph-Meth.bed-paGenes
     179356 L-1263_S173_5x_sorted.bedgraph-sparseMeth.bed-paGenes
+   2678416 L-1263_S173_5x_sorted.bedgraph-unMeth.bed-paGenes
    1832809 L-562_S174_5x_sorted.bedgraph.bed-paGenes
     157124 L-562_S174_5x_sorted.bedgraph-Meth.bed-paGenes
      89008 L-562_S174_5x_sorted.bedgraph-sparseMeth.bed-paGenes
+   1586677 L-562_S174_5x_sorted.bedgraph-unMeth.bed-paGenes
    2871151 L-571_S194_5x_sorted.bedgraph.bed-paGenes
     303845 L-571_S194_5x_sorted.bedgraph-Meth.bed-paGenes
     131426 L-571_S194_5x_sorted.bedgraph-sparseMeth.bed-paGenes
+   2435880 L-571_S194_5x_sorted.bedgraph-unMeth.bed-paGenes
    2482095 L-661_S182_5x_sorted.bedgraph.bed-paGenes
     262238 L-661_S182_5x_sorted.bedgraph-Meth.bed-paGenes
     123083 L-661_S182_5x_sorted.bedgraph-sparseMeth.bed-paGenes
+   2096774 L-661_S182_5x_sorted.bedgraph-unMeth.bed-paGenes
    2699045 L-704_S169_5x_sorted.bedgraph.bed-paGenes
     321774 L-704_S169_5x_sorted.bedgraph-Meth.bed-paGenes
     143745 L-704_S169_5x_sorted.bedgraph-sparseMeth.bed-paGenes
+   2233526 L-704_S169_5x_sorted.bedgraph-unMeth.bed-paGenes
     913948 L-728_S161_5x_sorted.bedgraph.bed-paGenes
      79369 L-728_S161_5x_sorted.bedgraph-Meth.bed-paGenes
      69340 L-728_S161_5x_sorted.bedgraph-sparseMeth.bed-paGenes
+    765239 L-728_S161_5x_sorted.bedgraph-unMeth.bed-paGenes
    1746638 L-862_S200_5x_sorted.bedgraph.bed-paGenes
     190324 L-862_S200_5x_sorted.bedgraph-Meth.bed-paGenes
      81545 L-862_S200_5x_sorted.bedgraph-sparseMeth.bed-paGenes
+   1474769 L-862_S200_5x_sorted.bedgraph-unMeth.bed-paGenes
    2061603 L-924_S204_5x_sorted.bedgraph.bed-paGenes
     186125 L-924_S204_5x_sorted.bedgraph-Meth.bed-paGenes
     106038 L-924_S204_5x_sorted.bedgraph-sparseMeth.bed-paGenes
+   1769440 L-924_S204_5x_sorted.bedgraph-unMeth.bed-paGenes
    2666083 L-933_S203_5x_sorted.bedgraph.bed-paGenes
     269011 L-933_S203_5x_sorted.bedgraph-Meth.bed-paGenes
     120153 L-933_S203_5x_sorted.bedgraph-sparseMeth.bed-paGenes
- 117820721 total
+   2276919 L-933_S203_5x_sorted.bedgraph-unMeth.bed-paGenes
+ 202871070 total

@@ -1,142 +1,189 @@
     571446 18-106_S163_5x_sorted.bedgraph.bed-paCDS
      48844 18-106_S163_5x_sorted.bedgraph-Meth.bed-paCDS
      36805 18-106_S163_5x_sorted.bedgraph-sparseMeth.bed-paCDS
+    485797 18-106_S163_5x_sorted.bedgraph-unMeth.bed-paCDS
     673262 18-118_S162_5x_sorted.bedgraph.bed-paCDS
      56096 18-118_S162_5x_sorted.bedgraph-Meth.bed-paCDS
      39317 18-118_S162_5x_sorted.bedgraph-sparseMeth.bed-paCDS
+    577849 18-118_S162_5x_sorted.bedgraph-unMeth.bed-paCDS
     565672 18-130_S172_5x_sorted.bedgraph.bed-paCDS
      41255 18-130_S172_5x_sorted.bedgraph-Meth.bed-paCDS
      35046 18-130_S172_5x_sorted.bedgraph-sparseMeth.bed-paCDS
+    489371 18-130_S172_5x_sorted.bedgraph-unMeth.bed-paCDS
     634066 18-142_S189_5x_sorted.bedgraph.bed-paCDS
      47573 18-142_S189_5x_sorted.bedgraph-Meth.bed-paCDS
      31894 18-142_S189_5x_sorted.bedgraph-sparseMeth.bed-paCDS
+    554599 18-142_S189_5x_sorted.bedgraph-unMeth.bed-paCDS
     352577 18-167_S166_5x_sorted.bedgraph.bed-paCDS
      28018 18-167_S166_5x_sorted.bedgraph-Meth.bed-paCDS
      22636 18-167_S166_5x_sorted.bedgraph-sparseMeth.bed-paCDS
+    301923 18-167_S166_5x_sorted.bedgraph-unMeth.bed-paCDS
     658220 18-178_S191_5x_sorted.bedgraph.bed-paCDS
      53060 18-178_S191_5x_sorted.bedgraph-Meth.bed-paCDS
      29737 18-178_S191_5x_sorted.bedgraph-sparseMeth.bed-paCDS
+    575423 18-178_S191_5x_sorted.bedgraph-unMeth.bed-paCDS
     649726 18-190_S186_5x_sorted.bedgraph.bed-paCDS
      54962 18-190_S186_5x_sorted.bedgraph-Meth.bed-paCDS
      34289 18-190_S186_5x_sorted.bedgraph-sparseMeth.bed-paCDS
+    560475 18-190_S186_5x_sorted.bedgraph-unMeth.bed-paCDS
     460546 18-202_S188_5x_sorted.bedgraph.bed-paCDS
      36958 18-202_S188_5x_sorted.bedgraph-Meth.bed-paCDS
      23869 18-202_S188_5x_sorted.bedgraph-sparseMeth.bed-paCDS
+    399719 18-202_S188_5x_sorted.bedgraph-unMeth.bed-paCDS
     587859 18-20_S202_5x_sorted.bedgraph.bed-paCDS
      43986 18-20_S202_5x_sorted.bedgraph-Meth.bed-paCDS
      29675 18-20_S202_5x_sorted.bedgraph-sparseMeth.bed-paCDS
+    514198 18-20_S202_5x_sorted.bedgraph-unMeth.bed-paCDS
     624032 18-227_S170_5x_sorted.bedgraph.bed-paCDS
      41430 18-227_S170_5x_sorted.bedgraph-Meth.bed-paCDS
      37899 18-227_S170_5x_sorted.bedgraph-sparseMeth.bed-paCDS
+    544703 18-227_S170_5x_sorted.bedgraph-unMeth.bed-paCDS
     539677 18-239_S185_5x_sorted.bedgraph.bed-paCDS
      39262 18-239_S185_5x_sorted.bedgraph-Meth.bed-paCDS
      29128 18-239_S185_5x_sorted.bedgraph-sparseMeth.bed-paCDS
+    471287 18-239_S185_5x_sorted.bedgraph-unMeth.bed-paCDS
     737941 18-250_S195_5x_sorted.bedgraph.bed-paCDS
      56183 18-250_S195_5x_sorted.bedgraph-Meth.bed-paCDS
      35126 18-250_S195_5x_sorted.bedgraph-sparseMeth.bed-paCDS
+    646632 18-250_S195_5x_sorted.bedgraph-unMeth.bed-paCDS
     794411 18-262_S179_5x_sorted.bedgraph.bed-paCDS
      65846 18-262_S179_5x_sorted.bedgraph-Meth.bed-paCDS
      35143 18-262_S179_5x_sorted.bedgraph-sparseMeth.bed-paCDS
+    693422 18-262_S179_5x_sorted.bedgraph-unMeth.bed-paCDS
     699364 18-311_S187_5x_sorted.bedgraph.bed-paCDS
      55823 18-311_S187_5x_sorted.bedgraph-Meth.bed-paCDS
      37304 18-311_S187_5x_sorted.bedgraph-sparseMeth.bed-paCDS
+    606237 18-311_S187_5x_sorted.bedgraph-unMeth.bed-paCDS
     695885 18-322_S180_5x_sorted.bedgraph.bed-paCDS
      56533 18-322_S180_5x_sorted.bedgraph-Meth.bed-paCDS
      36168 18-322_S180_5x_sorted.bedgraph-sparseMeth.bed-paCDS
+    603184 18-322_S180_5x_sorted.bedgraph-unMeth.bed-paCDS
     677990 18-32_S178_5x_sorted.bedgraph.bed-paCDS
      60465 18-32_S178_5x_sorted.bedgraph-Meth.bed-paCDS
      34591 18-32_S178_5x_sorted.bedgraph-sparseMeth.bed-paCDS
+    582934 18-32_S178_5x_sorted.bedgraph-unMeth.bed-paCDS
      51444 18-334_S164_5x_sorted.bedgraph.bed-paCDS
       4899 18-334_S164_5x_sorted.bedgraph-Meth.bed-paCDS
       3376 18-334_S164_5x_sorted.bedgraph-sparseMeth.bed-paCDS
+     43169 18-334_S164_5x_sorted.bedgraph-unMeth.bed-paCDS
     810239 18-346_S193_5x_sorted.bedgraph.bed-paCDS
      68848 18-346_S193_5x_sorted.bedgraph-Meth.bed-paCDS
      37185 18-346_S193_5x_sorted.bedgraph-sparseMeth.bed-paCDS
+    704206 18-346_S193_5x_sorted.bedgraph-unMeth.bed-paCDS
     648914 18-358_S201_5x_sorted.bedgraph.bed-paCDS
      48795 18-358_S201_5x_sorted.bedgraph-Meth.bed-paCDS
      46362 18-358_S201_5x_sorted.bedgraph-sparseMeth.bed-paCDS
+    553757 18-358_S201_5x_sorted.bedgraph-unMeth.bed-paCDS
     716978 18-370_S171_5x_sorted.bedgraph.bed-paCDS
      58915 18-370_S171_5x_sorted.bedgraph-Meth.bed-paCDS
      43389 18-370_S171_5x_sorted.bedgraph-sparseMeth.bed-paCDS
+    614674 18-370_S171_5x_sorted.bedgraph-unMeth.bed-paCDS
     591952 18-394_S192_5x_sorted.bedgraph.bed-paCDS
      45093 18-394_S192_5x_sorted.bedgraph-Meth.bed-paCDS
      32028 18-394_S192_5x_sorted.bedgraph-sparseMeth.bed-paCDS
+    514831 18-394_S192_5x_sorted.bedgraph-unMeth.bed-paCDS
     732455 18-406_S177_5x_sorted.bedgraph.bed-paCDS
      59695 18-406_S177_5x_sorted.bedgraph-Meth.bed-paCDS
      35249 18-406_S177_5x_sorted.bedgraph-sparseMeth.bed-paCDS
+    637511 18-406_S177_5x_sorted.bedgraph-unMeth.bed-paCDS
     699209 18-418_S196_5x_sorted.bedgraph.bed-paCDS
      56983 18-418_S196_5x_sorted.bedgraph-Meth.bed-paCDS
      32022 18-418_S196_5x_sorted.bedgraph-sparseMeth.bed-paCDS
+    610204 18-418_S196_5x_sorted.bedgraph-unMeth.bed-paCDS
     838414 18-442_S165_5x_sorted.bedgraph.bed-paCDS
      77091 18-442_S165_5x_sorted.bedgraph-Meth.bed-paCDS
      43679 18-442_S165_5x_sorted.bedgraph-sparseMeth.bed-paCDS
+    717644 18-442_S165_5x_sorted.bedgraph-unMeth.bed-paCDS
     762480 18-44_S198_5x_sorted.bedgraph.bed-paCDS
      64179 18-44_S198_5x_sorted.bedgraph-Meth.bed-paCDS
      35679 18-44_S198_5x_sorted.bedgraph-sparseMeth.bed-paCDS
+    662622 18-44_S198_5x_sorted.bedgraph-unMeth.bed-paCDS
     869380 18-454_S197_5x_sorted.bedgraph.bed-paCDS
      75348 18-454_S197_5x_sorted.bedgraph-Meth.bed-paCDS
      40691 18-454_S197_5x_sorted.bedgraph-sparseMeth.bed-paCDS
+    753341 18-454_S197_5x_sorted.bedgraph-unMeth.bed-paCDS
     846338 18-466_S199_5x_sorted.bedgraph.bed-paCDS
      70400 18-466_S199_5x_sorted.bedgraph-Meth.bed-paCDS
      40472 18-466_S199_5x_sorted.bedgraph-sparseMeth.bed-paCDS
+    735466 18-466_S199_5x_sorted.bedgraph-unMeth.bed-paCDS
     712921 18-55_S190_5x_sorted.bedgraph.bed-paCDS
      55260 18-55_S190_5x_sorted.bedgraph-Meth.bed-paCDS
      33509 18-55_S190_5x_sorted.bedgraph-sparseMeth.bed-paCDS
+    624152 18-55_S190_5x_sorted.bedgraph-unMeth.bed-paCDS
     552326 18-67_S176_5x_sorted.bedgraph.bed-paCDS
      42717 18-67_S176_5x_sorted.bedgraph-Meth.bed-paCDS
      29882 18-67_S176_5x_sorted.bedgraph-sparseMeth.bed-paCDS
+    479727 18-67_S176_5x_sorted.bedgraph-unMeth.bed-paCDS
     824735 18-79_S181_5x_sorted.bedgraph.bed-paCDS
      68135 18-79_S181_5x_sorted.bedgraph-Meth.bed-paCDS
      38691 18-79_S181_5x_sorted.bedgraph-sparseMeth.bed-paCDS
+    717909 18-79_S181_5x_sorted.bedgraph-unMeth.bed-paCDS
     175953 18-91_S160_5x_sorted.bedgraph.bed-paCDS
      10343 18-91_S160_5x_sorted.bedgraph-Meth.bed-paCDS
      15396 18-91_S160_5x_sorted.bedgraph-sparseMeth.bed-paCDS
+    150214 18-91_S160_5x_sorted.bedgraph-unMeth.bed-paCDS
     136368 18-9_S159_5x_sorted.bedgraph.bed-paCDS
       8832 18-9_S159_5x_sorted.bedgraph-Meth.bed-paCDS
      12407 18-9_S159_5x_sorted.bedgraph-sparseMeth.bed-paCDS
+    115129 18-9_S159_5x_sorted.bedgraph-unMeth.bed-paCDS
     630712 L-1029_S183_5x_sorted.bedgraph.bed-paCDS
      50978 L-1029_S183_5x_sorted.bedgraph-Meth.bed-paCDS
      26509 L-1029_S183_5x_sorted.bedgraph-sparseMeth.bed-paCDS
+    553225 L-1029_S183_5x_sorted.bedgraph-unMeth.bed-paCDS
     603722 L-1038_S184_5x_sorted.bedgraph.bed-paCDS
      47838 L-1038_S184_5x_sorted.bedgraph-Meth.bed-paCDS
      26959 L-1038_S184_5x_sorted.bedgraph-sparseMeth.bed-paCDS
+    528925 L-1038_S184_5x_sorted.bedgraph-unMeth.bed-paCDS
     757757 L-1053_S167_5x_sorted.bedgraph.bed-paCDS
      69149 L-1053_S167_5x_sorted.bedgraph-Meth.bed-paCDS
      37707 L-1053_S167_5x_sorted.bedgraph-sparseMeth.bed-paCDS
+    650901 L-1053_S167_5x_sorted.bedgraph-unMeth.bed-paCDS
     865077 L-1059_S175_5x_sorted.bedgraph.bed-paCDS
      71207 L-1059_S175_5x_sorted.bedgraph-Meth.bed-paCDS
      32387 L-1059_S175_5x_sorted.bedgraph-sparseMeth.bed-paCDS
+    761483 L-1059_S175_5x_sorted.bedgraph-unMeth.bed-paCDS
     815296 L-1093_S168_5x_sorted.bedgraph.bed-paCDS
      73276 L-1093_S168_5x_sorted.bedgraph-Meth.bed-paCDS
      39173 L-1093_S168_5x_sorted.bedgraph-sparseMeth.bed-paCDS
+    702847 L-1093_S168_5x_sorted.bedgraph-unMeth.bed-paCDS
     941011 L-1257_S205_5x_sorted.bedgraph.bed-paCDS
      85887 L-1257_S205_5x_sorted.bedgraph-Meth.bed-paCDS
      37159 L-1257_S205_5x_sorted.bedgraph-sparseMeth.bed-paCDS
+    817965 L-1257_S205_5x_sorted.bedgraph-unMeth.bed-paCDS
     886159 L-1263_S173_5x_sorted.bedgraph.bed-paCDS
      75479 L-1263_S173_5x_sorted.bedgraph-Meth.bed-paCDS
      41882 L-1263_S173_5x_sorted.bedgraph-sparseMeth.bed-paCDS
+    768798 L-1263_S173_5x_sorted.bedgraph-unMeth.bed-paCDS
     603092 L-562_S174_5x_sorted.bedgraph.bed-paCDS
      42876 L-562_S174_5x_sorted.bedgraph-Meth.bed-paCDS
      26438 L-562_S174_5x_sorted.bedgraph-sparseMeth.bed-paCDS
+    533778 L-562_S174_5x_sorted.bedgraph-unMeth.bed-paCDS
     819447 L-571_S194_5x_sorted.bedgraph.bed-paCDS
      66996 L-571_S194_5x_sorted.bedgraph-Meth.bed-paCDS
      32298 L-571_S194_5x_sorted.bedgraph-sparseMeth.bed-paCDS
+    720153 L-571_S194_5x_sorted.bedgraph-unMeth.bed-paCDS
     740761 L-661_S182_5x_sorted.bedgraph.bed-paCDS
      61025 L-661_S182_5x_sorted.bedgraph-Meth.bed-paCDS
      31759 L-661_S182_5x_sorted.bedgraph-sparseMeth.bed-paCDS
+    647977 L-661_S182_5x_sorted.bedgraph-unMeth.bed-paCDS
     790854 L-704_S169_5x_sorted.bedgraph.bed-paCDS
      71340 L-704_S169_5x_sorted.bedgraph-Meth.bed-paCDS
      38598 L-704_S169_5x_sorted.bedgraph-sparseMeth.bed-paCDS
+    680916 L-704_S169_5x_sorted.bedgraph-unMeth.bed-paCDS
     357394 L-728_S161_5x_sorted.bedgraph.bed-paCDS
      26137 L-728_S161_5x_sorted.bedgraph-Meth.bed-paCDS
      26805 L-728_S161_5x_sorted.bedgraph-sparseMeth.bed-paCDS
+    304452 L-728_S161_5x_sorted.bedgraph-unMeth.bed-paCDS
     570576 L-862_S200_5x_sorted.bedgraph.bed-paCDS
      48659 L-862_S200_5x_sorted.bedgraph-Meth.bed-paCDS
      25045 L-862_S200_5x_sorted.bedgraph-sparseMeth.bed-paCDS
+    496872 L-862_S200_5x_sorted.bedgraph-unMeth.bed-paCDS
     664759 L-924_S204_5x_sorted.bedgraph.bed-paCDS
      48694 L-924_S204_5x_sorted.bedgraph-Meth.bed-paCDS
      30611 L-924_S204_5x_sorted.bedgraph-sparseMeth.bed-paCDS
+    585454 L-924_S204_5x_sorted.bedgraph-unMeth.bed-paCDS
     780408 L-933_S203_5x_sorted.bedgraph.bed-paCDS
      62483 L-933_S203_5x_sorted.bedgraph-Meth.bed-paCDS
      30111 L-933_S203_5x_sorted.bedgraph-sparseMeth.bed-paCDS
-  34755741 total
+    687814 L-933_S203_5x_sorted.bedgraph-unMeth.bed-paCDS
+  61439610 total

@@ -1,0 +1,8 @@
+   1893256 Past-CGMotif-CDS-Overlaps.txt
+         0 Past-CGMotif-Flanks-Downstream-Overlaps.txt
+   3041507 Past-CGMotif-Flanks-Overlaps.txt
+   1680722 Past-CGMotif-Flanks-Upstream-Overlaps.txt
+   7551011 Past-CGMotif-Gene-Overlaps.txt
+  18128757 Past-CGMotif-Intergenic-Overlaps.txt
+   5649303 Past-CGMotif-Intron-Overlaps.txt
+  37944556 total

@@ -1,13 +1,24 @@
-visual# *Porites astreoides* Thermal Transplant WGBS Workflow
-Script modified from [D Becker-Polinski](https://github.com/hputnam/Becker_E5/blob/master/Bioinformatics/Workflows/Becker_WGBS_Workflow.md)
+# *Porites astreoides* Thermal Transplant WGBS Workflow
 
-## 1) Methylation Quantification with Methylseq for *P. astreoides*
+This script takes raw whole genome bisulfite sequencing files to bed files where they can then be analzyed in R. The laboratory preparation methods can be found [here](https://kevinhwong1.github.io/KevinHWong_Notebook/Thermal-Transplant-WGBS-PicoMethyl-Protocol/).
+
+**Table of Contents:**
+1. [**Methylation Quantification with Methylseq**](#methylseq)  
+2. [**Merge strands with Biskmark**](#merge)  
+3. [**Create bedgraphs post merge**](#bedgraph)   
+4. [**CpGs for 5x coverage**](#5xcov)    
+5. [**CpGs for 10x coverage**](#10xcov)    
+6. [**Select samples**](#select)    
+7. [**Intersect across samples and genes**](#intersect)    
+
+
+## <a name="methylseq"></a> **1. Methylation Quantification with Methylseq**
 
 A few testing parameters for the settings can be found in this [notebook post](https://kevinhwong1.github.io/KevinHWong_Notebook/Methylseq-trimming-test-to-remove-m-bias/). I decided to use the Trim_3 parameters as it keeps the most amount of data while still reducing the m-bias.
 
 I also used the *Porites astreoides* genome from [this repository](https://github.com/hputnam/Past_Genome).
 
-### methylseq_trim3.sh
+`nano methylseq_trim3.sh`
 
 ```bash
 #!/bin/bash
@@ -50,13 +61,13 @@ nextflow run nf-core/methylseq \
 scp kevin_wong1@ssh3.hac.uri.edu:/data/putnamlab/kevin_wong1/Thermal_Transplant_WGBS/methylseq_trim3/WGBS_methylseq/MultiQC/multiqc_report.html MyProjects/Thermal_Transplant_Molecular/output/multiqc_report_trim3_full.html
 ```
 
-## 2) Merge strands
+## <a name="merge"></a> **2. Merge strands with Biskmark**
 
 The Bismark coverage2cytosine command re-reads the genome-wide report and merges methylation evidence of both top and bottom strand.
 
 `mkdir cov_to_cyto`
 
-### cov_to_cyto.sh
+`nano cov_to_cyto.sh`
 
 ```bash
 #!/bin/bash
@@ -86,7 +97,7 @@ module load Bismark/0.20.1-foss-2018b
 /data/putnamlab/kevin_wong1/Thermal_Transplant_WGBS/Past_WGBS/methylseq_trim3/WGBS_methylseq/bismark_methylation_calls/methylation_coverage/{}_L004_R1_001_val_1_bismark_bt2_pe.deduplicated.bismark.cov.gz
 ```
 
-## 3) Sorting the merged files so scaffolds are all in the same order and multiIntersectBed will run correctly. Run for loop using bedtools to sort all .tab files
+We now have to sort the merged files so the scaffolds are all in the same order and multiIntersectBed will run correctly. Run this for loop using bedtools to sort all .tab files
 
 `nano bedtools.sort.sh`
 
@@ -112,9 +123,36 @@ do
 done
 ```
 
-### Create files for statistical analysis
+## <a name="bedgraph"></a> **3. Create bedgraphs post merge**
 
-#### Run loop to filter CpGs for 5x coverage, creating tab files with raw count for glms
+These bedgraph files are neccessary for the characterization of methylation in [genomic feature analysis](https://github.com/kevinhwong1/Thermal_Transplant_Molecular/blob/main/scripts/Past_Genomic_Feature_Analysis_20221014.md).
+
+**5x bedgraph**
+
+```
+for f in *_sorted.cov
+do
+  STEM=$(basename "${f}" _sorted.cov)
+  cat "${f}" | awk -F $'\t' 'BEGIN {OFS = FS} {if ($5+$6 >= 5) {print $1, $2, $3, $4}}' \
+  > "${STEM}"_5x_sorted.bedgraph
+done
+```
+
+**10x bedgraph**
+
+```
+for f in *_sorted.cov
+do
+  STEM=$(basename "${f}" _sorted.cov)
+  cat "${f}" | awk -F $'\t' 'BEGIN {OFS = FS} {if ($5+$6 >= 10) {print $1, $2, $3, $4}}' \
+  > "${STEM}"_10x_sorted.bedgraph
+done
+```
+
+
+## <a name="5xcov"></a> **4. CpGs for 5x coverage**
+
+Run loop to filter CpGs for 5x coverage, creating tab files with raw count for glms.
 
 ```
 for f in *_sorted.cov
@@ -178,7 +216,9 @@ done
 250925802 total
 ```
 
-### Run loop to filter CpGs for 10x coverage, creating tab files with raw count for glms
+## <a name="10xcov"></a> **5. CpGs for 10x coverage**
+
+Run loop to filter CpGs for 10x coverage, creating tab files with raw count for glms.
 
 ```
 for f in *_sorted.cov
@@ -242,635 +282,13 @@ done
 68718897 total
 ```
 
-## 4) Create a file with positions found in all samples at specified coverage
+## <a name="select"></a> **6. Select samples**
 
-`nano 5x_intersect.sh`
-
-```bash
-#!/bin/bash
-#SBATCH -t 500:00:00
-#SBATCH --nodes=1 --ntasks-per-node=10
-#SBATCH --mem=500GB
-#SBATCH --account=putnamlab
-#SBATCH --export=NONE
-#SBATCH --mail-type=BEGIN,END,FAIL
-#SBATCH --mail-user=kevin_wong1@uri.edu
-#SBATCH -D /data/putnamlab/kevin_wong1/Thermal_Transplant_WGBS/Past_WGBS/cov_to_cyto
-#SBATCH --cpus-per-task=3
-
-# load modules needed
-
-module load BEDTools/2.27.1-foss-2018b
-
-multiIntersectBed -i *_5x_sorted.tab > CpG.all.samps.5x_sorted.bed
-
-cat CpG.all.samps.5x_sorted.bed | awk '$4 ==47' > CpG.filt.all.samps.5x_sorted.bed
-
-```
-
-`nano 10x_intersect.sh`
-
-```bash
-#!/bin/bash
-#SBATCH -t 500:00:00
-#SBATCH --nodes=1 --ntasks-per-node=10
-#SBATCH --mem=500GB
-#SBATCH --account=putnamlab
-#SBATCH --export=NONE
-#SBATCH --mail-type=BEGIN,END,FAIL
-#SBATCH --mail-user=kevin_wong1@uri.edu
-#SBATCH -D /data/putnamlab/kevin_wong1/Thermal_Transplant_WGBS/Past_WGBS/cov_to_cyto
-#SBATCH --cpus-per-task=3
-
-# load modules needed
-
-module load BEDTools/2.27.1-foss-2018b
-
-multiIntersectBed -i *_10x_sorted.tab > CpG.all.samps.10x_sorted.bed
-
-cat CpG.all.samps.10x_sorted.bed | awk '$4 ==47' > CpG.filt.all.samps.10x_sorted.bed
-
-```
-
-## 5) Create bedgraphs post merge
-
-5x bedgraph
-
-```
-for f in *_sorted.cov
-do
-  STEM=$(basename "${f}" _sorted.cov)
-  cat "${f}" | awk -F $'\t' 'BEGIN {OFS = FS} {if ($5+$6 >= 5) {print $1, $2, $3, $4}}' \
-  > "${STEM}"_5x_sorted.bedgraph
-done
-```
-
-10 x bedgraph
-
-```
-for f in *_sorted.cov
-do
-  STEM=$(basename "${f}" _sorted.cov)
-  cat "${f}" | awk -F $'\t' 'BEGIN {OFS = FS} {if ($5+$6 >= 10) {print $1, $2, $3, $4}}' \
-  > "${STEM}"_10x_sorted.bedgraph
-done
-```
-
-## 6) Use intersectBed to find where loci and genes intersect, allowing loci to be mapped to annotated genes
-
-#### Filtered gff to only include gene positions modified.gff > gene.gff
-
-```bash
-cd /data/putnamlab/kevin_wong1/Past_Genome/past_struc_annotations_v1
-awk '{if ($3 == "gene") {print}}' Pastreoides_all_v1.gff  > Pastreoides_all_v1.gene.gff
-```
-
-`nano 5x_intersectBed.sh`
-
-```
-#!/bin/bash
-#SBATCH -t 500:00:00
-#SBATCH --nodes=1 --ntasks-per-node=10
-#SBATCH --mem=500GB
-#SBATCH --account=putnamlab
-#SBATCH --export=NONE
-#SBATCH --mail-type=BEGIN,END,FAIL
-#SBATCH --mail-user=kevin_wong1@uri.edu
-#SBATCH -D /data/putnamlab/kevin_wong1/Thermal_Transplant_WGBS/Past_WGBS/cov_to_cyto
-#SBATCH --cpus-per-task=3
-
-# load modules needed
-
-module load BEDTools/2.27.1-foss-2018b
-
-for i in *5x_sorted.tab
-do
-  intersectBed \
-  -wb \
-  -a ${i} \
-  -b /data/putnamlab/kevin_wong1/Past_Genome/past_struc_annotations_v1/Pastreoides_all_v1.gene.gff \
-  > ${i}_gene
-done
-```
-
-`nano 10x_intersectBed.sh`
-
-```
-#!/bin/bash
-#SBATCH -t 500:00:00
-#SBATCH --nodes=1 --ntasks-per-node=10
-#SBATCH --mem=500GB
-#SBATCH --account=putnamlab
-#SBATCH --export=NONE
-#SBATCH --mail-type=BEGIN,END,FAIL
-#SBATCH --mail-user=kevin_wong1@uri.edu
-#SBATCH -D /data/putnamlab/kevin_wong1/Thermal_Transplant_WGBS/Past_WGBS/cov_to_cyto
-#SBATCH --cpus-per-task=3
-
-# load modules needed
-
-module load BEDTools/2.27.1-foss-2018b
-
-for i in *10x_sorted.tab
-do
-  intersectBed \
-  -wb \
-  -a ${i} \
-  -b /data/putnamlab/kevin_wong1/Past_Genome/past_struc_annotations_v1/Pastreoides_all_v1.gene.gff \
-  > ${i}_gene
-done
-```
-
-## 7) Intersect with file to subset only those positions found in all samples
-
-`nano 5x_intersect_final.sh`
-
-```bash
-#!/bin/bash
-#SBATCH -t 500:00:00
-#SBATCH --nodes=1 --ntasks-per-node=10
-#SBATCH --mem=120GB
-#SBATCH --account=putnamlab
-#SBATCH --export=NONE
-#SBATCH --mail-type=BEGIN,END,FAIL
-#SBATCH --mail-user=kevin_wong1@uri.edu
-#SBATCH -D /data/putnamlab/kevin_wong1/Thermal_Transplant_WGBS/Past_WGBS/cov_to_cyto
-#SBATCH --cpus-per-task=3
-
-# load modules needed
-
-module load BEDTools/2.27.1-foss-2018b
-
-for i in *_5x_sorted.tab_gene
-do
-  intersectBed \
-  -a ${i} \
-  -b CpG.filt.all.samps.5x_sorted.bed \
-  > ${i}_CpG_5x_enrichment.bed
-done
-```
-
-`wc -l *5x_enrichment.bed`
-
-```
-5231 18-106_S163_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-5231 18-118_S162_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-5231 18-130_S172_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-5231 18-142_S189_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-5231 18-167_S166_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-5231 18-178_S191_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-5231 18-190_S186_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-5231 18-202_S188_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-5231 18-20_S202_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-5231 18-227_S170_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-5231 18-239_S185_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-5231 18-250_S195_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-5231 18-262_S179_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-5231 18-311_S187_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-5231 18-322_S180_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-5231 18-32_S178_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-5231 18-334_S164_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-5231 18-346_S193_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-5231 18-358_S201_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-5231 18-370_S171_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-5231 18-394_S192_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-5231 18-406_S177_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-5231 18-418_S196_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-5231 18-442_S165_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-5231 18-44_S198_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-5231 18-454_S197_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-5231 18-466_S199_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-5231 18-55_S190_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-5231 18-67_S176_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-5231 18-79_S181_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-5231 18-91_S160_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-5231 18-9_S159_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-5231 L-1029_S183_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-5231 L-1038_S184_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-5231 L-1053_S167_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-5231 L-1059_S175_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-5231 L-1093_S168_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-5231 L-1257_S205_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-5231 L-1263_S173_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-5231 L-562_S174_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-5231 L-571_S194_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-5231 L-661_S182_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-5231 L-704_S169_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-5231 L-728_S161_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-5231 L-862_S200_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-5231 L-924_S204_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-5231 L-933_S203_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-245857 total
-```
-
-`nano 10x_intersect_final.sh`
-
-```bash
-#!/bin/bash
-#SBATCH -t 500:00:00
-#SBATCH --nodes=1 --ntasks-per-node=10
-#SBATCH --mem=120GB
-#SBATCH --account=putnamlab
-#SBATCH --export=NONE
-#SBATCH --mail-type=BEGIN,END,FAIL
-#SBATCH --mail-user=kevin_wong1@uri.edu
-#SBATCH -D /data/putnamlab/kevin_wong1/Thermal_Transplant_WGBS/Past_WGBS/cov_to_cyto
-#SBATCH --cpus-per-task=3
-
-# load modules needed
-
-module load BEDTools/2.27.1-foss-2018b
-
-for i in *_10x_sorted.tab_gene
-do
-  intersectBed \
-  -a ${i} \
-  -b CpG.filt.all.samps.10x_sorted.bed \
-  > ${i}_CpG_10x_enrichment.bed
-done
-```
-
-`wc -l *10x_enrichment.bed`
-
-```
-467 18-106_S163_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-467 18-118_S162_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-467 18-130_S172_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-467 18-142_S189_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-467 18-167_S166_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-467 18-178_S191_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-467 18-190_S186_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-467 18-202_S188_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-467 18-20_S202_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-467 18-227_S170_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-467 18-239_S185_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-467 18-250_S195_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-467 18-262_S179_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-467 18-311_S187_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-467 18-322_S180_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-467 18-32_S178_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-467 18-334_S164_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-467 18-346_S193_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-467 18-358_S201_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-467 18-370_S171_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-467 18-394_S192_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-467 18-406_S177_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-467 18-418_S196_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-467 18-442_S165_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-467 18-44_S198_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-467 18-454_S197_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-467 18-466_S199_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-467 18-55_S190_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-467 18-67_S176_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-467 18-79_S181_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-467 18-91_S160_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-467 18-9_S159_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-467 L-1029_S183_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-467 L-1038_S184_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-467 L-1053_S167_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-467 L-1059_S175_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-467 L-1093_S168_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-467 L-1257_S205_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-467 L-1263_S173_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-467 L-562_S174_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-467 L-571_S194_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-467 L-661_S182_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-467 L-704_S169_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-467 L-728_S161_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-467 L-862_S200_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-467 L-924_S204_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-467 L-933_S203_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-```
-
-## Notes
-
-From here, we are losing alot of data at step 4. I am going to run another analysis where I remove samples 18-334, 18-91 and 18-9 as they have low number of reads compared to the other samples.
-
-# Starting at step 4 with the removal of samples with low reads
-
-```bash
-mkdir cov_to_cyto_reduced
-
-cd cov_to_cyto
-
-cp *_sorted.cov ../cov_to_cyto_reduced
-cp *_5x_sorted.tab ../cov_to_cyto_reduced
-cp *_10x_sorted.tab ../cov_to_cyto_reduced
-
-cd ../cov_to_cyto_reduced
-
-rm -r 18-334_S164_*x_sorted.tab
-rm -r 18-91_S160_*x_sorted.tab
-rm -r 18-9_S159_*x_sorted.tab
-
-rm -r 18-334_S164_sorted.cov
-rm -r 18-91_S160_sorted.cov
-rm -r 18-9_S159_sorted.cov
-```
-
-## 4) Create a file with positions found in all samples at specified coverage
-
-`nano 5x_intersect.sh`
-
-```bash
-#!/bin/bash
-#SBATCH -t 500:00:00
-#SBATCH --nodes=1 --ntasks-per-node=10
-#SBATCH --mem=500GB
-#SBATCH --account=putnamlab
-#SBATCH --export=NONE
-#SBATCH --mail-type=BEGIN,END,FAIL
-#SBATCH --mail-user=kevin_wong1@uri.edu
-#SBATCH -D /data/putnamlab/kevin_wong1/Thermal_Transplant_WGBS/Past_WGBS/cov_to_cyto_reduced
-#SBATCH --cpus-per-task=3
-
-# load modules needed
-
-module load BEDTools/2.27.1-foss-2018b
-
-multiIntersectBed -i *_5x_sorted.tab > CpG.all.samps.5x_sorted.bed
-
-cat CpG.all.samps.5x_sorted.bed | awk '$4 ==44' > CpG.filt.all.samps.5x_sorted.bed
-```
-
-`nano 10x_intersect.sh`
-
-```bash
-#!/bin/bash
-#SBATCH -t 500:00:00
-#SBATCH --nodes=1 --ntasks-per-node=10
-#SBATCH --mem=500GB
-#SBATCH --account=putnamlab
-#SBATCH --export=NONE
-#SBATCH --mail-type=BEGIN,END,FAIL
-#SBATCH --mail-user=kevin_wong1@uri.edu
-#SBATCH -D /data/putnamlab/kevin_wong1/Thermal_Transplant_WGBS/Past_WGBS/cov_to_cyto_reduced
-#SBATCH --cpus-per-task=3
-
-# load modules needed
-
-module load BEDTools/2.27.1-foss-2018b
-
-multiIntersectBed -i *_10x_sorted.tab > CpG.all.samps.10x_sorted.bed
-
-cat CpG.all.samps.10x_sorted.bed | awk '$4 ==44' > CpG.filt.all.samps.10x_sorted.bed
-```
-
-## 5) Create bedgraphs post merge
-
-5x bedgraph
-
-```
-for f in *_sorted.cov
-do
-  STEM=$(basename "${f}" _sorted.cov)
-  cat "${f}" | awk -F $'\t' 'BEGIN {OFS = FS} {if ($5+$6 >= 5) {print $1, $2, $3, $4}}' \
-  > "${STEM}"_5x_sorted.bedgraph
-done
-```
-
-10 x bedgraph
-
-```
-for f in *_sorted.cov
-do
-  STEM=$(basename "${f}" _sorted.cov)
-  cat "${f}" | awk -F $'\t' 'BEGIN {OFS = FS} {if ($5+$6 >= 10) {print $1, $2, $3, $4}}' \
-  > "${STEM}"_10x_sorted.bedgraph
-done
-```
-
-## 6) Use intersectBed to find where loci and genes intersect, allowing loci to be mapped to annotated genes
-
-#### Filtered gff to only include gene positions modified.gff > gene.gff
-
-```bash
-cd /data/putnamlab/kevin_wong1/Past_Genome/past_struc_annotations_v1
-awk '{if ($3 == "gene") {print}}' Pastreoides_all_v1.gff  > Pastreoides_all_v1.gene.gff
-```
-
-`nano 5x_intersectBed.sh`
-
-```bash
-#!/bin/bash
-#SBATCH -t 500:00:00
-#SBATCH --nodes=1 --ntasks-per-node=10
-#SBATCH --mem=500GB
-#SBATCH --account=putnamlab
-#SBATCH --export=NONE
-#SBATCH --mail-type=BEGIN,END,FAIL
-#SBATCH --mail-user=kevin_wong1@uri.edu
-#SBATCH -D /data/putnamlab/kevin_wong1/Thermal_Transplant_WGBS/Past_WGBS/cov_to_cyto_reduced
-#SBATCH --cpus-per-task=3
-
-# load modules needed
-
-module load BEDTools/2.27.1-foss-2018b
-
-for i in *5x_sorted.tab
-do
-  intersectBed \
-  -wb \
-  -a ${i} \
-  -b /data/putnamlab/kevin_wong1/Past_Genome/past_struc_annotations_v1/Pastreoides_all_v1.gene.gff \
-  > ${i}_gene
-done
-```
-
-`nano 10x_intersectBed.sh`
-
-```bash
-#!/bin/bash
-#SBATCH -t 500:00:00
-#SBATCH --nodes=1 --ntasks-per-node=10
-#SBATCH --mem=500GB
-#SBATCH --account=putnamlab
-#SBATCH --export=NONE
-#SBATCH --mail-type=BEGIN,END,FAIL
-#SBATCH --mail-user=kevin_wong1@uri.edu
-#SBATCH -D /data/putnamlab/kevin_wong1/Thermal_Transplant_WGBS/Past_WGBS/cov_to_cyto_reduced
-#SBATCH --cpus-per-task=3
-
-# load modules needed
-
-module load BEDTools/2.27.1-foss-2018b
-
-for i in *10x_sorted.tab
-do
-  intersectBed \
-  -wb \
-  -a ${i} \
-  -b /data/putnamlab/kevin_wong1/Past_Genome/past_struc_annotations_v1/Pastreoides_all_v1.gene.gff \
-  > ${i}_gene
-done
-```
-
-## 7) Intersect with file to subset only those positions found in all samples
-
-`nano 5x_intersect_final.sh`
-
-```bash
-#!/bin/bash
-#SBATCH -t 500:00:00
-#SBATCH --nodes=1 --ntasks-per-node=10
-#SBATCH --mem=120GB
-#SBATCH --account=putnamlab
-#SBATCH --export=NONE
-#SBATCH --mail-type=BEGIN,END,FAIL
-#SBATCH --mail-user=kevin_wong1@uri.edu
-#SBATCH -D /data/putnamlab/kevin_wong1/Thermal_Transplant_WGBS/Past_WGBS/cov_to_cyto_reduced
-#SBATCH --cpus-per-task=3
-
-# load modules needed
-
-module load BEDTools/2.27.1-foss-2018b
-
-for i in *_5x_sorted.tab_gene
-do
-  intersectBed \
-  -a ${i} \
-  -b CpG.filt.all.samps.5x_sorted.bed \
-  > ${i}_CpG_5x_enrichment.bed
-done
-```
-
-`wc -l *5x_enrichment.bed`
-
-```
-78052 18-106_S163_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-78052 18-118_S162_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-78052 18-130_S172_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-78052 18-142_S189_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-78052 18-167_S166_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-78052 18-178_S191_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-78052 18-190_S186_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-78052 18-202_S188_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-78052 18-20_S202_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-78052 18-227_S170_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-78052 18-239_S185_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-78052 18-250_S195_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-78052 18-262_S179_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-78052 18-311_S187_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-78052 18-322_S180_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-78052 18-32_S178_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-78052 18-346_S193_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-78052 18-358_S201_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-78052 18-370_S171_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-78052 18-394_S192_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-78052 18-406_S177_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-78052 18-418_S196_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-78052 18-442_S165_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-78052 18-44_S198_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-78052 18-454_S197_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-78052 18-466_S199_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-78052 18-55_S190_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-78052 18-67_S176_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-78052 18-79_S181_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-78052 L-1029_S183_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-78052 L-1038_S184_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-78052 L-1053_S167_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-78052 L-1059_S175_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-78052 L-1093_S168_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-78052 L-1257_S205_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-78052 L-1263_S173_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-78052 L-562_S174_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-78052 L-571_S194_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-78052 L-661_S182_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-78052 L-704_S169_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-78052 L-728_S161_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-78052 L-862_S200_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-78052 L-924_S204_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-78052 L-933_S203_5x_sorted.tab_gene_CpG_5x_enrichment.bed
-3434288 total
-```
-
-`nano 10x_intersect_final.sh`
-
-```bash
-#!/bin/bash
-#SBATCH -t 500:00:00
-#SBATCH --nodes=1 --ntasks-per-node=10
-#SBATCH --mem=120GB
-#SBATCH --account=putnamlab
-#SBATCH --export=NONE
-#SBATCH --mail-type=BEGIN,END,FAIL
-#SBATCH --mail-user=kevin_wong1@uri.edu
-#SBATCH -D /data/putnamlab/kevin_wong1/Thermal_Transplant_WGBS/Past_WGBS/cov_to_cyto_reduced
-#SBATCH --cpus-per-task=3
-
-# load modules needed
-
-module load BEDTools/2.27.1-foss-2018b
-
-for i in *_10x_sorted.tab_gene
-do
-  intersectBed \
-  -a ${i} \
-  -b CpG.filt.all.samps.10x_sorted.bed \
-  > ${i}_CpG_10x_enrichment.bed
-done
-```
-
-`wc -l *10x_enrichment.bed`
-
-```
-2143 18-106_S163_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-2143 18-118_S162_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-2143 18-130_S172_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-2143 18-142_S189_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-2143 18-167_S166_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-2143 18-178_S191_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-2143 18-190_S186_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-2143 18-202_S188_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-2143 18-20_S202_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-2143 18-227_S170_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-2143 18-239_S185_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-2143 18-250_S195_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-2143 18-262_S179_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-2143 18-311_S187_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-2143 18-322_S180_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-2143 18-32_S178_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-2143 18-346_S193_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-2143 18-358_S201_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-2143 18-370_S171_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-2143 18-394_S192_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-2143 18-406_S177_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-2143 18-418_S196_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-2143 18-442_S165_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-2143 18-44_S198_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-2143 18-454_S197_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-2143 18-466_S199_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-2143 18-55_S190_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-2143 18-67_S176_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-2143 18-79_S181_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-2143 L-1029_S183_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-2143 L-1038_S184_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-2143 L-1053_S167_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-2143 L-1059_S175_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-2143 L-1093_S168_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-2143 L-1257_S205_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-2143 L-1263_S173_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-2143 L-562_S174_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-2143 L-571_S194_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-2143 L-661_S182_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-2143 L-704_S169_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-2143 L-728_S161_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-2143 L-862_S200_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-2143 L-924_S204_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-2143 L-933_S203_10x_sorted.tab_gene_CpG_10x_enrichment.bed
-94292 total
-```
-
-# Pipeline for each group comparison
-
-## Lifestage comparison
-
-Samples: Paired adult and larval samples
+At this step, you have to make sure you are comparing all of the necessary samples in your analysis. I am only including a subset, therefore I have made a new directory with samples only pertaining to adult-larval pairs.
 
 `mkdir cov_to_cyto_lifestage`
 
-
-## Running all steps above in one script
+`cd cov_to_cyto_lifestage`
 
 #### 5x coverage
 
@@ -906,6 +324,48 @@ cp ../cov_to_cyto_reduced/L-1059_S175_5x_sorted.tab ./
 cp ../cov_to_cyto_reduced/L-1093_S168_5x_sorted.tab ./
 cp ../cov_to_cyto_reduced/L-571_S194_5x_sorted.tab ./
 ```
+
+### 10x coverage
+
+```bash
+cp ../cov_to_cyto_reduced/18-118_S162_10x_sorted.tab ./
+cp ../cov_to_cyto_reduced/18-202_S188_10x_sorted.tab ./
+cp ../cov_to_cyto_reduced/18-322_S180_10x_sorted.tab ./
+cp ../cov_to_cyto_reduced/18-358_S201_10x_sorted.tab ./
+cp ../cov_to_cyto_reduced/18-106_S163_10x_sorted.tab ./
+cp ../cov_to_cyto_reduced/18-190_S186_10x_sorted.tab ./
+cp ../cov_to_cyto_reduced/18-370_S171_10x_sorted.tab ./
+cp ../cov_to_cyto_reduced/18-454_S197_10x_sorted.tab ./
+cp ../cov_to_cyto_reduced/18-130_S172_10x_sorted.tab ./
+cp ../cov_to_cyto_reduced/18-142_S189_10x_sorted.tab ./
+cp ../cov_to_cyto_reduced/18-418_S196_10x_sorted.tab ./
+cp ../cov_to_cyto_reduced/18-55_S190_10x_sorted.tab ./
+cp ../cov_to_cyto_reduced/18-167_S166_10x_sorted.tab ./
+cp ../cov_to_cyto_reduced/18-227_S170_10x_sorted.tab ./
+cp ../cov_to_cyto_reduced/18-406_S177_10x_sorted.tab ./
+cp ../cov_to_cyto_reduced/L-1029_S183_10x_sorted.tab ./
+cp ../cov_to_cyto_reduced/L-728_S161_10x_sorted.tab ./
+cp ../cov_to_cyto_reduced/L-924_S204_10x_sorted.tab ./
+cp ../cov_to_cyto_reduced/L-933_S203_10x_sorted.tab ./
+cp ../cov_to_cyto_reduced/L-1053_S167_10x_sorted.tab ./
+cp ../cov_to_cyto_reduced/L-1257_S205_10x_sorted.tab ./
+cp ../cov_to_cyto_reduced/L-704_S169_10x_sorted.tab ./
+cp ../cov_to_cyto_reduced/L-862_S200_10x_sorted.tab ./
+cp ../cov_to_cyto_reduced/L-1038_S184_10x_sorted.tab ./
+cp ../cov_to_cyto_reduced/L-1263_S173_10x_sorted.tab ./
+cp ../cov_to_cyto_reduced/L-562_S174_10x_sorted.tab ./
+cp ../cov_to_cyto_reduced/L-661_S182_10x_sorted.tab ./
+cp ../cov_to_cyto_reduced/L-1059_S175_10x_sorted.tab ./
+cp ../cov_to_cyto_reduced/L-1093_S168_10x_sorted.tab ./
+cp ../cov_to_cyto_reduced/L-571_S194_10x_sorted.tab ./
+```
+
+## <a name="intersect"></a> **7. Intersect across samples and genes **
+
+This script has multiple steps:
+* Intersect positions found in all samples at a specific coverage (5x and 10x)
+* Use `intersectBed` to find where loci and genes intersect, allowing loci to be mapped to annotated genes
+* Intersect with file to subset only those positions found in all samples
 
 `nano runall_meth_5x.sh`
 
@@ -993,41 +453,6 @@ done
  3109080 total
 ```
 
-### 10x coverage
-
-```bash
-cp ../cov_to_cyto_reduced/18-118_S162_10x_sorted.tab ./
-cp ../cov_to_cyto_reduced/18-202_S188_10x_sorted.tab ./
-cp ../cov_to_cyto_reduced/18-322_S180_10x_sorted.tab ./
-cp ../cov_to_cyto_reduced/18-358_S201_10x_sorted.tab ./
-cp ../cov_to_cyto_reduced/18-106_S163_10x_sorted.tab ./
-cp ../cov_to_cyto_reduced/18-190_S186_10x_sorted.tab ./
-cp ../cov_to_cyto_reduced/18-370_S171_10x_sorted.tab ./
-cp ../cov_to_cyto_reduced/18-454_S197_10x_sorted.tab ./
-cp ../cov_to_cyto_reduced/18-130_S172_10x_sorted.tab ./
-cp ../cov_to_cyto_reduced/18-142_S189_10x_sorted.tab ./
-cp ../cov_to_cyto_reduced/18-418_S196_10x_sorted.tab ./
-cp ../cov_to_cyto_reduced/18-55_S190_10x_sorted.tab ./
-cp ../cov_to_cyto_reduced/18-167_S166_10x_sorted.tab ./
-cp ../cov_to_cyto_reduced/18-227_S170_10x_sorted.tab ./
-cp ../cov_to_cyto_reduced/18-406_S177_10x_sorted.tab ./
-cp ../cov_to_cyto_reduced/L-1029_S183_10x_sorted.tab ./
-cp ../cov_to_cyto_reduced/L-728_S161_10x_sorted.tab ./
-cp ../cov_to_cyto_reduced/L-924_S204_10x_sorted.tab ./
-cp ../cov_to_cyto_reduced/L-933_S203_10x_sorted.tab ./
-cp ../cov_to_cyto_reduced/L-1053_S167_10x_sorted.tab ./
-cp ../cov_to_cyto_reduced/L-1257_S205_10x_sorted.tab ./
-cp ../cov_to_cyto_reduced/L-704_S169_10x_sorted.tab ./
-cp ../cov_to_cyto_reduced/L-862_S200_10x_sorted.tab ./
-cp ../cov_to_cyto_reduced/L-1038_S184_10x_sorted.tab ./
-cp ../cov_to_cyto_reduced/L-1263_S173_10x_sorted.tab ./
-cp ../cov_to_cyto_reduced/L-562_S174_10x_sorted.tab ./
-cp ../cov_to_cyto_reduced/L-661_S182_10x_sorted.tab ./
-cp ../cov_to_cyto_reduced/L-1059_S175_10x_sorted.tab ./
-cp ../cov_to_cyto_reduced/L-1093_S168_10x_sorted.tab ./
-cp ../cov_to_cyto_reduced/L-571_S194_10x_sorted.tab ./
-```
-
 `nano runall_meth_10x.sh`
 
 ```bash
@@ -1078,7 +503,6 @@ do
 done
 ```
 
-
 `wc -l *10x_enrichment.bed`
 
 ```
@@ -1115,11 +539,10 @@ done
 80610 total
 ```
 
-Exporting bedfiles to local computer:
+**Export bedfiles to local computer:**
 
 ```
 scp 'kevin_wong1@ssh3.hac.uri.edu:/data/putnamlab/kevin_wong1/Thermal_Transplant_WGBS/Past_WGBS/cov_to_cyto_lifestage/*_5x_enrichment.bed' ~/MyProjects/Thermal_Transplant_Molecular/output/WGBS/meth_counts_5x
 
 scp 'kevin_wong1@ssh3.hac.uri.edu:/data/putnamlab/kevin_wong1/Thermal_Transplant_WGBS/Past_WGBS/cov_to_cyto_lifestage/*_10x_enrichment.bed' ~/MyProjects/Thermal_Transplant_Molecular/output/WGBS/meth_counts_10x
-
 ```
