@@ -360,7 +360,7 @@ cp ../cov_to_cyto_reduced/L-1093_S168_10x_sorted.tab ./
 cp ../cov_to_cyto_reduced/L-571_S194_10x_sorted.tab ./
 ```
 
-## <a name="intersect"></a>**7. Intersect across samples and genes **
+## <a name="intersect"></a>**7. Intersect across samples and genes**
 
 This script has multiple steps:
 * Intersect positions found in all samples at a specific coverage (5x and 10x)
