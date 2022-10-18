@@ -1,4 +1,4 @@
-Symbolically# Genomic Feature Analysis
+# Genomic Feature Analysis
 
 This script determines where methylated CpGs are in certain genomic features.
 
