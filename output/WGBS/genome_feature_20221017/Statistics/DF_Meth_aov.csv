@@ -1,0 +1,11 @@
+                           Df  Sum Sq  Mean Sq F value  Pr(>F)   
+Origin                      1 0.02136 0.021357   8.604 0.00769 **
+Treatment                   1 0.00114 0.001143   0.460 0.50449   
+LifeStage                   1 0.00033 0.000333   0.134 0.71753   
+Origin:Treatment            1 0.00395 0.003949   1.591 0.22040   
+Origin:LifeStage            1 0.00004 0.000037   0.015 0.90367   
+Treatment:LifeStage         1 0.00129 0.001289   0.519 0.47872   
+Origin:Treatment:LifeStage  1 0.00027 0.000270   0.109 0.74487   
+Residuals                  22 0.05461 0.002482                   
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1

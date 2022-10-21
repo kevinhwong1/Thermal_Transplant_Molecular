@@ -6,7 +6,7 @@
 18-311,P-10-B,Patch-Ambient-Rim,2018,Adult,A-PAR,18-311_S187_L004_R1_001_val_1,Patch,Ambient,Rim,P-10-B_Adult
 18-346,P-6-B,Patch-Ambient-Rim,2018,Adult,A-PAR,18-346_S193_L004_R1_001_val_1,Patch,Ambient,Rim,P-6-B_Adult
 18-394,P-9-B,Patch-Ambient-Rim,2018,Adult,A-PAR,18-394_S192_L004_R1_001_val_1,Patch,Ambient,Rim,P-9-B_Adult
-18-9,P-4-B,Patch-Ambient-Rim,2018,Adult,A-PAR,18-9_S159_L004_R1_001_val_1,Patch,Ambient,Rim,P-4-B_Adult
+18-Sep,P-4-B,Patch-Ambient-Rim,2018,Adult,A-PAR,18-9_S159_L004_R1_001_val_1,Patch,Ambient,Rim,P-4-B_Adult
 18-106,P-19-A,Patch-Heated-Patch,2018,Adult,A-PHP,18-106_S163_L004_R1_001_val_1,Patch,Heated,Patch,P-19-A_Adult
 18-190,P-14-A,Patch-Heated-Patch,2018,Adult,A-PHP,18-190_S186_L004_R1_001_val_1,Patch,Heated,Patch,P-14-A_Adult
 18-370,P-15-A,Patch-Heated-Patch,2018,Adult,A-PHP,18-370_S171_L004_R1_001_val_1,Patch,Heated,Patch,P-15-A_Adult
@@ -19,10 +19,10 @@
 18-142,R-8-A,Rim-Ambient-Patch,2018,Adult,A-RAP,18-142_S189_L004_R1_001_val_1,Rim,Ambient,Patch,R-8-A_Adult
 18-418,R-9-A,Rim-Ambient-Patch,2018,Adult,A-RAP,18-418_S196_L004_R1_001_val_1,Rim,Ambient,Patch,R-9-A_Adult
 18-55,R-7-A,Rim-Ambient-Patch,2018,Adult,A-RAP,18-55_S190_L004_R1_001_val_1,Rim,Ambient,Patch,R-7-A_Adult
-18-178,R-5-B,Rim-Ambient-Rim,2018,Adult,A-RAM,18-178_S191_L004_R1_001_val_1,Rim,Ambient,Rim,R-5-B_Adult
-18-20,R-7-B,RIm-Ambient-Rim,2018,Adult,A-RAM,18-20_S202_L004_R1_001_val_1,Rim,Ambient,Rim,R-7-B_Adult
-18-239,R-8-B,Rim-Ambient-Rim,2018,Adult,A-RAM,18-239_S185_L004_R1_001_val_1,Rim,Ambient,Rim,R-8-B_Adult
-18-442,R-9-B,Rim-Ambient-Rim,2018,Adult,A-RAM,18-442_S165_L004_R1_001_val_1,Rim,Ambient,Rim,R-9-B_Adult
+18-178,R-5-B,Rim-Ambient-Rim,2018,Adult,A-RAR,18-178_S191_L004_R1_001_val_1,Rim,Ambient,Rim,R-5-B_Adult
+18-20,R-7-B,RIm-Ambient-Rim,2018,Adult,A-RAR,18-20_S202_L004_R1_001_val_1,Rim,Ambient,Rim,R-7-B_Adult
+18-239,R-8-B,Rim-Ambient-Rim,2018,Adult,A-RAR,18-239_S185_L004_R1_001_val_1,Rim,Ambient,Rim,R-8-B_Adult
+18-442,R-9-B,Rim-Ambient-Rim,2018,Adult,A-RAR,18-442_S165_L004_R1_001_val_1,Rim,Ambient,Rim,R-9-B_Adult
 18-167,R-19-A,Rim-Heated-Patch,2018,Adult,A-RHP,18-167_S166_L004_R1_001_val_1,Rim,Heated,Patch,R-19-A_Adult
 18-227,R-11-A,Rim-Heated-Patch,2018,Adult,A-RHP,18-227_S170_L004_R1_001_val_1,Rim,Heated,Patch,R-11-A_Adult
 18-406,R-15-A,Rim-Heated-Patch,2018,Adult,A-RHP,18-406_S177_L004_R1_001_val_1,Rim,Heated,Patch,R-15-A_Adult

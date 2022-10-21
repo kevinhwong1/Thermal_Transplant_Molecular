@@ -11,7 +11,8 @@ I followed [this pipeline](https://github.com/hputnam/Geoduck_Meth/blob/master/c
 4. [**Characterize CG motif locations in feature tracks**](#characterize)    
 5. [**Organize coverage files**](#organize)    
 6. [**Characterize methylation for each CpG dinucleotide**](#Char_meth)    
-7. [**Characterize genomic locations of CpGs**](#char_gene)    
+7. [**Characterize genomic locations of CpGs**](#char_gene)
+8. [**Canonical Coverage Track with unionbedg**](#coveragetrack)    
 
 ## <a name="reference"></a> **1. Prepare Reference File**
 
@@ -737,3 +738,70 @@ done
 `scp 'kevin_wong1@ssh3.hac.uri.edu:/data/putnamlab/kevin_wong1/Thermal_Transplant_WGBS/Past_WGBS/genome_feature_20221014/*counts.txt' ~/MyProjects/Thermal_Transplant_Molecular/output/WGBS/genome_feature_20221017`
 
 `scp 'kevin_wong1@ssh3.hac.uri.edu:/data/putnamlab/kevin_wong1/Thermal_Transplant_WGBS/Past_WGBS/genome_feature_20221014/Past-CGMotif-CDS-Overlaps.txt' ~/MyProjects/Thermal_Transplant_Molecular/output/WGBS/genome_feature_20221017`
+
+
+## <a name="coveragetrack"></a> **8. Canonical Coverage Track with unionbedg**
+
+`bedtools unionbedg` combines multiple bedgraph files into a single file check that one can direcctly compare coverage (and other text-values such as genotypes) across multiple samples.
+
+I am following [this script](https://github.com/hputnam/Meth_Compare/blob/master/code/01.10-Mcap-Canonical-Coverage-Track.ipynb).
+
+`cd /data/putnamlab/kevin_wong1/Thermal_Transplant_WGBS/Past_WGBS/genome_feature_20221014/coverage_files`
+
+`module load BEDTools/2.27.1-foss-2018b`
+
+```
+unionBedGraphs \
+-header \
+-filler N/A \
+-names 18-118 18-202 18-322 18-358 18-106 18-190 18-370 18-454 18-130 18-142 18-418 18-55 18-167 18-227 18-406 L-1029 L-728 L-924 L-933 L-1053 L-1257 L-704 L-862 L-1038 L-1263 L-562 L-661 L-1059 L-1093 L-571 \
+-i \
+18-118_S162_5x_sorted.bedgraph \
+18-202_S188_5x_sorted.bedgraph \
+18-322_S180_5x_sorted.bedgraph \
+18-358_S201_5x_sorted.bedgraph \
+18-106_S163_5x_sorted.bedgraph \
+18-190_S186_5x_sorted.bedgraph \
+18-370_S171_5x_sorted.bedgraph \
+18-454_S197_5x_sorted.bedgraph \
+18-130_S172_5x_sorted.bedgraph \
+18-142_S189_5x_sorted.bedgraph \
+18-418_S196_5x_sorted.bedgraph \
+18-55_S190_5x_sorted.bedgraph \
+18-167_S166_5x_sorted.bedgraph \
+18-227_S170_5x_sorted.bedgraph \
+18-406_S177_5x_sorted.bedgraph \
+L-1029_S183_5x_sorted.bedgraph \
+L-728_S161_5x_sorted.bedgraph \
+L-924_S204_5x_sorted.bedgraph \
+L-933_S203_5x_sorted.bedgraph \
+L-1053_S167_5x_sorted.bedgraph \
+L-1257_S205_5x_sorted.bedgraph \
+L-704_S169_5x_sorted.bedgraph \
+L-862_S200_5x_sorted.bedgraph \
+L-1038_S184_5x_sorted.bedgraph \
+L-1263_S173_5x_sorted.bedgraph \
+L-562_S174_5x_sorted.bedgraph \
+L-661_S182_5x_sorted.bedgraph \
+L-1059_S175_5x_sorted.bedgraph \
+L-1093_S168_5x_sorted.bedgraph \
+L-571_S194_5x_sorted.bedgraph \
+> ../Past_union_5x.bedgraph
+```
+
+`head Past_union_5x.bedgraph`
+
+```
+chrom	start	end	18-118	18-202	18-322	18-358	18-106	18-190	18-370	18-454	18-130	18-142	18-418	18-55	18-167	18-227	18-406	L-1029	L-728	L-924	L-933	L-1053	L-1257	L-704	L-862	L-1038	L-1263	L-562	L-661	L-1059	L-1093	L-571
+000000F	19438	19440	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	0.000000	N/A	N/A	N/A	N/N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	0.000000	N/A	N/A	N/A	N/A	N/A	N/A	N/A
+000000F	19456	19458	N/A	N/A	N/A	0.000000	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	N/A	0.000000	0.000000	N/A	N/A	N/A	N/A	0.000000
+000000F	19622	19624	N/A	N/A	N/A	0.000000	N/A	N/A	0.000000	0.000000	N/A	0.000000	0.000000	0.000000	N/A	0.000000	0.000000	N/A	0.000000	0.000000	0.000000	N/A	0.000000	N/A	0.000000	0.000000	0.000000	N/A	0.000000	0.000000	0.000000	0.000000
+000000F	19640	19642	N/A	N/A	N/A	0.000000	0.000000	N/A	N/A	0.000000	N/A	0.000000	0.000000	0.000000	N/A	0.000000	16.666667	N/A	0.000000	0.000000	0.000000	N/A	0.000000	N/A	0.000000	0.000000	0.000000	0.000000	0.000000	0.000000	0.000000	0.000000
+000000F	19656	19658	N/A	N/A	N/A	0.000000	0.000000	0.000000	N/A	N/A	N/A	0.000000	0.000000	0.000000	N/A	0.000000	0.000000	N/A	0.000000	0.000000	0.000000	N/A	0.000000	N/A	N/A	0.000000	0.000000	0.000000	0.000000	0.000000	0.000000	0.000000
+000000F	19673	19675	0.000000	N/A	N/A	0.000000	N/A	N/A	N/A	N/A	N/A	0.000000	0.000000	0.000000	N/A	0.000000	0.000000	N/A	N/A	N/A	0.000000	N/A	0.000000	N/A	N/A	0.000000	0.000000	0.000000	0.000000	0.000000	0.000000	0.000000
+000000F	19678	19680	N/A	N/A	N/A	0.000000	N/A	N/A	N/A	N/A	N/A	0.000000	0.000000	0.000000	N/A	0.000000	0.000000	N/A	N/A	N/A	0.000000	N/A	0.000000	N/A	N/A	0.000000	0.000000	0.000000	N/A	0.000000	0.000000	0.000000
+000000F	19702	19704	N/A	N/A	N/A	0.000000	N/A	N/A	N/A	N/A	N/A	0.000000	12.500000	0.000000	N/A	N/A	N/A	N/A	N/A	N/A	0.000000	N/A	0.000000	N/A	N/A	0.000000	7.142857	0.000000	0.000000	0.000000	0.000000	N/A
+000000F	19708	19710	N/A	N/A	N/A	25.000000	N/A	N/A	N/A	N/A	N/A	0.000000	0.000000	0.000000	N/A	N/A	N/A	N/A	N/A	N/A	0.000000	N/A	0.000000	N/A	N/A	0.000000	0.000000	0.000000	0.000000	0.000000	0.000000	N/A
+```
+
+`scp 'kevin_wong1@ssh3.hac.uri.edu:/data/putnamlab/kevin_wong1/Thermal_Transplant_WGBS/Past_WGBS/genome_feature_20221014/Past_union_5x.bedgraph' ~/MyProjects/Thermal_Transplant_Molecular/output/WGBS/genome_feature_20221017`
