@@ -41,6 +41,21 @@ nextflow run nf-core/methylseq \
 -name A4_Past_TT
 ```
 
+For some reason, multiQC did not run so I performed it manually from E. Strand:
+
 ```
-scp kevin_wong1@ssh3.hac.uri.edu:/data/putnamlab/kevin_wong1/Thermal_Transplant_WGBS/methylseq_A4/A4_Past_TT/MultiQC/multiqc_report.html MyProjects/Thermal_Transplant_Molecular/output/multiqc_report_A4.html
+cd /data/putnamlab/kevin_wong1/Thermal_Transplant_WGBS/methylseq_A4/A4_Past_TT
+
+interactive
+
+module load MultiQC/1.9-intel-2020a-Python-3.8.2
+
+multiqc -f --title "A4_Past_TT" --filename A4_Past_TT_multiqc_report  . \
+      -m custom_content -m picard -m qualimap -m bismark -m samtools -m preseq -m cutadapt -m fastqc
+
+```
+
+
+```
+scp kevin_wong1@ssh3.hac.uri.edu:/data/putnamlab/kevin_wong1/Thermal_Transplant_WGBS/methylseq_A4/A4_Past_TT/A4_Past_TT_multiqc_report.html MyProjects/Thermal_Transplant_Molecular/output/multiqc_report_A4.html
 ```

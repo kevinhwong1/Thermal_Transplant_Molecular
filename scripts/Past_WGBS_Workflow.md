@@ -282,6 +282,8 @@ done
 68718897 total
 ```
 
+
+
 ## <a name="select"></a> **6. Select samples**
 
 At this step, you have to make sure you are comparing all of the necessary samples in your analysis. I am only including a subset, therefore I have made a new directory with samples only pertaining to adult-larval pairs.
@@ -545,4 +547,68 @@ done
 scp 'kevin_wong1@ssh3.hac.uri.edu:/data/putnamlab/kevin_wong1/Thermal_Transplant_WGBS/Past_WGBS/cov_to_cyto_lifestage/*_5x_enrichment.bed' ~/MyProjects/Thermal_Transplant_Molecular/output/WGBS/meth_counts_5x
 
 scp 'kevin_wong1@ssh3.hac.uri.edu:/data/putnamlab/kevin_wong1/Thermal_Transplant_WGBS/Past_WGBS/cov_to_cyto_lifestage/*_10x_enrichment.bed' ~/MyProjects/Thermal_Transplant_Molecular/output/WGBS/meth_counts_10x
+```
+
+
+
+### Cov to Cyto with all samples (with removal of poor quality samples)
+
+Here I ran the cov to cyto script with all adult and larval samples, excluding the two samples with low coverage (18-334_S164_10x_sorted.tab; 18-91_S160_10x_sorted.tab; 18-9_S159_10x_sorted.tab). Here I can make the comparisons between (1) adult transplant sites and (2) adult larval pairs.
+
+
+`wc -l *5x_enrichment.bed`
+
+```bash
+    78052 18-106_S163_5x_sorted.tab_gene_CpG_5x_enrichment.bed
+    78052 18-118_S162_5x_sorted.tab_gene_CpG_5x_enrichment.bed
+    78052 18-130_S172_5x_sorted.tab_gene_CpG_5x_enrichment.bed
+    78052 18-142_S189_5x_sorted.tab_gene_CpG_5x_enrichment.bed
+    78052 18-167_S166_5x_sorted.tab_gene_CpG_5x_enrichment.bed
+    78052 18-178_S191_5x_sorted.tab_gene_CpG_5x_enrichment.bed
+    78052 18-190_S186_5x_sorted.tab_gene_CpG_5x_enrichment.bed
+    78052 18-202_S188_5x_sorted.tab_gene_CpG_5x_enrichment.bed
+    78052 18-20_S202_5x_sorted.tab_gene_CpG_5x_enrichment.bed
+    78052 18-227_S170_5x_sorted.tab_gene_CpG_5x_enrichment.bed
+    78052 18-239_S185_5x_sorted.tab_gene_CpG_5x_enrichment.bed
+    78052 18-250_S195_5x_sorted.tab_gene_CpG_5x_enrichment.bed
+    78052 18-262_S179_5x_sorted.tab_gene_CpG_5x_enrichment.bed
+    78052 18-311_S187_5x_sorted.tab_gene_CpG_5x_enrichment.bed
+    78052 18-322_S180_5x_sorted.tab_gene_CpG_5x_enrichment.bed
+    78052 18-32_S178_5x_sorted.tab_gene_CpG_5x_enrichment.bed
+    78052 18-346_S193_5x_sorted.tab_gene_CpG_5x_enrichment.bed
+    78052 18-358_S201_5x_sorted.tab_gene_CpG_5x_enrichment.bed
+    78052 18-370_S171_5x_sorted.tab_gene_CpG_5x_enrichment.bed
+    78052 18-394_S192_5x_sorted.tab_gene_CpG_5x_enrichment.bed
+    78052 18-406_S177_5x_sorted.tab_gene_CpG_5x_enrichment.bed
+    78052 18-418_S196_5x_sorted.tab_gene_CpG_5x_enrichment.bed
+    78052 18-442_S165_5x_sorted.tab_gene_CpG_5x_enrichment.bed
+    78052 18-44_S198_5x_sorted.tab_gene_CpG_5x_enrichment.bed
+    78052 18-454_S197_5x_sorted.tab_gene_CpG_5x_enrichment.bed
+    78052 18-466_S199_5x_sorted.tab_gene_CpG_5x_enrichment.bed
+    78052 18-55_S190_5x_sorted.tab_gene_CpG_5x_enrichment.bed
+    78052 18-67_S176_5x_sorted.tab_gene_CpG_5x_enrichment.bed
+    78052 18-79_S181_5x_sorted.tab_gene_CpG_5x_enrichment.bed
+    78052 L-1029_S183_5x_sorted.tab_gene_CpG_5x_enrichment.bed
+    78052 L-1038_S184_5x_sorted.tab_gene_CpG_5x_enrichment.bed
+    78052 L-1053_S167_5x_sorted.tab_gene_CpG_5x_enrichment.bed
+    78052 L-1059_S175_5x_sorted.tab_gene_CpG_5x_enrichment.bed
+    78052 L-1093_S168_5x_sorted.tab_gene_CpG_5x_enrichment.bed
+    78052 L-1257_S205_5x_sorted.tab_gene_CpG_5x_enrichment.bed
+    78052 L-1263_S173_5x_sorted.tab_gene_CpG_5x_enrichment.bed
+    78052 L-562_S174_5x_sorted.tab_gene_CpG_5x_enrichment.bed
+    78052 L-571_S194_5x_sorted.tab_gene_CpG_5x_enrichment.bed
+    78052 L-661_S182_5x_sorted.tab_gene_CpG_5x_enrichment.bed
+    78052 L-704_S169_5x_sorted.tab_gene_CpG_5x_enrichment.bed
+    78052 L-728_S161_5x_sorted.tab_gene_CpG_5x_enrichment.bed
+    78052 L-862_S200_5x_sorted.tab_gene_CpG_5x_enrichment.bed
+    78052 L-924_S204_5x_sorted.tab_gene_CpG_5x_enrichment.bed
+    78052 L-933_S203_5x_sorted.tab_gene_CpG_5x_enrichment.bed
+  3434288 total
+```
+
+**Export bedfiles to local computer:**
+
+```
+scp 'kevin_wong1@ssh3.hac.uri.edu:/data/putnamlab/kevin_wong1/Thermal_Transplant_WGBS/Past_WGBS/cov_to_cyto_reduced/*_5x_enrichment.bed' ~/MyProjects/Thermal_Transplant_Molecular/output/WGBS/cov_to_cyto_reduced/
+
 ```

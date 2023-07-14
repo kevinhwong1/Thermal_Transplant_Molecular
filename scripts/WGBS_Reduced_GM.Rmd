@@ -1,0 +1,758 @@
+---
+title: "Thermal Transplant WGBS Reduced Data DMG Analysis"
+author: "KH Wong"
+output:
+  github_document: default
+  pdf_document:
+    keep_tex: yes
+  html_document:
+    toc: yes
+    toc_depth: 6
+    toc_float: yes
+editor_options: 
+  chunk_output_type: inline
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+
+This markdown file performs the differential methylation analysis for (1) adults with different thermal histories and (2) adult/larval pairs from the Patch transplant site. 
+
+
+## Load Packages
+
+https://github.com/hputnam/Geoduck_Meth/blob/master/RAnalysis/Scripts/GM.Rmd
+
+```{r, message=FALSE, warning=FALSE}
+library(plotrix) 
+library(ggplot2)
+library(gridExtra)
+library(seacarb) 
+library(pheatmap)
+library(tidyverse)
+library(tidyr)
+library(goseq)
+library(genefilter)
+library(gplots)
+library(cowplot)
+library(lsmeans)
+library(data.table)
+library(RColorBrewer)
+library(randomcoloR)
+#library(GSEABase)
+library(ggpubr)
+library(hrbrthemes)
+library(viridis)
+library(factoextra)
+library(ropls)
+library(mixOmics)
+library(vegan)
+library(plyr)
+library(dplyr)
+```
+
+# Loading annotation file
+```{r}
+Annot <- read.csv("../data/Past_genome/Past_annotation_20220310.csv", header=TRUE, na.string="NA", stringsAsFactors = FALSE, skip=0)
+
+Annot[Annot == ""] <- NA
+
+Annot.1 <- Annot %>%
+  dplyr::select(gene, Length, InterPro_GO_Names, BLAST_GO_Names, SwissProt_GO_Names, TrEMBL_GO_Names) %>%
+  mutate(InterPro_GO_Names = na_if(InterPro_GO_Names, "no GO terms")) %>%
+  mutate(InterPro_GO_Names = na_if(InterPro_GO_Names, "no IPS match")) %>%
+  unite("GO_Name", InterPro_GO_Names:TrEMBL_GO_Names, remove = FALSE, na.rm = TRUE) %>%
+  dplyr::select(gene, Length, GO_Name)
+
+Annot.2 <- Annot %>%
+  dplyr::select(gene, InterPro_GO_IDs, BLAST_GO_IDs, SwissProt_GO_IDs, TrEMBL_GO_IDs) %>%
+  mutate(InterPro_GO_IDs = na_if(InterPro_GO_IDs, "no GO terms")) %>%
+  mutate(InterPro_GO_IDs = na_if(InterPro_GO_IDs, "no IPS match")) %>%
+  unite("GO_IDs", InterPro_GO_IDs:TrEMBL_GO_IDs, remove = FALSE, na.rm = TRUE) %>%
+ dplyr::select(gene, GO_IDs)
+
+Annot.select <- merge(Annot.1, Annot.2, by = "gene")
+Annot.select$GO_Name <- gsub("F:*","",Annot.select$GO_Name)
+Annot.select$GO_Name <- gsub("P:*","",Annot.select$GO_Name)
+Annot.select$GO_Name <- gsub("C:*","",Annot.select$GO_Name)
+Annot.select$GO_Name <- gsub("_","; ",Annot.select$GO_Name)
+
+Annot.select$GO_IDs <- gsub("F:*","",Annot.select$GO_IDs)
+Annot.select$GO_IDs <- gsub("P:*","",Annot.select$GO_IDs)
+Annot.select$GO_IDs <- gsub("C:*","",Annot.select$GO_IDs)
+Annot.select$GO_IDs <- gsub("_","; ",Annot.select$GO_IDs)
+
+#### ANNOTATION STATSITICS 
+
+Annot.NA <- Annot %>%
+  dplyr::select(gene, Length, InterPro_GO_Names, BLAST_GO_Names, SwissProt_GO_Names, TrEMBL_GO_Names) %>%
+  mutate(InterPro_GO_Names = na_if(InterPro_GO_Names, "no GO terms")) %>%
+  mutate(InterPro_GO_Names = na_if(InterPro_GO_Names, "no IPS match")) %>%
+  mutate_all(na_if,"")
+
+Annot.IPS <- Annot.NA %>% drop_na(InterPro_GO_Names) # 24089
+Annot.BLAST <- Annot.NA %>% drop_na(BLAST_GO_Names) # 11443
+Annot.SP <- Annot.NA %>% drop_na(SwissProt_GO_Names) # 30284
+Annot.Trem <- Annot.NA %>% drop_na(TrEMBL_GO_Names) # 12178
+
+Annot.all <- Annot.select %>% mutate_all(na_if,"") %>% drop_na() #43154 
+
+```
+
+# Load methylation data
+```{r}
+# All Reduced Data
+meth.data_5x <- list.files(path = "../output/WGBS/cov_to_cyto_reduced", pattern = ".bed$", full.names=TRUE) %>%
+  set_names(.) %>% 
+  map_dfr(read.csv,.id="Sample.ID", header=FALSE, sep="\t", na.string="NA", stringsAsFactors = FALSE) %>% 
+  dplyr::select(-c(V3,V7:V14)) %>%
+  group_by(Sample.ID)
+colnames(meth.data_5x) <- c("Sample.ID", "scaffold", "position","per.meth","meth","unmeth","gene")
+meth.data_5x$gene <- gsub(";.*","",meth.data_5x$gene) #remove extra characters
+meth.data_5x$gene <- gsub("ID=","",meth.data_5x$gene) #remove extra characters
+meth.data_5x$Sample.ID <- gsub("../output/WGBS/cov_to_cyto_reduced/","",meth.data_5x$Sample.ID) #remove extra characters
+meth.data_5x$Sample.ID <- gsub("*._5x_sorted.tab_gene_CpG_5x_enrichment.bed","",meth.data_5x$Sample.ID) #remove extra characters 
+meth.data_5x$Sample.ID <- gsub("_...","",meth.data_5x$Sample.ID) #remove extra characters
+
+sample.info <- read.csv("../data/metadata/Thermal_Transplant_Metadata_Analysis.csv", stringsAsFactors = TRUE)
+sample.info2 <- sample.info %>%
+  dplyr::select(-Timepoint, -File_Name)
+
+MD_5x <- merge(meth.data_5x, sample.info2, by="Sample.ID")
+```
+
+
+```{r}
+# Binomial GLM to test for differentially methylated genes
+meth_table <- MD_5x
+meth_table$sample_gene <- paste0(meth_table$Sample.ID, meth_table$gene)
+
+#filter for genes with >4 methylated positions
+min.filt <- dplyr::count(meth_table, vars = c(sample_gene))
+newdata4 <- min.filt[ which(min.filt$n > 4), ] # 225720
+
+#filter for genes with >9 methylated positions
+newdata9 <- min.filt[ which(min.filt$n > 9), ] # 96932
+
+meth_table_filt <- meth_table[meth_table$sample_gene %in% newdata4$vars,] #consider checking this and run a pca on this - have a decent rational for this 
+```
+
+# Analysis for Adult comparisons
+
+```{r}
+# Subset data for just the adult samples
+adult_meth_table <- meth_table_filt %>% dplyr::filter(LifeStage == "Adult")
+
+# Make Coral_ID_geno identifier 
+adult_meth_table$Coral.ID <- as.character(adult_meth_table$Coral.ID)
+adult_meth_table$Coral_ID_geno <- substr(adult_meth_table$Coral.ID,1,nchar(adult_meth_table$Coral.ID)-2) #remove extra characters
+
+adult_meth_table$Coral.ID <- as.factor(adult_meth_table$Coral.ID)
+adult_meth_table$Coral_ID_geno <- as.factor(adult_meth_table$Coral_ID_geno)
+
+# Figure out which pairs to keep
+table(adult_meth_table$Coral_ID_geno)
+
+# Remove samples with missing pairs, P-19, P-4, R-14
+adult_meth_table_pairs <- adult_meth_table %>%
+  filter(Coral_ID_geno != "P-19") %>%
+  filter(Coral_ID_geno != "P-4") %>%
+  filter(Coral_ID_geno != "R-14") 
+
+# Confirm removal
+table(adult_meth_table_pairs$Coral_ID_geno)
+```
+
+## Adult PCA
+
+```{r}
+# Plotting PCA
+
+### Formatting dataframe 
+meth_adult.means <- aggregate(per.meth ~ gene*Origin*Treatment*Transplant*Coral.ID, data=adult_meth_table_pairs, FUN=mean)
+#meth_collife.means2 <- meth_collife.means[meth_collife.means$gene %in% DMG_LS.sig$gene,]
+All_data_adult <- meth_adult.means %>% pivot_wider(names_from = gene, values_from = per.meth)
+
+All_data_adult <- as.data.frame(All_data_adult)
+rownames(All_data_adult) <- paste0(All_data_adult$Coral.ID)
+
+### Running prcomp
+scaled_pca_adult <-prcomp(All_data_adult[c(5:ncol(All_data_adult))], scale=FALSE, center=TRUE)
+fviz_eig(scaled_pca_adult)
+
+coral_info <- All_data_adult[c(1:4)]
+
+pca_data_adult <- scaled_pca_adult%>%
+  broom::augment(coral_info)%>%
+  group_by(Origin, Treatment, Transplant, Coral.ID)%>%
+  mutate(PC1.mean = mean(.fittedPC1),
+         PC2.mean = mean(.fittedPC2))
+
+#Examine PERMANOVA results.  
+# scale data
+vegan_adult <- scale(All_data_adult[c(5:ncol(All_data_adult))])
+
+# PERMANOVA 
+permanova_adult <- adonis(vegan_adult ~ Origin*Treatment*Transplant, data = All_data_adult, method='eu', permutations = 9999)
+z_pca_adult <- permanova_adult$aov.tab
+z_pca_adult
+
+capture.output(z_pca_adult, file = "../output/WGBS/PERMANOVA_DMG_Adult.csv")
+
+#Assemble plot with background points
+
+#1. make plot with dots
+
+#adding percentages on axis
+
+names(pca_data_adult)[6] <- "PCA1"
+names(pca_data_adult)[7] <- "PCA2"
+percentage_adult <- round((scaled_pca_adult$sdev^2) / sum((scaled_pca_adult$sdev^2)) * 100, 2)
+percentage_adult <- paste(colnames(pca_data_adult[6:33]), "(",paste(as.character(percentage_adult), "%", ")", sep="") )
+
+#Grouping informaation
+pca_data_adult$OTS <- paste(pca_data_adult$Origin, pca_data_adult$Treatment, pca_data_adult$Transplant)
+pca_data_adult$OT <- paste(pca_data_adult$Origin, pca_data_adult$Treatment)
+pca_data_adult$OS <- paste(pca_data_adult$Origin, pca_data_adult$Transplant)
+pca_data_adult$TS <- paste(pca_data_adult$Treatment, pca_data_adult$Transplant)
+
+pca_data_adult$Coral.ID <- as.character(pca_data_adult$Coral.ID)
+pca_data_adult$Coral_ID_geno <- substr(pca_data_adult$Coral.ID,1,nchar(pca_data_adult$Coral.ID)-2)
+
+pca_data_adult$Coral.ID <- as.factor(pca_data_adult$Coral.ID)
+pca_data_adult$Coral_ID_geno <- as.factor(pca_data_adult$Coral_ID_geno)
+
+library(ggrepel)
+
+PCA_adult <- ggplot(pca_data_adult, aes(PCA1, PCA2, color=Treatment, group = Coral_ID_geno)) + 
+  geom_point(size = 4, aes(shape = OS))+
+  geom_line() +
+  scale_colour_manual(values=c("#00a2ff", "#ff5d00")) +
+  scale_shape_manual(values=c(1, 5, 16, 18)) +
+  theme_classic()+
+  geom_label_repel(aes(label = Coral.ID),
+                  box.padding   = 0.5, 
+                  point.padding = 1,
+                  segment.color = 'black', 
+                  max.overlaps = Inf) +
+#  ylim(-20,15)+
+#  xlim(-15,15)+
+  ylab(percentage_adult[2])+
+  xlab(percentage_adult[1])+
+  labs(color = "Treatment", shape = "Origin / Transplant Site", fill = "Origin") +
+  theme(legend.text = element_text(size=18), 
+        legend.position="right",
+        plot.background = element_blank(),
+        legend.title = element_text(size=20), 
+        plot.margin = margin(1, 1, 1, 1, "cm"),
+        axis.text = element_text(size=18), 
+        title = element_text(size=25, face="bold"), 
+        axis.title = element_text(size=18))
+PCA_adult
+ggsave(filename="../output/WGBS/DMG/Adult_PerMeth_PCA.jpeg", plot=PCA_adult, dpi=300, width=15, height=12, units="in")
+
+```
+
+
+## Adult WGCNA
+
+# Load dependencies
+```{r dependencies, warning=FALSE, message=FALSE}
+
+## install packages if you dont already have them in your library
+if ("tidyverse" %in% rownames(installed.packages()) == 'FALSE') install.packages('tidyverse') 
+if ("vegan" %in% rownames(installed.packages()) == 'FALSE') install.packages('vegan') 
+if ("ggplot2" %in% rownames(installed.packages()) == 'FALSE') install.packages('ggplot2') 
+if ("factoextra" %in% rownames(installed.packages()) == 'FALSE') install.packages('factoextra') 
+if ("ggfortify" %in% rownames(installed.packages()) == 'FALSE') install.packages('ggfortify') 
+if ("naniar" %in% rownames(installed.packages()) == 'FALSE') install.packages('naniar') 
+if ("cowplot" %in% rownames(installed.packages()) == 'FALSE') install.packages('cowplot') 
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+if ("mixOmics" %in% rownames(installed.packages()) == 'FALSE') BiocManager::install("mixOmics") 
+if ("RVAideMemoire" %in% rownames(installed.packages()) == 'FALSE') install.packages('RVAideMemoire') 
+if ("VennDiagram" %in% rownames(installed.packages()) == 'FALSE') install.packages('VennDiagram') 
+if ("broom" %in% rownames(installed.packages()) == 'FALSE') install.packages('broom') 
+
+#load packages
+library("ggplot2")
+library('vegan')
+library('factoextra')
+library('ggfortify')
+library('naniar')
+library('cowplot')
+library("mixOmics")
+library("tidyverse")
+library("RVAideMemoire")
+library("VennDiagram")
+library("broom")
+
+if ("genefilter" %in% rownames(installed.packages()) == 'FALSE') install.packages('genefilter') 
+if ("DESeq2" %in% rownames(installed.packages()) == 'FALSE') install.packages('DESeq2') 
+if ("RColorBrewer" %in% rownames(installed.packages()) == 'FALSE') install.packages('RColorBrewer') 
+if ("WGCNA" %in% rownames(installed.packages()) == 'FALSE') install.packages('WGCNA') 
+if ("flashClust" %in% rownames(installed.packages()) == 'FALSE') install.packages('flashClust') 
+if ("gridExtra" %in% rownames(installed.packages()) == 'FALSE') install.packages('gridExtra') 
+if ("ComplexHeatmap" %in% rownames(installed.packages()) == 'FALSE') install.packages('ComplexHeatmap') 
+if ("goseq" %in% rownames(installed.packages()) == 'FALSE') install.packages('goseq') 
+if ("dplyr" %in% rownames(installed.packages()) == 'FALSE') install.packages('dplyr') 
+if ("clusterProfiler" %in% rownames(installed.packages()) == 'FALSE') install.packages('clusterProfiler') 
+if ("pheatmap" %in% rownames(installed.packages()) == 'FALSE') install.packages('pheatmap') 
+if ("magrittr" %in% rownames(installed.packages()) == 'FALSE') install.packages('magrittr') 
+
+library("genefilter")
+library("DESeq2")
+library("RColorBrewer")
+library("WGCNA")
+library("flashClust")
+library("gridExtra")
+library("ComplexHeatmap")
+library("goseq")
+library("dplyr")
+library("clusterProfiler")
+library("pheatmap")
+library("magrittr")
+library("reshape2")
+
+```
+
+
+```{r}
+#Creating metadata file
+metadata_adult <-unique(adult_meth_table_pairs[c(8:17)])
+
+#manipulating dataframe so sample IDs are the columns and genes are the rows (values are percent methylation of that gene)
+gcount_adult <- meth_adult.means %>% 
+  dplyr::select(-Origin, - Treatment, -Transplant) %>%
+  spread(key = "Coral.ID", value = "per.meth") %>%
+  column_to_rownames(var="gene")
+
+#Check that there are no genes with 0 counts for all samples. Should return TRUE.
+rowSums(dplyr::count(gcount_adult)) > 0
+```
+
+
+## Data filtering: PoverA and genefilter
+
+Conduct data filtering, this includes:  
+
+*pOverA*: Specifying the minimum count for a proportion of samples for each gene. Here, we are using a pOverA of 0.11. This is because we have 26 samples with a minimum of n=3 samples per group Therefore, we will accept genes that are present in 3/26 = 0.11 of the samples because we expect different expression by life stage. We are further setting the minimum percentage of genes to 1, such that 7% of the samples must have a methylation percentage >1 in order for the gene to remain in the data set.  
+
+Filter in the package "genefilter". Pre-filtering our dataset to reduce the memory size dataframe, increase the speed of the transformation and testing functions, and improve quality of statistical analysis by removing low-coverage counts. Removed counts could represent outliers in the data and removing these improves sensitivity of statistical tests.    
+
+``` {r, echo=TRUE, warning=FALSE, message=FALSE}
+
+filt_adult <- filterfun(pOverA(0.11,0.1)) #consider changing
+#create filter for the counts data
+gfilt_adult <- genefilter(gcount_adult, filt_adult)
+#identify genes to keep by count filter
+keep_adult <- gcount_adult[gfilt_adult,]
+
+#identify gene lists
+n.keep_adult <- rownames(keep_adult)
+#gene count data filtered in PoverA, P percent of the samples have counts over A
+data_filt_adult <- as.data.frame(gcount_adult[which(rownames(gcount_adult) %in% n.keep_adult),])
+#How many rows do we have before and after filtering?
+nrow(gcount_adult) #Before
+nrow(data_filt_adult) #After
+
+#Filtering removed 8 genes
+```
+
+
+##Outlier detection
+``` {r, echo=TRUE, warning=FALSE, message=FALSE}
+#Checking that all row and column names match. Should return "TRUE"
+all(rownames(metadata_adult$Coral.ID) %in% colnames(data_filt_adult))
+all(rownames(metadata_adult$Coral.ID) == colnames(data_filt_adult))
+
+sampleTree = hclust(dist(data_filt_adult), method = "average");
+# Plot the sample tree: Open a graphic output window of size 12 by 9 inches
+# The user should change the dimensions if the window is too large or too small.
+pdf("../output/WGBS/WGCNA_Adult_Pairs/outliers_genes.pdf")
+plot(sampleTree, main = "Sample clustering to detect outliers", sub="", xlab="", cex.lab = 1.5, cex.axis = 1.5, cex.main = 2)
+dev.off()
+
+#Transpose such that samples are in rows and metabolites are in columns.
+
+tdata_filt_adult <- t(data_filt_adult) 
+
+#Look for outliers by examining tree of samples  
+sampleTree = hclust(dist(tdata_filt_adult), method = "average");
+# Plot the sample tree: Open a graphic output window of size 12 by 9 inches
+# The user should change the dimensions if the window is too large or too small.
+pdf("../output/WGBS/WGCNA_Adult_Pairs/outliers_samples.pdf")
+plot(sampleTree, main = "Sample clustering to detect outliers", sub="", xlab="", cex.lab = 1.5, cex.axis = 1.5, cex.main = 2)
+dev.off()
+
+```
+
+# 2. Network construction and consensus modlue detection
+## Choosing a soft-thresholding power: Analysis of a network topology β
+``` {r, echo=TRUE, warning=FALSE, message=FALSE}
+# Choose a set of soft-thresholding powers
+#powers <- c(seq(from = 1, to=200, by=2), c(21:30)) #Create a string of numbers from 1 through 10, and even numbers from 10 through 20
+
+allowWGCNAThreads() 
+powers <- c(c(1:20), seq(from = 12, to=20, by=2)) #Create a string of numbers from 1 through 10, and even numbers from 10 through 20
+
+# Call the network topology analysis function
+sft <-pickSoftThreshold(tdata_filt_adult, powerVector = powers, verbose = 10)
+
+#Plot the results.  
+sizeGrWindow(9, 5)
+par(mfrow = c(1,2));
+cex1 = 0.9;
+# # # Scale-free topology fit index as a function of the soft-thresholding power
+plot(sft$fitIndices[,1], -sign(sft$fitIndices[,3])*sft$fitIndices[,2],
+      xlab="Soft Threshold (power)",ylab="Scale Free Topology Model Fit,signed R^2",type="n",
+     main = paste("Scale independence"));
+ text(sft$fitIndices[,1], -sign(sft$fitIndices[,3])*sft$fitIndices[,2],
+     labels=powers,cex=cex1,col="red");
+# # # this line corresponds to using an R^2 cut-off
+ abline(h=0.8,col="red")
+# # # Mean connectivity as a function of the soft-thresholding power
+ plot(sft$fitIndices[,1], sft$fitIndices[,5],
+     xlab="Soft Threshold (power)",ylab="Mean Connectivity", type="n",
+     main = paste("Mean connectivity"))
+ text(sft$fitIndices[,1], sft$fitIndices[,5], labels=powers, cex=cex1,col="red")
+
+ # Soft Threshold power is 4
+```
+
+``` {r, echo=TRUE, warning=FALSE, message=FALSE}
+picked_power = 4
+temp_cor <- cor       
+cor <- WGCNA::cor                                             # Force it to use WGCNA cor function (fix a namespace conflict issue)
+netwk <- blockwiseModules(tdata_filt_adult,                         # <= input here
+
+                          # == Adjacency Function ==
+                          power = picked_power,               # <= power here
+                          networkType = "unsigned",
+
+                          # == Tree and Block Options ==
+                          deepSplit = 2,
+                          pamRespectsDendro = F,
+                          # detectCutHeight = 0.75,
+                          minModuleSize = 50,                  #consider inreasing or decreasing this
+                          maxBlockSize = 4000,
+
+                          # == Module Adjustments ==
+                          reassignThreshold = 0,
+                          mergeCutHeight = 0.25,
+
+                          # == TOM == Archive the run results in TOM file (saves time)
+                          saveTOMs = T,
+                          saveTOMFileBase = "ER",
+
+                          # == Output Options
+                          numericLabels = T,
+                          verbose = 3)
+
+cor <- temp_cor     # Return cor function to original namespace
+
+# Convert labels to colors for plotting
+mergedColors = labels2colors(netwk$colors)
+# Plot the dendrogram and the module colors underneath
+plotDendroAndColors(
+  netwk$dendrograms[[1]],
+  mergedColors[netwk$blockGenes[[1]]],
+  "Module colors",
+  dendroLabels = FALSE,
+  hang = 0.03,
+  addGuide = TRUE,
+  guideHang = 0.05 )
+
+```
+
+## Relate Module (cluster) Assignments to SampleID 
+
+``` {r, echo=TRUE, warning=FALSE, message=FALSE}
+module_df <- data.frame(
+  gene = names(netwk$colors),
+  colors = labels2colors(netwk$colors)
+)
+
+module_df[1:5,]
+
+write.csv(module_df, "../output/WGBS/WGCNA_Adult_Pairs/gene_modules.csv")
+
+module_counts <- module_df %>% dplyr::count(colors)
+
+# Get Module Eigengenes per cluster
+MEs <- moduleEigengenes(tdata_filt_adult, mergedColors)$eigengenes
+
+# Reorder modules so similar modules are next to each other
+MEs <- orderMEs(MEs)
+module_order = names(MEs) %>% gsub("ME","", .)
+
+# Add Sample names
+MEs0 <- MEs
+MEs0$Coral.ID = row.names(MEs)
+
+# tidy & plot data
+mME = MEs0 %>%
+  pivot_longer(-Coral.ID) %>%
+  mutate(
+    name = gsub("ME", "", name),
+    name = factor(name, levels = module_order)
+  )
+
+mME %>% ggplot(., aes(x=Coral.ID, y=name, fill=value)) +
+  geom_tile() +
+  theme_bw() +
+  scale_fill_gradient2(
+    low = "blue",
+    high = "red",
+    mid = "white",
+    midpoint = 0,
+    limit = c(-1,1)) +
+  theme(axis.text.x = element_text(angle=90)) +
+  labs(title = "Module-Sample Relationships", y = "Modules", fill="corr")
+```
+
+
+## Relate Module (cluster) Assignments to Groupings 
+
+Prepare trait data. Data has to be numeric, so I will substitute Origin/Treatment/Transplant for numeric values. The "trait" we are considering here is each grouping (i.e. PAP, etc) 
+
+Make a dataframe that has a column for each groupinf name and a row for samples. Populate a 1 for samples that match each Group and a 0 for samples not matching respective Groups
+
+This process changes Groups from a categorical variable into a binary variable. This will allow for correlations between mean eigengenes and Groups  
+
+``` {r, echo=TRUE, warning=FALSE, message=FALSE}
+
+# metadata$num <- c("1")
+# allTraits <- as.data.frame(pivot_wider(metadata, names_from = Group, values_from = num, id_cols = Col_Life))
+# allTraits[is.na(allTraits)] <- c("0")
+# rownames(allTraits) <- allTraits$Col_Life
+# datTraits <- allTraits[,c(-1)]
+# head(datTraits)
+
+#Remove gene column and create one line for each sample
+metadata_adult2 <-metadata_adult %>% dplyr::select(-sample_gene) %>% distinct()
+
+metadata_adult2$num <- c("1")
+
+allTraits_adult <- as.data.frame(tidyr::pivot_wider(metadata_adult2, names_from = Group, values_from = num, id_cols = Coral.ID))
+allTraits_adult[is.na(allTraits_adult)] <- c("0")
+rownames(allTraits_adult) <- allTraits_adult$Coral.ID
+datTraits_adult <- allTraits_adult[,c(-1)]
+head(datTraits_adult)
+
+# Define numbers of genes and samples and print. 
+nGenes = ncol(tdata_filt_adult)
+nSamples = nrow(tdata_filt_adult)
+nGenes #5122
+nSamples#26
+
+# Correlations of traits with eigengenes
+Colors=sub("ME", "", names(MEs))
+moduleTraitCor = cor(MEs, datTraits_adult, use = "p");
+moduleTraitPvalue = corPvalueStudent(moduleTraitCor, nSamples);
+
+moduleTraitTree = hclust(dist(t(moduleTraitCor)), method = "average")
+pdf(file="../output/WGBS/WGCNA_Adult_Pairs/ModuleTraitClusterTree_Groupings.pdf", height=8, width=22)
+plot(moduleTraitTree)
+dev.off()
+
+# Correlations of metabolites with eigengenes. Calculate correlations between ME's and groups 
+moduleGeneCor=cor(MEs,tdata_filt_adult)
+moduleGenePvalue = corPvalueStudent(moduleGeneCor, nSamples);
+head(moduleGenePvalue)
+
+#Calculate kME values (module membership). 
+#datKME = signedKME(tdata_filt, MEs0, outputColumnName = "kME")
+#head(datKME)
+
+#Save module colors and labels for use in subsequent analyses.  
+#save(MEs, moduleLabels, moduleColors, geneTree, file = "Mcap2020/Output/Metabolomics/NetworkConstructionWGCNA.RData") 
+```
+
+## Plot module-trait associations
+
+Represent module trait correlations as a heatmap 
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
+textMatrix = paste(signif(moduleTraitCor, 2), "\n(",signif(moduleTraitPvalue, 1), ")", sep = "")
+dim(textMatrix) = dim(moduleTraitCor)
+head(textMatrix)
+labeledHeatmap(Matrix = moduleTraitCor, xLabels = names(datTraits_adult),  yLabels = names(MEs), ySymbols = names(MEs), cex.lab.y= 0.55, cex.lab.x= 0.55, colors = blueWhiteRed(50), textMatrix = textMatrix, setStdMargins = TRUE, cex.text = 0.25, textAdj = , zlim = c(-1,1), main = paste("Module-trait relationships"))
+pdf(file="../output/WGBS/WGCNA_Adult_Pairs/Module-trait-relationships_Groupings.pdf")
+labeledHeatmap(Matrix = moduleTraitCor, xLabels = names(datTraits_adult),  yLabels = names(MEs), ySymbols = names(MEs), cex.lab.y= 0.55, cex.lab.x= 0.55, colors = blueWhiteRed(50), textMatrix = textMatrix, setStdMargins = TRUE, cex.text = 0.25, textAdj = , zlim = c(-1,1), main = paste("Module-trait relationships"))
+dev.off()
+
+```
+# Generate a complex heatmap of module-trait relationships.  
+
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
+#bold sig p-values
+#dendrogram with WGCNA MEtree cut-off
+#colored y-axis
+#Create list of pvalues for eigengene correlation with specific life stages
+heatmappval <- signif(moduleTraitPvalue, 1)
+#Make list of heatmap row colors
+htmap.colors <- names(MEs)
+htmap.colors <- gsub("ME", "", htmap.colors)
+library(dendsort)
+row_dend = dendsort(hclust(dist(moduleTraitCor)))
+col_dend = dendsort(hclust(dist(t(moduleTraitCor))))
+
+#row_ha = rowAnnotation(ModuleSize = anno_text("11", "127", "8", "64", "85"), just = "left", 
+#        location = unit(0.5, "npc"), show_name = TRUE)
+# brown (11), grey (127), yellow (8), blue (64), turqoise (85) #figure out how to do row annotations to add sample sizes
+
+pdf(file = "../output/WGBS/WGCNA_Adult_Pairs/Module-trait-relationship-heatmap_Groupings.pdf", height = 8, width = 8)
+
+ht <- Heatmap(moduleTraitCor, name = "Eigenvalue", cluster_rows = row_dend, cluster_columns = FALSE,
+        col = blueWhiteRed(50), 
+        row_names_side = "left",
+        row_dend_side = "left",
+        width = unit(5, "in"),
+        height = unit(4.5, "in"), 
+        row_gap = unit(2.5, "mm"), 
+        border = TRUE,
+        cell_fun = function(j, i, x, y, w, h, col) {
+        if(heatmappval[i, j] < 0.051) {
+            grid.text(sprintf("%s", heatmappval[i, j]), x, y, gp = gpar(fontsize = 10, fontface = "bold"))
+        }
+        else {
+            grid.text(sprintf("%s", heatmappval[i, j]), x, y, gp = gpar(fontsize = 10, fontface = "plain", col = "grey"))
+        }},
+        column_names_gp =  gpar(fontsize = 12, border=FALSE),
+        column_names_rot = 0,
+        row_names_gp = gpar(fontsize = 12, alpha = 0.75, border = FALSE))
+draw(ht)
+dev.off()
+
+```
+
+
+
+## Relate Module (cluster) Assignments to Variables 
+
+Prepare trait data. Data has to be numeric, so I will substitute Origin/Treatment/Transplant for numeric values. The "trait" we are considering here is each variable (i.e. Origin/Treatment/Transplant) 
+
+Make a dataframe that has a column for each groupinf name and a row for samples. Populate a 1 for samples that match each Group and a 0 for samples not matching respective Groups
+
+This process changes Groups from a categorical variable into a binary variable. This will allow for correlations between mean eigengenes and Groups  
+
+``` {r, echo=TRUE, warning=FALSE, message=FALSE}
+
+# metadata$num <- c("1")
+# allTraits <- as.data.frame(pivot_wider(metadata, names_from = Group, values_from = num, id_cols = Col_Life))
+# allTraits[is.na(allTraits)] <- c("0")
+# rownames(allTraits) <- allTraits$Col_Life
+# datTraits <- allTraits[,c(-1)]
+# head(datTraits)
+
+#Remove gene column and create one line for each sample
+metadata_adult2 <-metadata_adult %>% dplyr::select(-sample_gene) %>% distinct()
+
+metadata_adult2$num <- c("1")
+
+OriginTraits <- as.data.frame(pivot_wider(metadata_adult2, names_from = Origin, values_from = num, id_cols = Coral.ID))
+OriginTraits[is.na(OriginTraits)] <- c("0")
+
+TreatmentTraits <- as.data.frame(pivot_wider(metadata_adult2, names_from = Treatment, values_from = num, id_cols = Coral.ID))
+TreatmentTraits[is.na(TreatmentTraits)] <- c("0")
+
+TransplantTraits <- as.data.frame(pivot_wider(metadata_adult2, names_from = Transplant, values_from = num, id_cols = Coral.ID))
+TransplantTraits[is.na(TransplantTraits)] <- c("0")
+
+traits <- merge(OriginTraits, TreatmentTraits, by = "Coral.ID")
+allTraits <- merge(traits, TransplantTraits,  by = "Coral.ID")
+rownames(allTraits) <- allTraits$Coral.ID
+datTraits <- allTraits[,c(-1)]
+head(datTraits)
+
+# Define numbers of genes and samples and print. 
+nGenes = ncol(tdata_filt_adult)
+nSamples = nrow(tdata_filt_adult)
+nGenes #5122
+nSamples#26
+
+# Correlations of traits with eigengenes
+Colors=sub("ME", "", names(MEs))
+moduleTraitCor = cor(MEs, datTraits, use = "p");
+moduleTraitPvalue = corPvalueStudent(moduleTraitCor, nSamples);
+
+moduleTraitTree = hclust(dist(t(moduleTraitCor)), method = "average")
+pdf(file="../output/WGBS/WGCNA_Adult_Pairs/ModuleTraitClusterTree_Variable.pdf", height=8, width=22)
+plot(moduleTraitTree)
+dev.off()
+
+# Correlations of metabolites with eigengenes. Calculate correlations between ME's and groups 
+moduleGeneCor=cor(MEs,tdata_filt_adult)
+moduleGenePvalue = corPvalueStudent(moduleGeneCor, nSamples);
+head(moduleGenePvalue)
+
+#Calculate kME values (module membership). 
+#datKME = signedKME(tdata_filt, MEs0, outputColumnName = "kME")
+#head(datKME)
+
+#Save module colors and labels for use in subsequent analyses.  
+#save(MEs, moduleLabels, moduleColors, geneTree, file = "Mcap2020/Output/Metabolomics/NetworkConstructionWGCNA.RData") 
+```
+
+## Plot module-trait associations
+
+Represent module trait correlations as a heatmap 
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
+textMatrix = paste(signif(moduleTraitCor, 2), "\n(",signif(moduleTraitPvalue, 1), ")", sep = "")
+dim(textMatrix) = dim(moduleTraitCor)
+head(textMatrix)
+labeledHeatmap(Matrix = moduleTraitCor, xLabels = names(datTraits),  yLabels = names(MEs), ySymbols = names(MEs), cex.lab.y= 0.55, cex.lab.x= 0.55, colors = blueWhiteRed(50), textMatrix = textMatrix, setStdMargins = TRUE, cex.text = 0.25, textAdj = , zlim = c(-1,1), main = paste("Module-trait relationships"))
+pdf(file="../output/WGBS/WGCNA_Adult_Pairs/Module-trait-relationships_Variables.pdf")
+labeledHeatmap(Matrix = moduleTraitCor, xLabels = names(datTraits),  yLabels = names(MEs), ySymbols = names(MEs), cex.lab.y= 0.55, cex.lab.x= 0.55, colors = blueWhiteRed(50), textMatrix = textMatrix, setStdMargins = TRUE, cex.text = 0.25, textAdj = , zlim = c(-1,1), main = paste("Module-trait relationships"))
+dev.off()
+
+```
+
+
+`
+# Generate a complex heatmap of module-trait relationships.  
+
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
+#bold sig p-values
+#dendrogram with WGCNA MEtree cut-off
+#colored y-axis
+#Create list of pvalues for eigengene correlation with specific life stages
+heatmappval <- signif(moduleTraitPvalue, 1)
+#Make list of heatmap row colors
+htmap.colors <- names(MEs)
+htmap.colors <- gsub("ME", "", htmap.colors)
+library(dendsort)
+row_dend = dendsort(hclust(dist(moduleTraitCor)))
+col_dend = dendsort(hclust(dist(t(moduleTraitCor))))
+
+#row_ha = rowAnnotation(ModuleSize = anno_text("11", "127", "8", "64", "85"), just = "left", 
+#        location = unit(0.5, "npc"), show_name = TRUE)
+# brown (11), grey (127), yellow (8), blue (64), turqoise (85) #figure out how to do row annotations to add sample sizes
+
+pdf(file = "../output/WGBS/WGCNA_Adult_Pairs/Module-trait-relationship-heatmap_Variables.pdf", height = 8, width = 8)
+
+ht <- Heatmap(moduleTraitCor, name = "Eigenvalue", cluster_rows = row_dend, cluster_columns = FALSE,
+        col = blueWhiteRed(50), 
+        row_names_side = "left",
+        row_dend_side = "left",
+        width = unit(5, "in"),
+        height = unit(4.5, "in"), 
+        row_gap = unit(2.5, "mm"), 
+        border = TRUE,
+        cell_fun = function(j, i, x, y, w, h, col) {
+        if(heatmappval[i, j] < 0.051) {
+            grid.text(sprintf("%s", heatmappval[i, j]), x, y, gp = gpar(fontsize = 10, fontface = "bold"))
+        }
+        else {
+            grid.text(sprintf("%s", heatmappval[i, j]), x, y, gp = gpar(fontsize = 10, fontface = "plain", col = "grey"))
+        }},
+        column_names_gp =  gpar(fontsize = 12, border=FALSE),
+        column_names_rot = 0,
+        row_names_gp = gpar(fontsize = 12, alpha = 0.75, border = FALSE))
+draw(ht)
+dev.off()
+
+```
